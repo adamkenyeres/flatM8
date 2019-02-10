@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -28,6 +29,7 @@ public class User implements Serializable {
     private String mateStayTypeComment;
     private int age;
     private List<AdditionalDetail> additionalDetails;
+    private Set<Role> roles;
 
     @Override
     public boolean equals(Object o) {

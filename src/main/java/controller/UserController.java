@@ -1,18 +1,25 @@
 package controller;
 
 import model.tenant.User;
+import model.tenant.UserLogin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import repository.UserRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/")
+@CrossOrigin
 public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
@@ -23,7 +30,8 @@ public class UserController {
         this.repository = repository;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/getAllUsers", method = RequestMethod.GET)
     public List<User> getAllUsers() {
         return repository.findAll();
     }
@@ -47,7 +55,7 @@ public class UserController {
         return repository.findByEmail(email);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "/createUser", method = RequestMethod.POST)
     public User createUser(@Valid @RequestBody User user) {
         return repository.save(user);
     }
@@ -55,5 +63,10 @@ public class UserController {
     @RequestMapping(value = "/{email}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable String email) {
         repository.delete(repository.findByEmail(email));
+    }
+
+    @RequestMapping(value = "/user")
+    public Principal user(Principal user) {
+       return user;
     }
 }
