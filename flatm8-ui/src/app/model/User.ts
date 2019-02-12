@@ -1,5 +1,6 @@
 export class User {
   password: string;
+  passwordConfirm: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -11,3 +12,4 @@ export class User {
   additionalDetails = [];
   roles = [];
 }
+

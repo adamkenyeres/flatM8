@@ -1,1 +1,8 @@
-<h1>Kaga</h1>
+<h1>Greeting</h1>
+<div [hidden]="!authenticated()">
+  <p>Szia, {{greeting.name}}</p>
+  <p>Jogaid: {{greeting.authorities}}</p>
+</div>
+<div [hidden]="authenticated()">
+  <p>Please login or register!</p>
+</div>

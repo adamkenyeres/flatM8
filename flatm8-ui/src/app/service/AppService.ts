@@ -1,29 +1,26 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
+import {tap} from "rxjs/operators";
 
 @Injectable()
 export class AppService {
 
-  authenticated = false;
-
   constructor(private http: HttpClient) {
   }
 
-  authenticate(credentials, callback) {
-
-    const headers = new HttpHeaders(credentials ? {
-      authorization : 'Basic ' + btoa(credentials.username + ':' + credentials.password)
-    } : {});
-
-    this.http.get('http://localhost:8080/user', {headers: headers}).subscribe(response => {
-      if (response['name']) {
-        this.authenticated = true;
-      } else {
-        this.authenticated = false;
-      }
+  register(user, callback) {
+    this.http.post('http://localhost:8080/registration', user).subscribe(response => {
       return callback && callback();
     });
 
   }
-
+  authenticate(credentials, callback) {
+    this.http.post('http://localhost:8080/signin', credentials)
+      .subscribe(response => {
+        if (response["token"]) {
+          sessionStorage.setItem("token", response["token"]);
+        }
+        return callback && callback();
+      });
+  }
 }
