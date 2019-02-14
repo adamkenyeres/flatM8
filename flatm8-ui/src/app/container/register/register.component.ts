@@ -4,6 +4,7 @@ import {AppService} from "../../service/AppService";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../auth/auth.service";
+import {Form, FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-register',
@@ -33,13 +34,13 @@ export class RegisterComponent implements OnInit {
   };
 
   credentials: User = new User();
-  error = false;
 
   typesArray = [];
   stayTypesArray = [];
+  error = false;
+  userExistsError = false;
 
   constructor(private app: AppService, private http: HttpClient, private router: Router, private auth: AuthService) {
-
     for (const key in this.CONST_TENANT_TYPES) {
       this.typesArray.push(this.CONST_TENANT_TYPES[key])
     }
@@ -50,13 +51,22 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
+    this.error = false;
+    this.userExistsError = false;
     this.credentials.roles = [{
       "name": "USER"
     }];
 
-    console.log(this.credentials);
-    this.app.register(this.credentials, () => {
-      this.router.navigateByUrl('/login');
+    console.log(this.credentials.email);
+      this.app.register(this.credentials).subscribe(resp => {
+        this.router.navigateByUrl("/login");
+      },
+        err => {
+        if (err.status === 404) {
+          this.userExistsError = true;
+        } else {
+          this.error = true;
+        }
     });
   }
   ngOnInit() {
@@ -67,5 +77,4 @@ export class RegisterComponent implements OnInit {
       sessionStorage.removeItem('token');
     }
   }
-
 }

@@ -1,7 +1,8 @@
 import {Component, NgModule} from '@angular/core';
-import {RouterModule, Routes} from "@angular/router";
+import {Router, RouterModule, Routes} from "@angular/router";
 import {HomeComponent} from "./container/home/home.component";
 import {PagenotfoundComponent} from "./container/pagenotfound/pagenotfound.component";
+import {AuthService} from "./auth/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -11,4 +12,30 @@ import {PagenotfoundComponent} from "./container/pagenotfound/pagenotfound.compo
 
 export class AppComponent {
   title = 'flatm8-ui';
+
+  constructor(private auth: AuthService, private router: Router ) { }
+
+  register() {
+    this.router.navigateByUrl('register');
+  }
+
+  login() {
+    this.router.navigateByUrl('login');
+  }
+
+  accountDetails() {
+    this.router.navigateByUrl('account');
+  }
+
+  logout() {
+    this.router.navigateByUrl('logout');
+  }
+
+  home() {
+    this.router.navigateByUrl('');
+  }
+
+  myflats() {
+    this.router.navigateByUrl('myflats');
+  }
 }

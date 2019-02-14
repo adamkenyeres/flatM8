@@ -9,4 +9,5 @@ public interface FlatRepository extends MongoRepository<Flat, String> {
 
     Flat findByAddress(Address address);
     Flat findById(String id);
+    Flat findByUserEmail(String userEmail);
 }

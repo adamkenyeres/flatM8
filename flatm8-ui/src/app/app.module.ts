@@ -15,6 +15,7 @@ import {TokenInterceptor} from "./auth/token.interceptor";
 import {AuthService} from "./auth/auth.service";
 import {JwtHelperService, JwtModule} from "@auth0/angular-jwt";
 import { LogoutComponent } from './container/logout/logout.component';
+import { MyflatsComponent } from './container/myflats/myflats.component';
 
 const appRoutes: Routes = [
   {
@@ -34,6 +35,10 @@ const appRoutes: Routes = [
     path: 'logout',
     component: LogoutComponent
   },
+  {
+    path: 'myflats',
+    component: MyflatsComponent
+  },
   { path: '**', component: PagenotfoundComponent }
 ];
 
@@ -48,7 +53,8 @@ export function tokenGetter() {
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    LogoutComponent
+    LogoutComponent,
+    MyflatsComponent
   ],
   imports: [
     BrowserModule,

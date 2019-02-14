@@ -1,16 +1,19 @@
 package controller;
 
+import exception.FlatNotFoundException;
 import model.flat.Address;
 import model.flat.Flat;
 import model.tenant.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import repository.FlatRepository;
 import repository.UserRepository;
+import service.FlatService;
 import util.FlatUtils;
 
 import javax.validation.Valid;
@@ -19,57 +22,104 @@ import java.util.List;
 
 @RequestMapping("/flats")
 @RestController
-public class FlatController {
+public class FlatController implements GenericController<Flat> {
     private static final Logger LOGGER = LoggerFactory.getLogger(FlatController.class);
-    private FlatRepository repository;
+
+    private FlatService service;
 
     @Autowired
-    public FlatController(FlatRepository repository) {
-        this.repository = repository;
+    public FlatController(FlatService service, FlatRepository flatRepository) {
+        this.service = service;
     }
 
+    @Override
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public List<Flat> getAllFlats() {
-        return repository.findAll();
+    public ResponseEntity getAllEntities() {
+        return ResponseEntity.ok(service.getAllFlats());
     }
 
+    @Override
+    public ResponseEntity getEntityById(String id) {
+        Flat f = service.getFlatById(id);
+        return f == null ? ResponseEntity.notFound().build()
+                : ResponseEntity.ok(f);
+    }
+
+    @Override
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public Flat createFlat(@Valid @RequestBody Flat flat) {
-        return repository.save(flat);
+    public ResponseEntity createEntity(@Valid @RequestBody Flat flat) {
+        Flat f = null;
+
+        try {
+            f = service.saveFlat(flat);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return f == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(f);
     }
 
+    @Override
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void deleteFlatById(@PathVariable String id) {
-        repository.delete(repository.findById(id));
+    public ResponseEntity deleteEntityById(@PathVariable String id) {
+        Flat f = service.getFlatById(id);
+        try {
+            service.deleteFlat(f);
+            return ResponseEntity.ok().build();
+        } catch (FlatNotFoundException e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @RequestMapping(value = "/deleteByAddress", method = RequestMethod.DELETE)
-    public void deleteFlatByAddress(@Valid @RequestBody Address address) {
-        repository.delete(repository.findByAddress(address));
+    public ResponseEntity deleteFlatByAddress(@Valid @RequestBody Address address) {
+        try {
+            service.deleteFlatByAddress(address);
+            return ResponseEntity.ok().build();
+        } catch (FlatNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @RequestMapping(value = "/getFlatByAddress", method = RequestMethod.GET)
-    public Flat getFlatByAddress(@RequestBody Address address) {
-        return repository.findByAddress(address);
+    public ResponseEntity getFlatByAddress(@RequestBody Address address) {
+        Flat f = service.getFlatByAddress(address);
+        return f == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(f);
     }
 
     @RequestMapping(value = "/getFlatByAddressString", method = RequestMethod.GET)
-    public Flat getFlatByAddressString(@RequestParam("address") String addressString) {
-        String[] addressParts = addressString.split(",");
+    public ResponseEntity getFlatByAddressString(@RequestParam("address") String addressString) {
+        Flat f = service.getFlatByAddressString(addressString);
 
-        if (addressParts.length != 6) {
-            LOGGER.error("Address string should be: " +
-                    "'city,streetAddress,streetNumber,district,door,floor'. " +
-                    "Returning null.");
-            return null;
+        if (f == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(f);
         }
-
-        Address address = FlatUtils.addressFromStringArray(addressParts);
-        return repository.findByAddress(address);
     }
 
+    @Override
     @RequestMapping(value = "/deleteAll", method = RequestMethod.DELETE)
-    public void deleteAll() {
-        repository.deleteAll();
+    public ResponseEntity deleteAllEntities() {
+        try {
+            service.deleteAll();
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
+
+    @RequestMapping(value = "/getForUser", method = RequestMethod.GET)
+    public ResponseEntity getFlatForUser(@RequestParam("email") String email) {
+        Flat f = service.getFlatByUserEmail(email);
+
+        if (f == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(f);
+        }
+    }
+
+
 }

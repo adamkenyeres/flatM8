@@ -1,1 +1,19 @@
-<router-outlet></router-outlet>
+<nav class="navbar navbar-inverse">
+  <div class="container">
+    <div class="menu">
+      <div class="topnav">
+        <a (click)="home()">Home</a>
+        <a *ngIf="auth.isAuthenticated() == false" (click)="login()">Login</a>
+        <a *ngIf="auth.isAuthenticated() == false" (click)="register()">Registration</a>
+        <a *ngIf="auth.isAuthenticated()== true" (click)="accountDetails()">Account</a>
+        <a *ngIf="auth.isAuthenticated()== true" (click)="myflats()">MyFlats</a>
+        <a *ngIf="auth.isAuthenticated() == true" (click)="logout()">Logout</a>
+      </div>
+    </div>
+  </div>
+</nav>
+<div>
+  <div class="router">
+    <router-outlet></router-outlet>
+  </div>
+</div>

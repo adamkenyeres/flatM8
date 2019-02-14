@@ -16,14 +16,28 @@ export class LoginComponent implements OnInit {
 
   credentials = {email: '', password: ''};
 
+  loginError = false;
+  unknownError = false;
+
   constructor(private app: AppService, private http: HttpClient, private router: Router, private auth: AuthService) {
   }
 
   login() {
-    this.app.authenticate(this.credentials, () => {
-      this.router.navigateByUrl("");
+    this.loginError = false;
+    this.unknownError = false;
+    this.app.authenticate(this.credentials).subscribe(response => {
+      if (response["token"]) {
+        sessionStorage.setItem("token", response["token"]);
+        this.router.navigateByUrl("");
+      }
+    },
+      err => {
+        if (err.status == 404 || err.status == 403) {
+          this.loginError = true;
+        } else {
+          this.unknownError = true;
+        }
     });
-    return false;
   }
 
   ngOnInit() {

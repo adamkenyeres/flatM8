@@ -20,7 +20,7 @@ public class Flat {
     private Address address;
     private FlatType type;
     private Integer roomCount;
-
+    private String userEmail;
     private List<AdditionalDetail> additionalDetails;
 
     @Override
