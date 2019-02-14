@@ -1,3 +1,18 @@
-<p>
-  myflats works!
-</p>
+<div *ngIf="error" class="alert alert-danger">
+  Unknown error occurred while login, please try again later!
+</div>
+<div *ngIf="noFlats" class="alert alert-danger">
+  No flats are present. Would you like to add one?
+</div>
+<div [hidden]="!noFlats">
+  <div class="centered">
+  <div class="plus" id="plus">
+    <div class="plus__line plus__line--v">
+      <a (click)="addiLiveFlat()" class="plus__link">iLive</a>
+      <a (click)="addiShareFlat()" class="plus__link">iShare</a>
+      <a (click)="addExisting()" class="plus__link">itExists</a>
+    </div>
+    <div class="plus__line plus__line--h"></div>
+  </div>
+  </div>
+</div>

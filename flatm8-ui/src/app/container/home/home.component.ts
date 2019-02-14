@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   constructor(private app: AppService, private http: HttpClient, private router: Router, private auth: AuthService) {
 
     if (this.auth.isAuthenticated()) {
-      http.get('http://localhost:8080/user').subscribe(data => {
+      this.app.getUserLoggedInUser().subscribe(data => {
         this.greeting = data;
         console.log(data);
       });

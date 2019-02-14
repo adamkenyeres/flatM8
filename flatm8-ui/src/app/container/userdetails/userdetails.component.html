@@ -1,0 +1,68 @@
+<div class="dark-panel">
+  <div class="panel panel-default login-container">
+    <div class="panel-heading">
+      Your account details
+    </div>
+
+    <div class="panel-body">
+
+      <label>E-mail: {{ user.email }} </label>
+      <br />
+
+      <label>First Name: {{ user.firstName}} </label>
+      <button type="button" (click)="editName()" class="btn btn-default">Edit</button>
+      <div *ngIf="isNamePressed == true">
+        <input type="text" name="name" class="form-control">
+      </div>
+
+      <br />
+
+      <label>Last Name: {{ user.lastName }} </label>
+      <button type="button" (click)="editName()" class="btn btn-default">Edit</button>
+      <div *ngIf="isNamePressed == true">
+        <input type="text" name="name" class="form-control">
+      </div>
+
+      <br />
+
+      <label>Lifestyle: {{ app.CONST_TENANT_TYPES[user.tenantType] }} </label>
+      <button type="button" (click)="editName()" class="btn btn-default">Edit</button>
+      <div *ngIf="isNamePressed == true">
+        <input type="text" name="name" class="form-control">
+      </div>
+
+      <br />
+
+      <label>Comments on Lifestyle: {{ user.mateTypeComment}} </label>
+      <button type="button" (click)="editName()" class="btn btn-default">Edit</button>
+      <div *ngIf="isNamePressed == true">
+        <input type="text" name="name" class="form-control">
+      </div>
+
+      <br />
+
+      <label>Stay at home habits: {{ app.CONST_TENANT_STAY_TYPES[user.tenantStayType] }} </label>
+      <button type="button" (click)="editName()" class="btn btn-default">Edit</button>
+      <div *ngIf="isNamePressed == true">
+        <input type="text" name="name"  class="form-control">
+      </div>
+
+      <br />
+
+      <label>Comments on stay at home habits: {{ user.mateStayTypeComment }} </label>
+      <button type="button" (click)="editName()" class="btn btn-default">Edit</button>
+      <div *ngIf="isNamePressed == true">
+        <input type="text" name="name" class="form-control">
+      </div>
+
+      <br />
+      <label>Age: {{ user.age }} </label>
+      <button type="button" (click)="editName()" class="btn btn-default">Edit</button>
+      <div *ngIf="isNamePressed == true">
+        <input type="text" name="name" [(ngModel)]="user.age" class="form-control">
+      </div>
+  <div>
+  </div>
+    </div>
+  </div>
+</div>

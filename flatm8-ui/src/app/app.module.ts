@@ -16,6 +16,9 @@ import {AuthService} from "./auth/auth.service";
 import {JwtHelperService, JwtModule} from "@auth0/angular-jwt";
 import { LogoutComponent } from './container/logout/logout.component';
 import { MyflatsComponent } from './container/myflats/myflats.component';
+import {FlatService} from "./service/FlatService";
+import { CreateflatComponent } from './container/createflat/createflat.component';
+import { UserdetailsComponent } from './container/userdetails/userdetails.component';
 
 const appRoutes: Routes = [
   {
@@ -39,6 +42,14 @@ const appRoutes: Routes = [
     path: 'myflats',
     component: MyflatsComponent
   },
+  {
+    path: 'userdetails',
+    component: UserdetailsComponent
+  },
+  {
+    path: 'createflat',
+    component: CreateflatComponent
+  },
   { path: '**', component: PagenotfoundComponent }
 ];
 
@@ -54,7 +65,9 @@ export function tokenGetter() {
     LoginComponent,
     RegisterComponent,
     LogoutComponent,
-    MyflatsComponent
+    MyflatsComponent,
+    CreateflatComponent,
+    UserdetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -73,7 +86,7 @@ export function tokenGetter() {
       { enableTracing: true }
     )
   ],
-  providers: [AppService,
+  providers: [FlatService, AppService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

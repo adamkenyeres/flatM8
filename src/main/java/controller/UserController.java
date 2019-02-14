@@ -77,8 +77,8 @@ public class UserController {
         return repository.findAllByFirstNameAndLastName(nameParts[0], nameParts[1]);
     }
 
-    @RequestMapping(value = "/{email}", method = RequestMethod.GET)
-    public User getByEmail(@PathVariable("email") String email) {
+    @RequestMapping(value = "/getUserByEmail", method = RequestMethod.GET)
+    public User getByEmail(@RequestParam("email") String email) {
         if (!email.contains("@")) {
             LOGGER.error("Email doesn't contain @ sign, returning null.");
             return null;
