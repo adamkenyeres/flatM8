@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import repository.FlatRepository;
 import repository.RoleRepository;
 import repository.UserRepository;
 
@@ -32,6 +33,9 @@ public class Main implements CommandLineRunner {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private FlatRepository flatRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
@@ -43,6 +47,7 @@ public class Main implements CommandLineRunner {
         Role r = new Role();
         r.setName("USER");
         roleRepository.save(r);
+        flatRepository.deleteAll();
     }
 
 

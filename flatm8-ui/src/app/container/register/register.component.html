@@ -31,8 +31,8 @@
   <div class="form-group">
     <label for="password">Your lifestyle*:</label><br/>
     <select [(ngModel)]="credentials.tenantType" id="tenantType" name="tenantTypeOption" required>
-      <option *ngFor="let key of objectKeys(CONST_TENANT_TYPES)" [value]="key"
-              [label]="CONST_TENANT_TYPES[key]"></option>
+      <option *ngFor="let key of objectKeys(app.CONST_TENANT_TYPES)" [value]="key"
+              [label]="app.CONST_TENANT_TYPES[key]"></option>
     </select>
   </div>
   <div class="form-group">
@@ -43,8 +43,8 @@
   <div class="form-group">
     <label for="password">Your stay at home habits*:</label><br/>
     <select [(ngModel)]="credentials.tenantStayType" id="tenantStayTypeOption" name="tenantStayTypeOption" required>
-      <option *ngFor="let key of objectKeys(CONST_TENANT_STAY_TYPES)" [value]="key"
-              [label]="CONST_TENANT_STAY_TYPES[key]"></option>
+      <option *ngFor="let key of objectKeys(app.CONST_TENANT_STAY_TYPES)" [value]="key"
+              [label]="app.CONST_TENANT_STAY_TYPES[key]"></option>
     </select>
   </div>
   <div class="form-group">

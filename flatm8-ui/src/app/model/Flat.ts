@@ -5,6 +5,8 @@ export class Flat {
   address: Address;
   flatType: string;
   roomCount: number;
+  capacity: number;
   userEmail: string;
   additionalDetails = [];
+  flatMates = [];
 }

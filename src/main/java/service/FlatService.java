@@ -45,7 +45,7 @@ public class FlatService {
         Flat f = flatRepository.findByUserEmail(email);
 
         if (f == null) {
-            LOGGER.error("Couldn't find any flats for user.");
+            LOGGER.warn("Couldn't find any flats for user.");
             return null;
         }
 
@@ -61,7 +61,7 @@ public class FlatService {
         Flat f = flatRepository.findByAddress(address);
 
         if (f == null) {
-            LOGGER.error("Couldn't find any flats for address.");
+            LOGGER.warn("Couldn't find any flats for address.");
             return null;
         }
 
@@ -111,7 +111,7 @@ public class FlatService {
         Flat flat = flatRepository.findById(f.getId());
 
         if (flat == null) {
-            LOGGER.error("Can't find flat by id {}, can't delete.", f.getId());
+            LOGGER.warn("Can't find flat by id {}, can't delete.", f.getId());
             throw new FlatNotFoundException("Can't find flat");
         }
 
@@ -126,7 +126,7 @@ public class FlatService {
 
         Flat f = flatRepository.findById(id);
         if (f == null) {
-            LOGGER.error("Can't find flat for id: {}, returning null.", id);
+            LOGGER.warn("Can't find flat for id: {}, returning null.", id);
             return null;
         }
 
@@ -146,7 +146,7 @@ public class FlatService {
         Flat f = flatRepository.findByAddress(address);
 
         if (f == null) {
-            LOGGER.error("Can't delete flat by address, flat is not found.");
+            LOGGER.warn("Can't delete flat by address, flat is not found.");
             throw new FlatNotFoundException("Couldn't find flat by address.");
         }
 

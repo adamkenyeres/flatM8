@@ -113,7 +113,6 @@ public class FlatController implements GenericController<Flat> {
     @RequestMapping(value = "/getForUser", method = RequestMethod.GET)
     public ResponseEntity getFlatForUser(@RequestParam("email") String email) {
         Flat f = service.getFlatByUserEmail(email);
-
         if (f == null) {
             return ResponseEntity.ok().build();
         } else {

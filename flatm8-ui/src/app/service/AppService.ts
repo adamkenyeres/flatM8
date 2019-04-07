@@ -41,11 +41,10 @@ export class AppService {
   }
 
   getUserByEmail(email) {
-    let user = {};
-    this.http.get('http://localhost:8080/' + email).subscribe(data => {
-      user = data;
-    });
+    return this.http.get('http://localhost:8080/getUserByEmail?email=' + email);
+  }
 
-    return user;
+  updateUser(user) {
+    return this.http.post('http://localhost:8080/updateUser', user);
   }
 }

@@ -23,8 +23,7 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public User save(User userLogin) throws Exception {
-
+    public User register(User userLogin) throws Exception {
         User u = userRepository.findByEmail(userLogin.getEmail());
         List<Role> roles = new ArrayList<>();
 
@@ -41,9 +40,11 @@ public class UserService {
         userLogin.setRoles(new HashSet<>(roles));
         return userRepository.save(userLogin);
     }
+    public User save(User userLogin) {
+        return userRepository.save(userLogin);
+    }
 
     public User findByUsername(String email) {
         return userRepository.findByEmail(email);
     }
-
 }

@@ -78,12 +78,17 @@ public class UserController {
     }
 
     @RequestMapping(value = "/getUserByEmail", method = RequestMethod.GET)
-    public User getByEmail(@RequestParam("email") String email) {
+    public ResponseEntity getByEmail(@RequestParam("email") String email) {
         if (!email.contains("@")) {
             LOGGER.error("Email doesn't contain @ sign, returning null.");
             return null;
         }
-        return repository.findByEmail(email);
+        User u = repository.findByEmail(email);
+        if (u == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(u);
+        }
     }
 
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
@@ -104,7 +109,7 @@ public class UserController {
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody User userLogin) {
         try {
-            return ResponseEntity.ok(userService.save(userLogin));
+            return ResponseEntity.ok(userService.register(userLogin));
         } catch (Exception e) {
             LOGGER.error("Error creating user!");
             return ResponseEntity.notFound().build();
@@ -145,4 +150,14 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+    public ResponseEntity updateUser(@RequestBody User user) {
+        try {
+            return ResponseEntity.ok(this.userService.save(user));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

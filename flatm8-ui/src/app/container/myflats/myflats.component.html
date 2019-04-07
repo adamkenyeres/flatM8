@@ -16,3 +16,29 @@
   </div>
   </div>
 </div>
+
+<div *ngIf="!noFlats && flat">
+
+  <h2>Your Flat: </h2>
+  <div class="panel-body">
+    <label>City: {{ flat.address.city }} </label> <br/>
+    <label>Street Address: {{ flat.address.streetAddress }} </label> <br/>
+    <label>Street Number: {{ flat.address.streetNumber }} </label> <br/>
+    <label>District: {{ flat.address.district }} </label> <br/>
+    <label>Floor: {{ flat.address.floor }} </label> <br/>
+    <label>Door: {{ flat.address.door }} </label> <br/>
+
+    <div *ngFor="let user of flat.flatMates; let i = index" [attr.data-index]="i">
+      <h3>Flatmate #{{i+1}}</h3>
+      <label>First Name: {{ user.firstName}} </label> <br/>
+      <label>Last Name: {{ user.lastName}} </label> <br/>
+      <label>Age: {{ user.age}} </label> <br/>
+      <label>LifeStyle: {{ app.CONST_TENANT_TYPES[user.tenantType]}} </label> <br/>
+      <label>LifeStyle Comments: {{ user.tenantTypeComment}} </label> <br/>
+      <label>Stay At Home: {{ app.CONST_TENANT_STAY_TYPES[user.tenantStayType]}} </label> <br/>
+      <label>Stay At Home Comments: {{ user.tenantStayTypeComment}} </label> <br/>
+    </div>
+
+  </div>
+  <button (click)="deleteFlat()">Delete Flat</button>
+</div>

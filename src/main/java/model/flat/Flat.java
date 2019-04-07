@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import model.common.AdditionalDetail;
+import model.tenant.User;
 import org.springframework.data.annotation.Id;
 
 import java.util.List;
@@ -22,6 +23,8 @@ public class Flat {
     private Integer roomCount;
     private String userEmail;
     private List<AdditionalDetail> additionalDetails;
+    private List<User> flatMates;
+    private Integer capacity;
 
     @Override
     public boolean equals(Object o) {

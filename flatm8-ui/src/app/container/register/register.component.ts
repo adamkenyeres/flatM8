@@ -13,23 +13,14 @@ import {Form, FormBuilder, FormGroup, Validators} from "@angular/forms";
 })
 @Injectable()
 export class RegisterComponent implements OnInit {
+
   objectKeys = Object.keys;
 
   credentials: User = new User();
-
-  typesArray = [];
-  stayTypesArray = [];
   error = false;
   userExistsError = false;
 
   constructor(private app: AppService, private http: HttpClient, private router: Router, private auth: AuthService) {
-    for (const key in this.app.CONST_TENANT_TYPES) {
-      this.typesArray.push(this.app.CONST_TENANT_TYPES[key])
-    }
-
-    for (const key in this.app.CONST_TENANT_STAY_TYPES) {
-      this.stayTypesArray.push(this.app.CONST_TENANT_STAY_TYPES[key])
-    }
   }
 
   register() {

@@ -16,7 +16,7 @@ export class MyflatsComponent implements OnInit {
   constructor(private flatService: FlatService, private app: AppService,
               private auth: AuthService, private router: Router, private http: HttpClient) { }
 
-  flats = [];
+  flat: Object;
   noFlats = false;
   error = false;
 
@@ -35,13 +35,21 @@ export class MyflatsComponent implements OnInit {
     plus.addEventListener('click', plusToggle);
   }
 
+  deleteFlat() {
+    this.flatService.deleteFlat(this.flat).subscribe(resp => {
+      console.log("delete success");
+    });
+    this.flat = null;
+    window.location.reload();
+  }
   getFlatsForUser() {
     this.noFlats = false;
     this.error = false;
     this.http.get('http://localhost:8080/user').subscribe(resp => {
       this.flatService.getFlatsForUser(resp["name"]).subscribe(resp => {
         if (resp != null) {
-
+          console.log(resp);
+          this.flat = resp;
         } else {
           this.noFlats = true
         }
@@ -49,11 +57,6 @@ export class MyflatsComponent implements OnInit {
         this.error = true;
       })
     });
-    /*this.flatService.getFlatsForUser(this.app.innerdata.name).subscribe(resp => {
-      console.log(resp);
-    }, err => {
-
-    });*/
   }
 
   addiLiveFlat() {

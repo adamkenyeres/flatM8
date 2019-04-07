@@ -24,9 +24,9 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     private TenantType tenantType;
-    private String mateTypeComment;
+    private String tenantTypeComment;
     private TenantStayType tenantStayType;
-    private String mateStayTypeComment;
+    private String tenantStayTypeComment;
     private int age;
     private List<AdditionalDetail> additionalDetails;
     private Set<Role> roles;
