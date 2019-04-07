@@ -1,5 +1,5 @@
 <div *ngIf="error" class="alert alert-danger">
-  Unknown error occurred while login, please try again later!
+  Unknown error occurred while fetching flats, please try again later!
 </div>
 <div *ngIf="noFlats" class="alert alert-danger">
   No flats are present. Would you like to add one?
@@ -18,7 +18,12 @@
 </div>
 
 <div *ngIf="!noFlats && flat">
-
+  <div *ngIf="addMateError" class="alert alert-danger">
+    Error adding new FlatMate (Maybe wrong email or duplicate?) !
+  </div>
+  <div *ngIf="deleteMateError" class="alert alert-danger">
+    Error deleting FlatMate!
+  </div>
   <h2>Your Flat: </h2>
   <div class="panel-body">
     <label>City: {{ flat.address.city }} </label> <br/>
@@ -29,7 +34,7 @@
     <label>Door: {{ flat.address.door }} </label> <br/>
 
     <div *ngFor="let user of flat.flatMates; let i = index" [attr.data-index]="i">
-      <h3>Flatmate #{{i+1}}</h3>
+      <h3>Flatmate #{{i+1}}<label (click)="deleteMate(user.email)">🗑</label></h3>
       <label>First Name: {{ user.firstName}} </label> <br/>
       <label>Last Name: {{ user.lastName}} </label> <br/>
       <label>Age: {{ user.age}} </label> <br/>
@@ -38,7 +43,14 @@
       <label>Stay At Home: {{ app.CONST_TENANT_STAY_TYPES[user.tenantStayType]}} </label> <br/>
       <label>Stay At Home Comments: {{ user.tenantStayTypeComment}} </label> <br/>
     </div>
-
+    <button *ngIf="flat.flatMates.length < flat.capacity" (click)="addNewMate()">Add new FlatMate</button>
+      <div class="form-group" *ngIf="addingNewMate">
+        <label for="newFlatMateEmail">Email*:</label> <input type="email"
+                                                          class="form-control" id="newFlatMateEmail" name="newFlatMateEmail" required
+                                                          [(ngModel)]="newFlatMateEmail"/>
+        <button type="submit" (click)="addMate()" class="btn btn-primary">Submit</button>
+        <button (click)="stopAddingNewFlatmate()" class="btn btn-primary">Cancel</button>
+      </div>
   </div>
   <button (click)="deleteFlat()">Delete Flat</button>
 </div>

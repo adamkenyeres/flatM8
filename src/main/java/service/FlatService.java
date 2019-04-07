@@ -29,7 +29,7 @@ public class FlatService {
 
         Flat flat = flatRepository.findByUserEmail(f.getUserEmail());
 
-        if (flat != null) {
+        if (flat != null && !flat.equals(f)) {
             LOGGER.error("User {} already has a flat.", f.getUserEmail());
             throw new MultipleFlatForUserException("User already has a flat present.");
         }

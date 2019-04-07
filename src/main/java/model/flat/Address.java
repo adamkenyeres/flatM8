@@ -33,7 +33,6 @@ public class Address {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(city, streetAddress, streetNumber, district, door, floor);
     }
 }

@@ -114,7 +114,7 @@ public class FlatController implements GenericController<Flat> {
     public ResponseEntity getFlatForUser(@RequestParam("email") String email) {
         Flat f = service.getFlatByUserEmail(email);
         if (f == null) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok(f);
         }

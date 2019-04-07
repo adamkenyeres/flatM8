@@ -74,7 +74,7 @@
 <div *ngIf="step==2">
   <h1>Please provide roommate details</h1>
 
-  <div class="plus" id="plus" (click)="addNewFlatMate()">
+  <div class="plus" id="plus" *ngIf="this.flatMates.length < flat.capacity" (click)="addNewFlatMate()">
     <div class="plus__line plus__line--v"></div>
     <div class="plus__line plus__line--h"></div>
   </div>

@@ -38,4 +38,8 @@ export class AppComponent {
   myflats() {
     this.router.navigateByUrl('myflats');
   }
+
+  myentries() {
+    this.router.navigateByUrl('myentries');
+  }
 }

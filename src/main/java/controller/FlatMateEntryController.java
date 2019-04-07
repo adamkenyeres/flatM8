@@ -107,13 +107,19 @@ public class FlatMateEntryController implements GenericController<FlatMateEntry>
     }
 
     @RequestMapping(value = "/getAllForMainTenant/{tenantEmail}", method = RequestMethod.GET)
-    public List<FlatMateEntry> getAllEntriesForMainTenant(@PathVariable String tenantEmail) {
+    public ResponseEntity getAllEntriesForMainTenant(@PathVariable String tenantEmail) {
         User mainTenant = userRepository.findByEmail(tenantEmail);
         if (mainTenant == null) {
             LOGGER.warn("Couldn't find main tenant with email: {}", tenantEmail);
-            return Collections.emptyList();
+            return ResponseEntity.badRequest().build();
         }
-        return repository.findAllByMainTenant(mainTenant);
+        List<FlatMateEntry> entries = repository.findAllByMainTenant(mainTenant);
+
+        if (entries.isEmpty()) {
+            LOGGER.warn("Couldn't find any entries for user: {}", tenantEmail);
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(entries);
     }
 
     @RequestMapping(value = "/getAllForTenant/{tenantEmail}", method = RequestMethod.GET)

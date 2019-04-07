@@ -19,6 +19,9 @@ import { MyflatsComponent } from './container/myflats/myflats.component';
 import {FlatService} from "./service/FlatService";
 import { CreateflatComponent } from './container/createflat/createflat.component';
 import { UserdetailsComponent } from './container/userdetails/userdetails.component';
+import { MyentriesComponent } from './container/myentries/myentries.component';
+import {EntryService} from "./service/EntryService";
+import { CreateentryComponent } from './container/createentry/createentry.component';
 
 const appRoutes: Routes = [
   {
@@ -50,6 +53,14 @@ const appRoutes: Routes = [
     path: 'createflat',
     component: CreateflatComponent
   },
+  {
+    path: 'myentries',
+    component: MyentriesComponent
+  },
+  {
+    path: 'createentry',
+    component: CreateentryComponent
+  },
   { path: '**', component: PagenotfoundComponent }
 ];
 
@@ -67,7 +78,9 @@ export function tokenGetter() {
     LogoutComponent,
     MyflatsComponent,
     CreateflatComponent,
-    UserdetailsComponent
+    UserdetailsComponent,
+    MyentriesComponent,
+    CreateentryComponent
   ],
   imports: [
     BrowserModule,
@@ -86,7 +99,7 @@ export function tokenGetter() {
       { enableTracing: true }
     )
   ],
-  providers: [FlatService, AppService,
+  providers: [EntryService, FlatService, AppService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

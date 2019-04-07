@@ -1,0 +1,36 @@
+<div *ngIf="error" class="alert alert-danger">
+  Unknown error occurred while fetching flats, please try again later!
+</div>
+<div *ngIf="noFlats" class="alert alert-danger">
+  No flats are present. Please add one under <a href="/myflats">MyFlats</a> menu.
+</div>
+<div *ngIf="flatFull" class="alert alert-danger">
+  The selected Flat is full, please select another one or remove flatmates.
+</div>
+<div *ngIf="!noFlats" class="form-group">
+  <label>Choose a flat:</label><br/>
+  <select (change)="update()" [(ngModel)]="selectedFlat">
+    <option *ngFor="let flat of flats" [ngValue]="flat"
+            [label]="flat.address.streetAddress + ' ' + flat.address.streetNumber"></option>
+  </select>
+</div>
+
+<div *ngIf="selectedFlat">
+  <label>Capacity: {{ selectedFlat.capacity }} </label> <br/>
+  <label>Current Flatmate count: {{selectedFlat.flatMates.length }}</label> <br/>
+</div>
+
+<div *ngIf="!flatFull && selectedFlat">
+  <select (change)="update()" [(ngModel)]="selectedFlat">
+    <option *ngFor="let crit of objectKeys(GENDER_CRITERIAS)" [ngValue]="crit"
+            [label]="GENDER_CRITERIAS[crit]"></option>
+  </select><br/>
+  <select (change)="update()" [(ngModel)]="selectedFlat">
+    <option *ngFor="let crit of objectKeys(LIFESTYLE_CRITERIAS)" [ngValue]="crit"
+            [label]="LIFESTYLE_CRITERIAS[crit]"></option>
+  </select><br/>
+  <select (change)="update()" [(ngModel)]="selectedFlat">
+    <option *ngFor="let crit of ROOMTYPE_CRITERIAS" [ngValue]="crit"
+            [label]="ROOMTYPE_CRITERIAS[crit]"></option>
+  </select><br/>
+</div>

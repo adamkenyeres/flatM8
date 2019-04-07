@@ -19,6 +19,10 @@ export class MyflatsComponent implements OnInit {
   flat: Object;
   noFlats = false;
   error = false;
+  addMateError = false;
+  deleteMateError = false;
+  addingNewMate = false;
+  newFlatMateEmail: string;
 
   ngOnInit() {
     if (!this.auth.isAuthenticated()) {
@@ -50,11 +54,13 @@ export class MyflatsComponent implements OnInit {
         if (resp != null) {
           console.log(resp);
           this.flat = resp;
-        } else {
-          this.noFlats = true
         }
       }, err => {
-        this.error = true;
+        if (err.status == 404) {
+          this.noFlats = true;
+        } else {
+          this.error = true;
+        }
       })
     });
   }
@@ -65,5 +71,50 @@ export class MyflatsComponent implements OnInit {
 
   addiShareFlat() {
     this.router.navigateByUrl("createflat?type=iShare");
+  }
+
+  deleteMate(email) {
+    let flatMates = this.flat["flatMates"];
+    let filteredMates = flatMates.filter(mate => mate["email"] != email);
+    this.flat["flatMates"] = filteredMates;
+
+    this.flatService.addFlat(<Flat>this.flat).subscribe(resp => {
+      console.log(resp);
+    }, err => {
+      console.log(err);
+    })
+  }
+
+  addMate() {
+    let coll = this.flat["flatMates"].filter(mate => mate["email"] == this.newFlatMateEmail);
+    if (coll.length != 0) {
+      this.addMateError = true;
+      return;
+    }
+
+    this.app.getUserByEmail(this.newFlatMateEmail).subscribe(resp => {
+      let flatMates = this.flat["flatMates"];
+      flatMates.push(resp);
+      this.flat["flatMates"] = flatMates;
+      this.flatService.addFlat(<Flat>this.flat).subscribe(resp => {
+        console.log(resp);
+        this.addMateError = false;
+      }, err => {
+        console.log(err);
+        this.addMateError = true;
+      });
+    }, err => {
+      this.addMateError = true;
+    });
+
+    this.stopAddingNewFlatmate();
+  }
+
+  addNewMate() {
+    this.addingNewMate = true;
+  }
+
+  stopAddingNewFlatmate() {
+    this.addingNewMate = false;
   }
 }
