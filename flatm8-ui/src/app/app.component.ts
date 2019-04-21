@@ -42,4 +42,8 @@ export class AppComponent {
   myentries() {
     this.router.navigateByUrl('myentries');
   }
+
+  notifications() {
+    this.router.navigateByUrl('notifications');
+  }
 }

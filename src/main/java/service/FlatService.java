@@ -4,22 +4,39 @@ import exception.FlatNotFoundException;
 import exception.MultipleFlatForUserException;
 import model.flat.Address;
 import model.flat.Flat;
+import model.tenant.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.FlatRepository;
+import repository.UserRepository;
 import util.FlatUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FlatService {
 
-    @Autowired
-    private FlatRepository flatRepository;
+    private final FlatRepository flatRepository;
+
+    private final UserRepository userRepository;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FlatService.class);
+
+    @Autowired
+    public FlatService(FlatRepository flatRepository, UserRepository userRepository) {
+        this.flatRepository = flatRepository;
+        this.userRepository = userRepository;
+    }
+
+    public Flat updateFlat(Flat f) {
+        if (f == null) {
+            return null;
+        }
+        return flatRepository.save(f);
+    }
 
     public Flat saveFlat(Flat f) throws MultipleFlatForUserException {
         if (f == null || f.getUserEmail() == null) {
@@ -35,6 +52,33 @@ public class FlatService {
         }
 
         return flatRepository.save(f);
+    }
+
+    public Flat getFlatForFlatMate(String email) {
+        if (email == null || email.isEmpty()) {
+            LOGGER.error("Couldn't find any flats for user, email shouldn't be null or empty.");
+            return null;
+        }
+
+        List<Flat> flats = flatRepository.findAll();
+
+        User u = userRepository.findByEmail(email);
+
+        if (u == null) {
+            LOGGER.error("Can't find user with email: {}", email);
+            return null;
+        }
+
+        List<Flat> userInFlats = flats.stream()
+                .filter(f -> f.getFlatMates().contains(u))
+                .collect(Collectors.toList());
+
+        if (userInFlats.size() == 1) {
+            return userInFlats.get(0);
+        } else {
+            LOGGER.error("Invalid state: User with email: {} is present as flatmate in multiple flats.", email);
+            return null;
+        }
     }
     public Flat getFlatByUserEmail(String email) {
         if (email == null || email.isEmpty()) {

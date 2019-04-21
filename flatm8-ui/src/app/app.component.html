@@ -8,6 +8,7 @@
         <a *ngIf="auth.isAuthenticated()== true" (click)="accountDetails()">Account</a>
         <a *ngIf="auth.isAuthenticated()== true" (click)="myflats()">MyFlat</a>
         <a *ngIf="auth.isAuthenticated() == true" (click)="myentries()">MyEntries</a>
+        <a *ngIf="auth.isAuthenticated() == true" (click)="notifications()">Notifications</a>
         <a *ngIf="auth.isAuthenticated() == true" (click)="logout()">Logout</a>
       </div>
     </div>

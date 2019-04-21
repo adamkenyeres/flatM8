@@ -154,3 +154,10 @@ span {
 .tutorial ul li:hover ul li:hover span {
   background-color: #ee204e;
 }
+
+.button__badge {
+  position: absolute;
+  right: 11px;
+  top: 6px;
+  color: #fff;
+}

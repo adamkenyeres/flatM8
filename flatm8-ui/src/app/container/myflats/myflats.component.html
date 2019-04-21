@@ -1,16 +1,32 @@
 <div *ngIf="error" class="alert alert-danger">
   Unknown error occurred while fetching flats, please try again later!
 </div>
-<div *ngIf="noFlats" class="alert alert-danger">
+<div *ngIf="noFlats" class="alert alert-info">
   No flats are present. Would you like to add one?
 </div>
+<div *ngIf="cantDeleteLastFlatMate" class="alert alert-danger">
+  You can't delete the last mate from the flat!
+</div>
+
+<div *ngIf="cantDeleteMainMate" class="alert alert-danger">
+  You can't delete the main mate from the flat!
+</div>
+
+<div *ngIf="notMainUserError" class="alert alert-danger">
+  Only main mate can pass "Main Mate" privilege! :(
+</div>
+
+<div *ngIf="mainMateSuccess" class="alert alert-success">
+  Main Mate change succeeded!
+</div>
+
 <div [hidden]="!noFlats">
   <div class="centered">
   <div class="plus" id="plus">
     <div class="plus__line plus__line--v">
       <a (click)="addiLiveFlat()" class="plus__link">iLive</a>
       <a (click)="addiShareFlat()" class="plus__link">iShare</a>
-      <a (click)="addExisting()" class="plus__link">itExists</a>
+      <!-- <a (click)="addExisting()" class="plus__link">itExists</a> -->
     </div>
     <div class="plus__line plus__line--h"></div>
   </div>
@@ -26,6 +42,7 @@
   </div>
   <h2>Your Flat: </h2>
   <div class="panel-body">
+    <h4>Main Mate Email: {{ flat.userEmail }}</h4><br/>
     <label>City: {{ flat.address.city }} </label> <br/>
     <label>Street Address: {{ flat.address.streetAddress }} </label> <br/>
     <label>Street Number: {{ flat.address.streetNumber }} </label> <br/>
@@ -34,7 +51,12 @@
     <label>Door: {{ flat.address.door }} </label> <br/>
 
     <div *ngFor="let user of flat.flatMates; let i = index" [attr.data-index]="i">
-      <h3>Flatmate #{{i+1}}<label (click)="deleteMate(user.email)">🗑</label></h3>
+      <h3>Flatmate #{{i+1}}
+        <label (click)="deleteMate(user.email)">🗑</label>
+        <label *ngIf="user.email === flat.userEmail">♛</label>
+      </h3>
+      <label *ngIf="user.email !== flat.userEmail"><a (click)="makeMainMate(user)">Make as Main Mate</a></label><br/>
+      <label>E-mail: {{ user.email}} </label> <br/>
       <label>First Name: {{ user.firstName}} </label> <br/>
       <label>Last Name: {{ user.lastName}} </label> <br/>
       <label>Age: {{ user.age}} </label> <br/>
@@ -51,6 +73,12 @@
         <button type="submit" (click)="addMate()" class="btn btn-primary">Submit</button>
         <button (click)="stopAddingNewFlatmate()" class="btn btn-primary">Cancel</button>
       </div>
+    <div *ngIf="requestSent" class="alert alert-success">
+      Request created! You can check the request status under Notifications tab!
+    </div>
+    <div *ngIf="requestAlreadyExists" class="alert alert-danger">
+      Couldn't create request because there is already one with the same parameters!
+    </div>
   </div>
   <button (click)="deleteFlat()">Delete Flat</button>
 </div>

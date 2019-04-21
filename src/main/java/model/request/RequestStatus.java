@@ -1,5 +1,5 @@
 package model.request;
 
-public enum ContactRequestStatus {
+public enum RequestStatus {
     NONE,PENDING,REJECTED,ACCEPTED
 }

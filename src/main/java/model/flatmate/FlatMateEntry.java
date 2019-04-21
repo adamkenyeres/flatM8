@@ -9,6 +9,7 @@ import model.tenant.User;
 import org.springframework.data.annotation.Id;
 
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @AllArgsConstructor
@@ -30,5 +31,19 @@ public class FlatMateEntry {
 
     public void addTenant(User tenant) {
         tenants.add(tenant);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FlatMateEntry that = (FlatMateEntry) o;
+        return Objects.equals(flat, that.flat);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(flat);
     }
 }

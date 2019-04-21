@@ -22,6 +22,10 @@ import { UserdetailsComponent } from './container/userdetails/userdetails.compon
 import { MyentriesComponent } from './container/myentries/myentries.component';
 import {EntryService} from "./service/EntryService";
 import { CreateentryComponent } from './container/createentry/createentry.component';
+import { NotificationsComponent } from './container/notifications/notifications.component';
+import {NotificationService} from "./service/NotificationService";
+import {MatExpansionModule} from "@angular/material";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 const appRoutes: Routes = [
   {
@@ -61,6 +65,10 @@ const appRoutes: Routes = [
     path: 'createentry',
     component: CreateentryComponent
   },
+  {
+    path: 'notifications',
+    component: NotificationsComponent
+  },
   { path: '**', component: PagenotfoundComponent }
 ];
 
@@ -80,9 +88,12 @@ export function tokenGetter() {
     CreateflatComponent,
     UserdetailsComponent,
     MyentriesComponent,
-    CreateentryComponent
+    CreateentryComponent,
+    NotificationsComponent
   ],
   imports: [
+    MatExpansionModule,
+    BrowserAnimationsModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -99,7 +110,7 @@ export function tokenGetter() {
       { enableTracing: true }
     )
   ],
-  providers: [EntryService, FlatService, AppService,
+  providers: [EntryService, FlatService, AppService, NotificationService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

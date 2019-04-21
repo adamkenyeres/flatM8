@@ -17,6 +17,10 @@ export class FlatService {
     return this.http.post("http://localhost:8080/flats/", flat);
   }
 
+  updateFlat(flat: Flat): Observable<Object> {
+    return this.http.post("http://localhost:8080/flats/update", flat);
+  }
+
   deleteFlat(flat): Observable<Object> {
     return this.http.delete("http://localhost:8080/flats/"+flat.id);
   }

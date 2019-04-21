@@ -1,0 +1,130 @@
+<div *ngIf="error" class="alert alert-danger">
+  Unknown error occurred while fetching notifications, please try again later!
+</div>
+<div *ngIf="notifications.length == 0" class="alert alert-info">
+  You don't have any notifications, check back later!
+</div>
+<div *ngIf="myRequests.length == 0" class="alert alert-info">
+  No notifications created by you, check back later!
+</div>
+
+<div *ngIf="requestCompleted" class="alert alert-success">
+  Request fulfilled successfully!
+</div>
+
+<div *ngIf="notifications.length > 0">
+  <h4>Notifications for You:</h4>
+  <div *ngFor="let noti of notifications;" [attr.data-index]="i">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Request ID: {{noti.id}}
+        </mat-panel-title>
+        <mat-panel-description>
+          <p style="color:green;" *ngIf="noti.requestStatus === 'ACCEPTED'">ACCEPTED</p>
+          <p style="color:red;" *ngIf="noti.requestStatus === 'REJECTED'">REJECTED</p>
+          <p style="color:#9b870c;" *ngIf="noti.requestStatus === 'PENDING'">PENDING</p>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <p>Type: <b>{{getTypeHR(noti)}}</b></p>
+      <p *ngIf="noti.requestType == 'MATE_DELETE'">Mate to be deleted:
+        {{noti.mateToDelete.firstName + " " + noti.mateToDelete.lastName + "(" + noti.mateToDelete.email + ")" }}</p>
+      <p *ngIf="noti.requestTye == 'MATE_ADD'">Mate to be added:</p>
+      <div *ngIf="noti.requestType == 'MATE_ADD'">
+        <p>Email: {{noti.mateToAdd.email}}</p>
+        <p>First Name: {{noti.mateToAdd.firstName}}</p>
+        <p>Last Name: {{noti.mateToAdd.lastName}}</p>
+        <p>Age: {{noti.mateToAdd.age}}</p>
+        <p>Stay at Home Type: {{noti.mateToAdd.tenantStayType}}</p>
+        <p>Stay at Home Type Comment: {{noti.mateToAdd.tenantStayTypeComment}}</p>
+        <p>Lifestyle Type: {{noti.mateToAdd.tenantType}}</p>
+        <p>Lifestyle Type Comment: {{noti.mateToAdd.tenantTypeComment}}</p>
+      </div>
+      <div *ngIf="noti.requestType == 'CONTACT_REQUEST'">
+        <p>Email: {{noti.sender.email}}</p>
+        <p>First Name: {{noti.sender.firstName}}</p>
+        <p>Last Name: {{noti.sender.lastName}}</p>
+        <p>Age: {{noti.sender.age}}</p>
+        <p>Stay at Home Type: {{noti.sender.tenantStayType}}</p>
+        <p>Stay at Home Type Comment: {{noti.sender.tenantStayTypeComment}}</p>
+        <p>Lifestyle Type: {{noti.sender.tenantType}}</p>
+        <p>Lifestyle Type Comment: {{noti.sender.tenantTypeComment}}</p>
+      </div>
+      <div *ngIf="noti.requestType == 'FLAT_DELETE'">
+        <p> City: {{ noti.flatToDelete.address.city }} </p>
+        <p>District: {{ noti.flatToDelete.address.district }}</p>
+        <p>Street: {{ noti.flatToDelete.address.streetAddress }}</p>
+        <p>Number: {{ noti.flatToDelete.address.streetNumber }}</p>
+        <p>Floor/Door: {{ noti.flatToDelete.address.floor + " / " + noti.flatToDelete.address.door }}</p>
+      </div>
+      <h4>Request accepted by:</h4>
+      <div *ngFor="let accepter of noti.approvers;" [attr.data-index]="i">
+        <p>{{ "✔ " + accepter.firstName + " " + accepter.lastName + " (" + accepter.email + ")"}}</p>
+      </div>
+      <h4>Request rejected by:</h4>
+      <div *ngFor="let rejecter of noti.rejecters;" [attr.data-index]="i">
+        <p>{{ "✖ " +rejecter.firstName + " " + rejecter.lastName + " (" + rejecter.email + ")"}}</p>
+      </div>
+      <p *ngIf="isAcceptOrRejectNeeded(noti)" (click)="acceptRequest(noti)">Accept ✅</p>
+      <p *ngIf="isAcceptOrRejectNeeded(noti)" (click)="rejectRequest(noti)">Reject ❌</p>
+    </mat-expansion-panel>
+  </div>
+</div>
+<div *ngIf="myRequests.length > 0">
+  <h4>Notifications created by You:</h4>
+  <div *ngFor="let noti of myRequests;" [attr.data-index]="i">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Request ID: {{noti.id}}
+        </mat-panel-title>
+        <mat-panel-description>
+          <p style="color:green;" *ngIf="noti.requestStatus === 'ACCEPTED'">ACCEPTED</p>
+          <p style="color:red;" *ngIf="noti.requestStatus === 'REJECTED'">REJECTED</p>
+          <p style="color:#9b870c;" *ngIf="noti.requestStatus === 'PENDING'">PENDING</p>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <p>Type: <b>{{getTypeHR(noti)}}</b></p>
+      <p *ngIf="noti.requestType == 'MATE_DELETE'">Mate to be deleted:
+        {{noti.mateToDelete.firstName + " " + noti.mateToDelete.lastName + "(" + noti.mateToDelete.email + ")" }}</p>
+      <p *ngIf="noti.requestTye == 'MATE_ADD'">Mate to be added:</p>
+      <div *ngIf="noti.requestType == 'MATE_ADD'">
+        <p>Email: {{noti.mateToAdd.email}}</p>
+        <p>First Name: {{noti.mateToAdd.firstName}}</p>
+        <p>Last Name: {{noti.mateToAdd.lastName}}</p>
+        <p>Age: {{noti.mateToAdd.age}}</p>
+        <p>Stay at Home Type: {{noti.mateToAdd.tenantStayType}}</p>
+        <p>Stay at Home Type Comment: {{noti.mateToAdd.tenantStayTypeComment}}</p>
+        <p>Lifestyle Type: {{noti.mateToAdd.tenantType}}</p>
+        <p>Lifestyle Type Comment: {{noti.mateToAdd.tenantTypeComment}}</p>
+      </div>
+      <div *ngIf="noti.requestType == 'CONTACT_REQUEST'">
+        <p>Email: {{noti.sender.email}}</p>
+        <p>First Name: {{noti.sender.firstName}}</p>
+        <p>Last Name: {{noti.sender.lastName}}</p>
+        <p>Age: {{noti.sender.age}}</p>
+        <p>Stay at Home Type: {{noti.sender.tenantStayType}}</p>
+        <p>Stay at Home Type Comment: {{noti.sender.tenantStayTypeComment}}</p>
+        <p>Lifestyle Type: {{noti.sender.tenantType}}</p>
+        <p>Lifestyle Type Comment: {{noti.sender.tenantTypeComment}}</p>
+      </div>
+      <div *ngIf="noti.requestType == 'FLAT_DELETE'">
+        <p>City: {{ noti.flatToDelete.address.city }} </p>
+        <p>District: {{ noti.flatToDelete.address.district }}</p>
+        <p>Street: {{ noti.flatToDelete.address.streetAddress }}</p>
+        <p>Number: {{ noti.flatToDelete.address.streetNumber }}</p>
+        <p>Floor/Door: {{ noti.flatToDelete.address.floor + " / " + noti.flatToDelete.address.door }}</p>
+      </div>
+      <h4>Request accepted by:</h4>
+      <div *ngFor="let accepter of noti.approvers;" [attr.data-index]="i">
+        <p>{{ "✔ " + accepter.firstName + " " + accepter.lastName + " (" + accepter.email + ")"}}</p>
+      </div>
+      <h4>Request rejected by:</h4>
+      <div *ngFor="let rejecter of noti.rejecters;" [attr.data-index]="i">
+        <p>{{ "✖ " +rejecter.firstName + " " + rejecter.lastName + " (" + rejecter.email + ")"}}</p>
+      </div>
+    </mat-expansion-panel>
+  </div>
+</div>

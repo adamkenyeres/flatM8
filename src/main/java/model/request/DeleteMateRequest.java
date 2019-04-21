@@ -1,9 +1,9 @@
 package model.request;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import model.flat.Flat;
 import model.flatmate.FlatMateEntry;
 import model.tenant.User;
 import org.springframework.data.annotation.Id;
@@ -11,13 +11,13 @@ import org.springframework.data.annotation.Id;
 import java.util.List;
 import java.util.Objects;
 
-@AllArgsConstructor
 @Data
-public class ContactRequest extends BaseRequest {
+public class DeleteMateRequest extends BaseRequest {
 
-    private FlatMateEntry entry;
+    private User mateToDelete;
+    private Flat flat;
 
-    public ContactRequest() {
+    public DeleteMateRequest() {
         super();
     }
 
@@ -25,14 +25,13 @@ public class ContactRequest extends BaseRequest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ContactRequest that = (ContactRequest) o;
-        return Objects.equals(entry, that.entry)
-                && Objects.equals(this.sender, that.sender);
+        DeleteMateRequest that = (DeleteMateRequest) o;
+        return Objects.equals(mateToDelete, that.mateToDelete) &&
+                Objects.equals(flat, that.flat);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(super.hashCode(), entry);
+        return Objects.hash(super.hashCode(), mateToDelete, flat);
     }
 }

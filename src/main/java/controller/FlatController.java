@@ -39,10 +39,18 @@ public class FlatController implements GenericController<Flat> {
     }
 
     @Override
-    public ResponseEntity getEntityById(String id) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity getEntityById(@PathVariable String id) {
         Flat f = service.getFlatById(id);
         return f == null ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok(f);
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ResponseEntity updateEntity(@Valid @RequestBody Flat flat) {
+        Flat f = service.updateFlat(flat);
+
+        return f == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(f);
     }
 
     @Override
@@ -112,7 +120,7 @@ public class FlatController implements GenericController<Flat> {
 
     @RequestMapping(value = "/getForUser", method = RequestMethod.GET)
     public ResponseEntity getFlatForUser(@RequestParam("email") String email) {
-        Flat f = service.getFlatByUserEmail(email);
+        Flat f = service.getFlatForFlatMate(email);
         if (f == null) {
             return ResponseEntity.notFound().build();
         } else {
