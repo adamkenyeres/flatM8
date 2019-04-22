@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {AppService} from "../../service/AppService";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
+import {NotificationService} from "../../service/NotificationService";
+import {DeleteMateRequest} from "../../model/DeleteMateRequest";
 
 @Component({
   selector: 'app-userdetails',
@@ -12,7 +14,7 @@ export class UserdetailsComponent implements OnInit {
 
   objectKeys = Object.keys;
 
-  constructor(private app: AppService, private http: HttpClient, private router: Router) {
+  constructor(private app: AppService, private http: HttpClient, private router: Router, private notificationService: NotificationService) {
   }
 
   user = {};
@@ -63,11 +65,7 @@ export class UserdetailsComponent implements OnInit {
   }
 
   update() {
-    this.app.updateUser(this.user).subscribe(resp => {
-      console.log(resp);
-    }, err => {
-      console.log(err);
-    });
+    this.app.updateUser(this.user).subscribe(resp => {}, err => {});
     window.location.reload();
   }
 

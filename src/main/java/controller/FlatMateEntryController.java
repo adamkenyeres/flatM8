@@ -1,6 +1,7 @@
 package controller;
 
 import model.criteria.BaseCriteria;
+import model.flat.Flat;
 import model.flatmate.FlatMateEntry;
 import model.tenant.User;
 import org.slf4j.Logger;
@@ -24,12 +25,10 @@ public class FlatMateEntryController implements GenericController<FlatMateEntry>
     private static final Logger LOGGER = LoggerFactory.getLogger(FlatMateEntryController.class);
 
     private final FlatMateEntryRepository repository;
-    private final UserRepository userRepository;
 
     @Autowired
-    public FlatMateEntryController(FlatMateEntryRepository repository, UserRepository userRepository) {
+    public FlatMateEntryController(FlatMateEntryRepository repository) {
         this.repository = repository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -82,56 +81,17 @@ public class FlatMateEntryController implements GenericController<FlatMateEntry>
         }
     }
 
-    @RequestMapping(value = "/deleteAllForMainTenant/{email}", method = RequestMethod.DELETE)
-    public void deleteAllForMainTenant(@PathVariable String email) {
-        User mainTenant = userRepository.findByEmail(email);
-        if (mainTenant == null) {
-            LOGGER.warn("Couldn't find main tenant with email: {}", email);
-            return;
-        }
-        List<FlatMateEntry> flatMateEntries = repository.findAllByMainTenant(mainTenant);
-        repository.delete(flatMateEntries);
-    }
-
-    @RequestMapping(value = "/getAllForCriteria", method = RequestMethod.GET)
-    public List<FlatMateEntry> getAllEntriesForCriteria(@Valid @RequestBody BaseCriteria criteria) {
-        List<FlatMateEntry> flatMateEntries = repository.findAll();
-
-        return flatMateEntries
+    @RequestMapping(value = "/getAllForFlat", method = RequestMethod.POST)
+    public ResponseEntity getAllEntriesForFlat(@RequestBody Flat flat) {
+        List<FlatMateEntry> entries = repository.findAll()
                 .stream()
-                .filter(entry -> entry.getRoomCriterias()
-                        .stream()
-                        .anyMatch(roomCriteria -> roomCriteria.getCriteria().equals(criteria))
-                )
+                .filter(e -> flat.equals(e.getFlat()))
                 .collect(Collectors.toList());
-    }
 
-    @RequestMapping(value = "/getAllForMainTenant/{tenantEmail}", method = RequestMethod.GET)
-    public ResponseEntity getAllEntriesForMainTenant(@PathVariable String tenantEmail) {
-        User mainTenant = userRepository.findByEmail(tenantEmail);
-        if (mainTenant == null) {
-            LOGGER.warn("Couldn't find main tenant with email: {}", tenantEmail);
-            return ResponseEntity.badRequest().build();
-        }
-        List<FlatMateEntry> entries = repository.findAllByMainTenant(mainTenant);
-
-        if (entries.isEmpty()) {
-            LOGGER.warn("Couldn't find any entries for user: {}", tenantEmail);
+        if (entries.size() == 0) {
             return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(entries);
         }
-        return ResponseEntity.ok(entries);
     }
-
-    @RequestMapping(value = "/getAllForTenant/{tenantEmail}", method = RequestMethod.GET)
-    public List<FlatMateEntry> getAllEntriesForTenant(@PathVariable String tenantEmail) {
-        List<FlatMateEntry> all = repository.findAll();
-        User tenant = userRepository.findByEmail(tenantEmail);
-
-        return all
-                .stream()
-                .filter(e -> e.getTenants().stream().anyMatch(t -> t.equals(tenant)))
-                .collect(Collectors.toList());
-    }
-
-
 }

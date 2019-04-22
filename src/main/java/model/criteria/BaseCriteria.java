@@ -11,5 +11,6 @@ public class BaseCriteria {
     private GenderCriteria genderCriteria;
     private LifestyleCriteria lifestyleCriteria;
     private Integer ageCriteria;
+    private Integer ageOffset;
     private RoomTypeCriteria roomTypeCriteria;
 }

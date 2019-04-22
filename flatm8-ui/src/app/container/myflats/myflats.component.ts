@@ -71,25 +71,24 @@ export class MyflatsComponent implements OnInit {
     }, err => {
       this.error = true;
     });
-
-
-    /*
-    this.flatService.deleteFlat(this.flat).subscribe(resp => {
-      console.log("delete success");
-    });
-    this.flat = null;
-    window.location.reload();
-    */
   }
   getFlatsForUser() {
     this.noFlats = false;
     this.error = false;
 
     this.http.get('http://localhost:8080/user').subscribe(resp => {
+
+      // Update users in case it was updated since last fetch
       this.flatService.getFlatsForUser(resp["name"]).subscribe(resp => {
         if (resp != null) {
-          console.log(resp);
           this.flat = resp;
+          let arr = [];
+          for (let u of resp["flatMates"]) {
+            this.app.getUserByEmail(u["email"]).subscribe(userResp => {
+              arr.push(userResp);
+            })
+          }
+          this.flat["flatMates"] = arr;
         }
       }, err => {
         if (err.status == 404) {
@@ -209,7 +208,11 @@ export class MyflatsComponent implements OnInit {
     addRequest.sender = <User>resp;
     addRequest.flat = <Flat>this.flat;
     addRequest.mateToAdd = <User>addMateResp;
-    addRequest.receivers = this.flat["flatMates"];
+    let arr = [];
+    arr = arr.concat(this.flat['flatMates']);
+    arr.push(addRequest.mateToAdd);
+    addRequest.receivers = arr;
+    //addRequest.receivers.push(addMateResp);
     addRequest.requestStatus = "PENDING";
     addRequest.approvers = [];
     addRequest.rejecters = [];

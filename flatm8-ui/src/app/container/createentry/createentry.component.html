@@ -1,8 +1,14 @@
 <div *ngIf="error" class="alert alert-danger">
   Unknown error occurred while fetching flats, please try again later!
 </div>
-<div *ngIf="noFlats" class="alert alert-danger">
+<div *ngIf="noFlats" class="alert alert-info">
   No flats are present. Please add one under <a href="/myflats">MyFlats</a> menu.
+</div>
+<div *ngIf="mainUserError" class="alert alert-danger">
+  You are not the Main Mate in your current Flat. You can't create an entry.
+</div>
+<div *ngIf="entryCreated" class="alert alert-success">
+  Entry created sucessfully!
 </div>
 <div *ngIf="flatFull" class="alert alert-danger">
   The selected Flat is full, please select another one or remove flatmates.
@@ -15,22 +21,31 @@
   </select>
 </div>
 
-<div *ngIf="selectedFlat">
-  <label>Capacity: {{ selectedFlat.capacity }} </label> <br/>
+<div *ngIf="selectedFlat && !mainUserError">
+  <label>Flat Capacity Left: {{ selectedFlat.capacity - selectedFlat.flatMates.length }} </label> <br/>
   <label>Current Flatmate count: {{selectedFlat.flatMates.length }}</label> <br/>
 </div>
 
-<div *ngIf="!flatFull && selectedFlat">
-  <select (change)="update()" [(ngModel)]="selectedFlat">
+<div *ngIf="!flatFull && selectedFlat && !mainUserError">
+  Gender Criteria: <select [(ngModel)]="selectedGender">
     <option *ngFor="let crit of objectKeys(GENDER_CRITERIAS)" [ngValue]="crit"
             [label]="GENDER_CRITERIAS[crit]"></option>
   </select><br/>
-  <select (change)="update()" [(ngModel)]="selectedFlat">
+  Lifestyle Criteria: <select [(ngModel)]="selectedLifeStyle">
     <option *ngFor="let crit of objectKeys(LIFESTYLE_CRITERIAS)" [ngValue]="crit"
             [label]="LIFESTYLE_CRITERIAS[crit]"></option>
   </select><br/>
-  <select (change)="update()" [(ngModel)]="selectedFlat">
-    <option *ngFor="let crit of ROOMTYPE_CRITERIAS" [ngValue]="crit"
+  Room Type: <select [(ngModel)]="selectedRoomType">
+    <option *ngFor="let crit of objectKeys(ROOMTYPE_CRITERIAS)" [ngValue]="crit"
             [label]="ROOMTYPE_CRITERIAS[crit]"></option>
   </select><br/>
+  Room Capacity: <select [(ngModel)]="selectedNumber">
+  <option *ngFor="let item of [].constructor((selectedFlat.capacity - selectedFlat.flatMates.length)); let i = index" [ngValue]="i+1"
+          [label]="i+1"></option>
+</select><br/>
+  <br/>
+  Age <input type="number" [(ngModel)]="selectedAge"/><br/>
+  Age Offset: <br/>
+  <ng5-slider [(value)]="ageOffset" [options]="options"></ng5-slider>
+  <br/><button (click)="createEntry()" class="btn btn-primary">Create Entry</button>
 </div>

@@ -9,6 +9,6 @@ import model.criteria.BaseCriteria;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomCriteria {
-    private Integer roomId;
     private BaseCriteria criteria;
+    private Integer capacity;
 }

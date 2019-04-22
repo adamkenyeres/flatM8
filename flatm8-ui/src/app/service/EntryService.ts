@@ -10,7 +10,11 @@ export class EntryService {
   constructor(private http: HttpClient, private app: AppService) {
   }
 
-  getEntriesForUser(email) {
-    return this.http.get("http://localhost:8080/getAllForMainTenant/"+email);
+  createEntry(entry) {
+    return this.http.post("http://localhost:8080/flatmateEntries/", entry);
+  }
+
+  getEntriesForFlat(flat) {
+    return this.http.post("http://localhost:8080/flatmateEntries/getAllForFlat/", flat);
   }
 }

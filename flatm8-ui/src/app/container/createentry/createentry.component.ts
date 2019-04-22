@@ -7,6 +7,10 @@ import {AuthService} from "../../auth/auth.service";
 import {Router} from "@angular/router";
 import {FlatService} from "../../service/FlatService";
 import {Flat} from "../../model/Flat";
+import {FlatMateEntry} from "../../model/FlatMateEntry";
+import {RoomCriteria} from "../../model/RoomCriteria";
+import {BaseCriteria} from "../../model/BaseCriteria";
+import {Options} from "ng5-slider";
 
 @Component({
   selector: 'app-createentry',
@@ -17,11 +21,21 @@ export class CreateentryComponent implements OnInit {
 
   flats = [];
   selectedFlat: Flat;
-  user: User;
+  userEmail: string;
   noFlats: boolean = false;
   error: boolean = false;
   flatFull: boolean = false;
   objectKeys = Object.keys;
+  selectedAge: number;
+  selectedGender: string;
+  selectedLifeStyle: string;
+  selectedRoomType: string;
+  selectedNumber: number;
+
+  mainUserError: boolean = false;
+  ageOffset: number = 10;
+  currentEntries: Array<FlatMateEntry>;
+  entryCreated: boolean = false;
 
   ROOMTYPE_CRITERIAS = {
     "NONE": "Not given",
@@ -32,7 +46,7 @@ export class CreateentryComponent implements OnInit {
   GENDER_CRITERIAS = {
     "NONE": "Not given",
     "FEMALE": "Room for female",
-    "Male": "Room for male"
+    "MALE": "Room for male"
   };
 
   LIFESTYLE_CRITERIAS = {
@@ -40,6 +54,11 @@ export class CreateentryComponent implements OnInit {
     "WORKING": "Room for working person",
     "UNI_STUDYING": "Room for a college student",
     "BELOW_UNI_STUDYING": "Room for a high school student"
+  };
+
+  options: Options = {
+    floor: 1,
+    ceil: 30
   };
 
   constructor(private entryService: EntryService,private app: AppService,
@@ -53,6 +72,7 @@ export class CreateentryComponent implements OnInit {
     }
 
     this.http.get('http://localhost:8080/user').subscribe(resp => {
+      this.userEmail = resp["name"];
       this.flatService.getFlatsForUser(resp["name"]).subscribe(resp => {
         this.flats.push(<Flat>resp);
         this.error = false;
@@ -64,15 +84,52 @@ export class CreateentryComponent implements OnInit {
           this.error = true;
         }
       })
+    }, err => {
+      this.error = true;
     });
 
   }
 
   update(){
-    console.log(this.selectedFlat);
     this.flatFull = false;
+    this.mainUserError = this.userEmail !== this.selectedFlat.userEmail;
+
     if (this.selectedFlat.flatMates.length >= this.selectedFlat.capacity) {
       this.flatFull = true;
     }
+
+    this.entryService.getEntriesForFlat(this.selectedFlat).subscribe(entries => {
+      this.currentEntries = <FlatMateEntry[]>entries;
+    });
+  }
+
+  createEntry() {
+    this.entryCreated = false;
+    let entry = this.assembleCreateEntry(this.selectedFlat);
+    this.entryService.createEntry(entry).subscribe(resp => {
+      this.entryCreated = true;
+    }, err => {
+      this.error = true;
+    })
+  }
+
+  assembleCreateEntry(flat: Flat) {
+    let e = new FlatMateEntry();
+    e.flat = flat;
+
+    let bc = new BaseCriteria();
+    bc.ageCriteria = this.selectedAge;
+    bc.genderCriteria = this.selectedGender;
+    bc.lifestyleCriteria = this.selectedLifeStyle;
+    bc.roomTypeCriteria = this.selectedRoomType;
+    bc.ageOffset = this.ageOffset;
+
+    let c = new RoomCriteria();
+    c.capacity = this.selectedNumber;
+    c.criteria = bc;
+
+    e.roomCriteria = c;
+
+    return e;
   }
 }

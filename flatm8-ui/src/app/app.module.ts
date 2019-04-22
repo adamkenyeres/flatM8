@@ -24,8 +24,16 @@ import {EntryService} from "./service/EntryService";
 import { CreateentryComponent } from './container/createentry/createentry.component';
 import { NotificationsComponent } from './container/notifications/notifications.component';
 import {NotificationService} from "./service/NotificationService";
-import {MatExpansionModule} from "@angular/material";
+import {
+  MatButtonModule,
+  MatCheckboxModule,
+  MatExpansionModule, MatIconModule,
+  MatProgressBarModule,
+  MatSliderModule,
+  MatSlideToggleModule
+} from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {Ng5SliderModule} from "ng5-slider";
 
 const appRoutes: Routes = [
   {
@@ -93,6 +101,14 @@ export function tokenGetter() {
   ],
   imports: [
     MatExpansionModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    Ng5SliderModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressBarModule,
     BrowserAnimationsModule,
     BrowserModule,
     AppRoutingModule,

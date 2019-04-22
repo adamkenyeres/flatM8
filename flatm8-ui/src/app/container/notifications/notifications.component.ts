@@ -131,6 +131,7 @@ export class NotificationsComponent implements OnInit {
                 flat.flatMates = flat.flatMates.filter(fmate => fmate.email != request.mateToDelete.email);
                 this.flatService.updateFlat(flat).subscribe(resp => {
                   this.requestCompleted = true;
+                  // window.location.reload(); // TODO needed?
                 });
               })
           }

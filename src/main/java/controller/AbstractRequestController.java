@@ -53,7 +53,8 @@ public abstract class AbstractRequestController<T extends BaseRequest> implement
         List<T> reqs = abstractRequestService.getRequests();
         boolean existing = abstractRequestService.getRequests()
                 .stream()
-                .anyMatch(r -> r.equals(request));
+                .anyMatch(r -> r.equals(request)
+                        && r.getRequestStatus().equals(RequestStatus.PENDING));
 
         if (existing) {
             return ResponseEntity.badRequest().build();
