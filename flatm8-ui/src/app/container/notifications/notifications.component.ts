@@ -5,6 +5,7 @@ import {BaseRequest} from "../../model/BaseRequest";
 import {User} from "../../model/User";
 import {FlatService} from "../../service/FlatService";
 import {Flat} from "../../model/Flat";
+import {EntryService} from "../../service/EntryService";
 
 @Component({
   selector: 'app-notifications',
@@ -13,7 +14,8 @@ import {Flat} from "../../model/Flat";
 })
 export class NotificationsComponent implements OnInit {
 
-  constructor(private notificationService: NotificationService, private app: AppService, private flatService: FlatService) { }
+  constructor(private notificationService: NotificationService, private app: AppService,
+              private flatService: FlatService, private entryService: EntryService) { }
 
   notifications = [];
   myRequests = [];
@@ -155,7 +157,10 @@ export class NotificationsComponent implements OnInit {
         } else if (request.requestType === "FLAT_DELETE") {
           if (this.isRequestFulfilled(request)) {
             this.flatService.deleteFlat(request.flatToDelete).subscribe(resp => {
-              this.requestCompleted = true;
+              this.entryService.deleteAllForFlat(request.flatToDelete).subscribe(resp => {
+                this.requestCompleted = true;
+              }, err => {
+              })
             }, err => {
               this.error = true;
             })

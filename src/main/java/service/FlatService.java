@@ -54,6 +54,19 @@ public class FlatService {
         return flatRepository.save(f);
     }
 
+    public Flat updateFlatWithUser(User user) {
+        if (user == null || user.getEmail() == null) {
+            LOGGER.error("User or email is null.");
+            return null;
+        }
+
+        Flat flat = getFlatForFlatMate(user.getEmail());
+
+        flat.getFlatMates().remove(user);
+        flat.getFlatMates().add(user);
+
+        return updateFlat(flat);
+    }
     public Flat getFlatForFlatMate(String email) {
         if (email == null || email.isEmpty()) {
             LOGGER.error("Couldn't find any flats for user, email shouldn't be null or empty.");
@@ -75,6 +88,8 @@ public class FlatService {
 
         if (userInFlats.size() == 1) {
             return userInFlats.get(0);
+        } else if (userInFlats.size() == 0) {
+            return null;
         } else {
             LOGGER.error("Invalid state: User with email: {} is present as flatmate in multiple flats.", email);
             return null;

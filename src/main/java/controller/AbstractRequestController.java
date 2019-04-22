@@ -134,6 +134,38 @@ public abstract class AbstractRequestController<T extends BaseRequest> implement
         }
     }
 
+    @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+    public ResponseEntity getMyRequests(@RequestBody User user) {
+        List<T> requests = abstractRequestService.getRequestsForUsers(user.getEmail());
+        List<T> myRequests = abstractRequestService.getMyRequests(user.getEmail());
+
+
+        if (isEmpty(requests)) {
+            return ResponseEntity.notFound().build();
+        } else {
+            requests.forEach(r -> {
+                r.getReceivers().remove(user);
+                r.getReceivers().add(user);
+
+                if (r.getSender().equals(user)) {
+                    r.setSender(user);
+                }
+            });
+
+            myRequests.forEach(r -> {
+                r.setSender(user);
+                if (r.getReceivers().contains(user)) {
+                    r.getReceivers().remove(user);
+                    r.getReceivers().add(user);
+                }
+            });
+
+            requests.forEach(r -> abstractRequestService.saveRequest(r));
+            myRequests.forEach(r -> abstractRequestService.saveRequest(r));
+            return ResponseEntity.ok().build();
+        }
+    }
+
     private T getById(String id) {
         List<T> requests = abstractRequestService.getRequests()
                 .stream()

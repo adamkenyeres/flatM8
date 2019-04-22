@@ -17,6 +17,7 @@ export class MyentriesComponent implements OnInit {
 
   error: boolean = false;
   noEntries: boolean = false;
+  noFlat: boolean = false;
   entries: Array<FlatMateEntry> = [];
 
   ROOMTYPE_CRITERIAS = {
@@ -58,7 +59,7 @@ export class MyentriesComponent implements OnInit {
           this.noEntries = true;
         })
       }, err => {
-        this.error = true;
+        this.noFlat = true;
       })
     }, err => {
       this.error = true;

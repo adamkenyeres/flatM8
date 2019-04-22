@@ -1,5 +1,11 @@
 <div class="dark-panel">
   <div class="panel panel-default login-container">
+    <div *ngIf="error" class="alert alert-danger">
+      Unknown error occurred, please try again later!
+    </div>
+    <div *ngIf="success" class="alert alert-success">
+      Successfully updated account details!
+    </div>
     <div class="panel-heading">
       Your account details
     </div>

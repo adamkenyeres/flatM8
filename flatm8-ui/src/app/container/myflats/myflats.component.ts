@@ -82,15 +82,15 @@ export class MyflatsComponent implements OnInit {
       this.flatService.getFlatsForUser(resp["name"]).subscribe(resp => {
         if (resp != null) {
           this.flat = resp;
-          let arr = [];
+          /*let arr = [];
           for (let u of resp["flatMates"]) {
             this.app.getUserByEmail(u["email"]).subscribe(userResp => {
               arr.push(userResp);
             })
           }
-          this.flat["flatMates"] = arr;
+          this.flat["flatMates"] = arr;*/
         }
-      }, err => {
+        }, err => {
         if (err.status == 404) {
           this.noFlats = true;
         } else {

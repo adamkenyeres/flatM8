@@ -26,7 +26,7 @@
           <p style="color:#9b870c;" *ngIf="noti.requestStatus === 'PENDING'">PENDING</p>
         </mat-panel-description>
       </mat-expansion-panel-header>
-
+      <p>Created By: {{noti.sender.firstName + " " + noti.sender.lastName + " (" + noti.sender.email + ")" }}</p>
       <p>Type: <b>{{getTypeHR(noti)}}</b></p>
       <p *ngIf="noti.requestType == 'MATE_DELETE'">Mate to be deleted:
         {{noti.mateToDelete.firstName + " " + noti.mateToDelete.lastName + "(" + noti.mateToDelete.email + ")" }}</p>

@@ -5,7 +5,10 @@
 <div *ngIf="noEntries" class="alert alert-info">
   No entries are present. Would you like to add one?
 </div>
-<div>
+<div *ngIf="noFlat" class="alert alert-warning">
+  No flats are present. Please create one under <a href="/myflats">MyFlats</a>!
+</div>
+<div *ngIf="!noFlat">
   <div (click)="addEntry()" class="centered">
     <div class="plus" id="plus">
       <div class="plus__line plus__line--v">
@@ -15,7 +18,7 @@
   </div>
 </div>
 
-<div *ngIf="!noEntries">
+<div *ngIf="!noEntries && !noFlat">
   <h4>Current entries: </h4>
   <div *ngFor="let entry of entries; let i = index" [attr.data-index]="i">
     <mat-expansion-panel>

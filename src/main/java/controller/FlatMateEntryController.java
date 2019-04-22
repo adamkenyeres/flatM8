@@ -94,4 +94,20 @@ public class FlatMateEntryController implements GenericController<FlatMateEntry>
             return ResponseEntity.ok(entries);
         }
     }
+
+    @RequestMapping(value = "/deleteAllForFlat", method = RequestMethod.POST)
+    public ResponseEntity deleteAllForFlat(@RequestBody Flat flat) {
+        List<FlatMateEntry> entries = repository.findAll()
+                .stream()
+                .filter(e -> flat.equals(e.getFlat()))
+                .collect(Collectors.toList());
+
+        repository.delete(entries);
+
+        if (entries.size() == 0) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
 }

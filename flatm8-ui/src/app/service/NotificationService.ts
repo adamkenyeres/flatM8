@@ -71,4 +71,21 @@ export class NotificationService {
     return this.http.post('http://localhost:8080/deleteFlatRequests/updateRequest/', request);
   }
 
+  updateDeleteFlatRequestWithUser(user) {
+    return this.http.post('http://localhost:8080/deleteFlatRequests/updateUser/', user);
+  }
+
+  updateAddMateRequestWithUser(user) {
+    return this.http.post('http://localhost:8080/addMateRequests/updateUser/', user);
+  }
+
+
+  updateDeleteMateRequestWithUser(user) {
+    return this.http.post('http://localhost:8080/deleteMateRequests/updateUser/', user);
+  }
+
+
+  updateContactRequestWithUser(user) {
+    return this.http.post('http://localhost:8080/contactRequests/updateUser/', user);
+  }
 }

@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {NotificationService} from "../../service/NotificationService";
 import {DeleteMateRequest} from "../../model/DeleteMateRequest";
+import {FlatService} from "../../service/FlatService";
 
 @Component({
   selector: 'app-userdetails',
@@ -14,7 +15,8 @@ export class UserdetailsComponent implements OnInit {
 
   objectKeys = Object.keys;
 
-  constructor(private app: AppService, private http: HttpClient, private router: Router, private notificationService: NotificationService) {
+  constructor(private app: AppService, private http: HttpClient, private router: Router,
+              private flatService: FlatService, private notificationService: NotificationService) {
   }
 
   user = {};
@@ -25,8 +27,9 @@ export class UserdetailsComponent implements OnInit {
   isTenantStayTypesPressed= false;
   isTenantStayTypesCommentsPressed= false;
   isAgedPressed= false;
-  private CONST_TENANT_TYPES;
-  private CONST_TENANT_STAY_TYPES;
+
+  success = false;
+  error = false;
 
   ngOnInit() {
     this.http.get('http://localhost:8080/user').subscribe(resp => {
@@ -65,8 +68,22 @@ export class UserdetailsComponent implements OnInit {
   }
 
   update() {
-    this.app.updateUser(this.user).subscribe(resp => {}, err => {});
-    window.location.reload();
+    this.success = false;
+    this.error = false;
+    this.app.updateUser(this.user).subscribe(resp => {
+      this.flatService.updateUserInFlat(this.user).subscribe( resp => {
+        this.notificationService.updateDeleteFlatRequestWithUser(this.user).subscribe();
+        this.notificationService.updateContactRequestWithUser(this.user).subscribe();
+        this.notificationService.updateDeleteMateRequestWithUser(this.user).subscribe();
+        this.notificationService.updateAddMateRequestWithUser(this.user).subscribe();
+        this.success = true;
+        window.location.reload();
+      }, err => {
+        this.error = true;
+      })
+    }, err => {
+      this.error = true;
+    });
   }
 
 }

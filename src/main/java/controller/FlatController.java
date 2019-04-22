@@ -128,5 +128,14 @@ public class FlatController implements GenericController<Flat> {
         }
     }
 
+    @RequestMapping(value = "/updateUserInFlat", method = RequestMethod.POST)
+    public ResponseEntity updateUserInFlat(@RequestBody User user) {
+        Flat f = service.updateFlatWithUser(user);
 
+        if (f == null) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok(f);
+        }
+    }
 }
