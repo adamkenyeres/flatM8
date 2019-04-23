@@ -36,9 +36,11 @@ export class MyentriesComponent implements OnInit {
 
   LIFESTYLE_CRITERIAS = {
     "NONE": "Not given",
-    "WORKING": "Room for working person",
-    "UNI_STUDYING": "Room for a college student",
-    "BELOW_UNI_STUDYING": "Room for a high school student"
+    "WORK": "Room for working person",
+    "UNIVERSITY": "Room for a college student",
+    "BELOW_UNI": "Room for a high school student",
+    "STAY_AT_HOME": "Not doing anything for the moment",
+    "OTHER": "Other",
   };
 
   constructor(private entryService: EntryService,private app: AppService,

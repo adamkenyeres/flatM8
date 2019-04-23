@@ -2,3 +2,97 @@
 <div [hidden]="authenticated()">
   <p>Please login or register!</p>
 </div>
+
+<div *ngIf="authenticated()">
+  <div *ngIf="!userHasFlat && ageRecommendedEntries.length !== 0">
+    <h4>Entries recommended for you by age</h4>
+    <div *ngFor="let entry of ageRecommendedEntries; let i = index" [attr.data-index]="i">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Entry #{{i+1}}
+          </mat-panel-title>
+          <mat-panel-description>
+            Address: {{ entry.flat.address.streetAddress }} {{ entry.flat.address.streetNumber }}
+            {{ entry.flat.address.floor + " / " + entry.flat.address.door }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <button *ngIf="entry.flat.userEmail === loggedInUserEmail" type="button" (click)="deleteEntry(entry)" mat-icon-button>
+          <mat-icon aria-label="Add new FlatMate">delete</mat-icon>
+        </button>
+        <p>RoomType: {{ ROOMTYPE_CRITERIAS[entry.roomCriteria.criteria.roomTypeCriteria] }}</p>
+        <p>LifeStyle: {{ LIFESTYLE_CRITERIAS[entry.roomCriteria.criteria.lifestyleCriteria] }}</p>
+        <p>Gender: {{ GENDER_CRITERIAS[entry.roomCriteria.criteria.genderCriteria] }}</p>
+        <p>Age: {{ entry.roomCriteria.criteria.ageCriteria }}</p>
+        <p>Age Offset: {{ entry.roomCriteria.criteria.ageOffset }}</p>
+        <p>Room Capacity: {{ entry.roomCriteria.capacity }}</p>
+        <p>Room Size: {{ entry.roomCriteria.size }}</p>
+        <p>Additional Details:</p>
+        <ul>
+          <li *ngFor="let detail of entry.roomCriteria.additionalDetails">{{ detail }}</li>
+        </ul>
+      </mat-expansion-panel>
+    </div>
+  </div>
+  <div *ngIf="!userHasFlat && lifeStyleRecommendedEntries.length !== 0">
+    <h4>Entries recommended for you by lifestyle</h4>
+    <div *ngFor="let entry of lifeStyleRecommendedEntries; let i = index" [attr.data-index]="i">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Entry #{{i+1}}
+          </mat-panel-title>
+          <mat-panel-description>
+            Address: {{ entry.flat.address.streetAddress }} {{ entry.flat.address.streetNumber }}
+            {{ entry.flat.address.floor + " / " + entry.flat.address.door }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <button *ngIf="entry.flat.userEmail === loggedInUserEmail" type="button" (click)="deleteEntry(entry)" mat-icon-button>
+          <mat-icon aria-label="Add new FlatMate">delete</mat-icon>
+        </button>
+        <p>RoomType: {{ ROOMTYPE_CRITERIAS[entry.roomCriteria.criteria.roomTypeCriteria] }}</p>
+        <p>LifeStyle: {{ LIFESTYLE_CRITERIAS[entry.roomCriteria.criteria.lifestyleCriteria] }}</p>
+        <p>Gender: {{ GENDER_CRITERIAS[entry.roomCriteria.criteria.genderCriteria] }}</p>
+        <p>Age: {{ entry.roomCriteria.criteria.ageCriteria }}</p>
+        <p>Age Offset: {{ entry.roomCriteria.criteria.ageOffset }}</p>
+        <p>Room Capacity: {{ entry.roomCriteria.capacity }}</p>
+        <p>Room Size: {{ entry.roomCriteria.size }}</p>
+        <p>Additional Details:</p>
+        <ul>
+          <li *ngFor="let detail of entry.roomCriteria.additionalDetails">{{ detail }}</li>
+        </ul>
+      </mat-expansion-panel>
+    </div>
+  </div>
+  <div *ngIf="!userHasFlat && ultimateEntries.length !== 0">
+    <h4>ULTIMATE entries for you:</h4>
+    <div *ngFor="let entry of ultimateEntries; let i = index" [attr.data-index]="i">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Entry #{{i+1}}
+          </mat-panel-title>
+          <mat-panel-description>
+            Address: {{ entry.flat.address.streetAddress }} {{ entry.flat.address.streetNumber }}
+            {{ entry.flat.address.floor + " / " + entry.flat.address.door }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <button *ngIf="entry.flat.userEmail === loggedInUserEmail" type="button" (click)="deleteEntry(entry)" mat-icon-button>
+          <mat-icon aria-label="Add new FlatMate">delete</mat-icon>
+        </button>
+        <p>RoomType: {{ ROOMTYPE_CRITERIAS[entry.roomCriteria.criteria.roomTypeCriteria] }}</p>
+        <p>LifeStyle: {{ LIFESTYLE_CRITERIAS[entry.roomCriteria.criteria.lifestyleCriteria] }}</p>
+        <p>Gender: {{ GENDER_CRITERIAS[entry.roomCriteria.criteria.genderCriteria] }}</p>
+        <p>Age: {{ entry.roomCriteria.criteria.ageCriteria }}</p>
+        <p>Age Offset: {{ entry.roomCriteria.criteria.ageOffset }}</p>
+        <p>Room Capacity: {{ entry.roomCriteria.capacity }}</p>
+        <p>Room Size: {{ entry.roomCriteria.size }}</p>
+        <p>Additional Details:</p>
+        <ul>
+          <li *ngFor="let detail of entry.roomCriteria.additionalDetails">{{ detail }}</li>
+        </ul>
+      </mat-expansion-panel>
+    </div>
+  </div>
+</div>
+

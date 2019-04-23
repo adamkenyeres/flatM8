@@ -1,5 +1,5 @@
 package model.criteria;
 
 public enum LifestyleCriteria {
-    NONE,WORKING,UNI_STUDYING,BELOW_UNI_STUDYING
+    NONE, BELOW_UNI, UNIVERSITY, WORK, STAY_AT_HOME, OTHER
 }

@@ -25,4 +25,16 @@ export class EntryService {
   deleteEntry(entry) {
     return this.http.post("http://localhost:8080/flatmateEntries/deleteEntry/", entry);
   }
+
+  getEntriesForAge(age) {
+    return this.http.get("http://localhost:8080/flatmateEntries/getEntriesForAge?age=" + age);
+  }
+  getEntriesForLifestyle(lifestyle) {
+    return this.http.get("http://localhost:8080/flatmateEntries/getEntriesForLifeStyle?lifestyleCriteria=" + lifestyle);
+  }
+
+  getUltimateMatches(lifestyle, age) {
+    return this.http.get("http://localhost:8080/flatmateEntries/getEntriesForLifeStyle?lifestyleCriteria=" + lifestyle
+    + "&age="+age);
+  }
 }
