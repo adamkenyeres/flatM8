@@ -31,6 +31,16 @@ public class FlatMateEntryController implements GenericController<FlatMateEntry>
         this.repository = repository;
     }
 
+    @RequestMapping(value = "/deleteEntry", method = RequestMethod.POST)
+    public ResponseEntity deleteEntry(@Valid @RequestBody FlatMateEntry entry) {
+        try {
+            repository.delete(entry);
+            return ResponseEntity.ok().build();
+        } catch (Exception ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @Override
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity getAllEntities() {

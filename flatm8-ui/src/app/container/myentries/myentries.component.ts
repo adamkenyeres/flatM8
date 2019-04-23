@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {FlatService} from "../../service/FlatService";
 import {FlatMateEntry} from "../../model/FlatMateEntry";
 import {Flat} from "../../model/Flat";
+import {User} from "../../model/User";
 
 @Component({
   selector: 'app-myentries',
@@ -19,6 +20,7 @@ export class MyentriesComponent implements OnInit {
   noEntries: boolean = false;
   noFlat: boolean = false;
   entries: Array<FlatMateEntry> = [];
+  loggedInUserEmail: string;
 
   ROOMTYPE_CRITERIAS = {
     "NONE": "Not given",
@@ -48,7 +50,8 @@ export class MyentriesComponent implements OnInit {
       this.router.navigateByUrl('');
     }
 
-    this.http.get('http://localhost:8080/user').subscribe(resp => {
+    this.app.getUserLoggedInUser().subscribe(resp => {
+      this.loggedInUserEmail = resp["name"];
       this.flatService.getFlatsForUser(resp["name"]).subscribe(flatResp => {
         this.entryService.getEntriesForFlat(flatResp).subscribe(entriesResp => {
           for (let entry of <FlatMateEntry[]>entriesResp) {
@@ -70,4 +73,8 @@ export class MyentriesComponent implements OnInit {
     this.router.navigateByUrl('/createentry')
   }
 
+  deleteEntry(entry) {
+    this.entryService.deleteEntry(entry).subscribe();
+    window.location.reload();
+  }
 }

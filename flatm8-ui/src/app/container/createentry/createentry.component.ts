@@ -138,6 +138,7 @@ export class CreateentryComponent implements OnInit {
 
     this.entryService.createEntry(entry).subscribe(resp => {
       this.entryCreated = true;
+      this.router.navigateByUrl('/myentries')
     }, err => {
       this.error = true;
     })

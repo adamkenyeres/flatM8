@@ -21,4 +21,8 @@ export class EntryService {
   deleteAllForFlat(flat) {
     return this.http.post("http://localhost:8080/flatmateEntries/deleteAllForFlat/", flat);
   }
+
+  deleteEntry(entry) {
+    return this.http.post("http://localhost:8080/flatmateEntries/deleteEntry/", entry);
+  }
 }

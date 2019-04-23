@@ -68,7 +68,6 @@ public class Main implements CommandLineRunner {
         contactRequestRepository.deleteAll();
         deleteFlatRequestRepository.deleteAll();
         flatMateEntryRepository.deleteAll();
-        flatRepository.deleteAll();
     }
 
 

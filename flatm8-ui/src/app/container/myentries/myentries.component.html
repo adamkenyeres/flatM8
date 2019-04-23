@@ -31,6 +31,9 @@
           {{ entry.flat.address.floor + " / " + entry.flat.address.door }}
         </mat-panel-description>
       </mat-expansion-panel-header>
+      <button *ngIf="entry.flat.userEmail === loggedInUserEmail" type="button" (click)="deleteEntry(entry)" mat-icon-button>
+        <mat-icon aria-label="Add new FlatMate">delete</mat-icon>
+      </button>
       <p>RoomType: {{ ROOMTYPE_CRITERIAS[entry.roomCriteria.criteria.roomTypeCriteria] }}</p>
       <p>LifeStyle: {{ LIFESTYLE_CRITERIAS[entry.roomCriteria.criteria.lifestyleCriteria] }}</p>
       <p>Gender: {{ GENDER_CRITERIAS[entry.roomCriteria.criteria.genderCriteria] }}</p>
