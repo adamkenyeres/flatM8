@@ -4,4 +4,8 @@ export class BaseCriteria {
   ageCriteria: number;
   ageOffset: number;
   roomTypeCriteria: string;
+
+  constructor (private ageOffsetDefault: number) {
+    this.ageOffset = ageOffsetDefault;
+  }
 }

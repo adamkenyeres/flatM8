@@ -13,6 +13,9 @@
 <div *ngIf="flatFull" class="alert alert-danger">
   The selected Flat is full, please select another one or remove flatmates.
 </div>
+<div *ngIf="flatFullWithEntries" class="alert alert-danger">
+  The selected Flat is full with the created entries, please delete entries before creating new ones!
+</div>
 <div *ngIf="!noFlats" class="form-group">
   <label>Choose a flat:</label><br/>
   <select (change)="update()" [(ngModel)]="selectedFlat">
@@ -22,30 +25,58 @@
 </div>
 
 <div *ngIf="selectedFlat && !mainUserError">
-  <label>Flat Capacity Left: {{ selectedFlat.capacity - selectedFlat.flatMates.length }} </label> <br/>
+  <label>Flat Capacity Left (with entries): {{ selectedFlat.capacity - selectedFlat.flatMates.length - sumOfMatesWithEntries }} </label> <br/>
   <label>Current Flatmate count: {{selectedFlat.flatMates.length }}</label> <br/>
 </div>
 
-<div *ngIf="!flatFull && selectedFlat && !mainUserError">
-  Gender Criteria: <select [(ngModel)]="selectedGender">
-    <option *ngFor="let crit of objectKeys(GENDER_CRITERIAS)" [ngValue]="crit"
+<div *ngIf="!flatFullWithEntries && !flatFull && selectedFlat && !mainUserError">
+  <form role="form" (submit)="createEntry()" ngNativeValidate>
+  Gender Criteria: <select [(ngModel)]="baseCriteria.genderCriteria" name="genderCrit" required>
+    <option *ngFor="let crit of objectKeys(GENDER_CRITERIAS)" name="genderCrit" [ngValue]="crit"
             [label]="GENDER_CRITERIAS[crit]"></option>
   </select><br/>
-  Lifestyle Criteria: <select [(ngModel)]="selectedLifeStyle">
+  Lifestyle Criteria: <select [(ngModel)]="baseCriteria.lifestyleCriteria" name="lifestyleCrit" required>
     <option *ngFor="let crit of objectKeys(LIFESTYLE_CRITERIAS)" [ngValue]="crit"
             [label]="LIFESTYLE_CRITERIAS[crit]"></option>
   </select><br/>
-  Room Type: <select [(ngModel)]="selectedRoomType">
+  Room Type: <select [(ngModel)]="baseCriteria.roomTypeCriteria" name="roomCrit" required>
     <option *ngFor="let crit of objectKeys(ROOMTYPE_CRITERIAS)" [ngValue]="crit"
             [label]="ROOMTYPE_CRITERIAS[crit]"></option>
   </select><br/>
-  Room Capacity: <select [(ngModel)]="selectedNumber">
-  <option *ngFor="let item of [].constructor((selectedFlat.capacity - selectedFlat.flatMates.length)); let i = index" [ngValue]="i+1"
+  Room Capacity: <select [(ngModel)]="selectedNumber" name="capacity" required>
+  <option *ngFor="let item of [].constructor((selectedFlat.capacity - selectedFlat.flatMates.length) - sumOfMatesWithEntries); let i = index"
+          [ngValue]="i+1"
           [label]="i+1"></option>
 </select><br/>
   <br/>
-  Age <input type="number" [(ngModel)]="selectedAge"/><br/>
+  Age <input type="number" [(ngModel)]="baseCriteria.ageCriteria" name="age" required/><br/>
   Age Offset: <br/>
-  <ng5-slider [(value)]="ageOffset" [options]="options"></ng5-slider>
-  <br/><button (click)="createEntry()" class="btn btn-primary">Create Entry</button>
+  <ng5-slider [(value)]="baseCriteria.ageOffset" [options]="options" name="ageOffset" required></ng5-slider>
+  <br/>
+  Room Size (m2): <input type="number" [(ngModel)]="roomCriteria.size" name="size" required/><br/>
+    <label>Additional details:</label> <br/>
+    <ul>
+      <li *ngFor="let detail of additionalDetails">{{ detail }}</li>
+    </ul>
+    <button type="button" (click)="addDetail()" mat-icon-button formnovalidate>
+      <mat-icon aria-label="Add new FlatMate">add</mat-icon>
+    </button>
+    <div class="form-group" *ngIf="addingDetail">
+      <form role="form" (submit)="addToList()" ngNativeValidate>
+        <div *ngIf="detailAlreadyAdded" class="alert alert-danger">
+          This detail is already in the list! Please be more specific!
+        </div>
+        <label for="newDetail">Detail*:</label>
+        <input type="text" class="form-control" id="newDetail" name="newDetail" required [(ngModel)]="newDetail"/>
+        <button type="submit" mat-icon-button>
+          <mat-icon aria-label="Add">done</mat-icon>
+        </button>
+        <button (click)="stopAddingDetail()" mat-icon-button>
+          <mat-icon aria-label="Cancel">cancel</mat-icon>
+        </button>
+      </form>
+    </div>
+    <br/>
+  <button type="submit" class="btn btn-primary">Create Entry</button>
+  </form>
 </div>

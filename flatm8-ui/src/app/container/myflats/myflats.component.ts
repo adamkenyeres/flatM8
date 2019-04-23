@@ -36,7 +36,22 @@ export class MyflatsComponent implements OnInit {
   cantDeleteMainMate = false;
   notMainUserError = false;
   mainMateSuccess = false;
+  iShareError = false;
 
+  resetErrors() {
+    this.noFlats = false;
+    this.error = false;
+    this.addMateError = false;
+    this.deleteMateError = false;
+    this.addingNewMate = false;
+    this.cantDeleteLastFlatMate = false;
+    this.requestSent = false;
+    this.requestAlreadyExists = false;
+    this.cantDeleteMainMate = false;
+    this.notMainUserError = false;
+    this.mainMateSuccess = false;
+    this.iShareError = false;
+  }
   ngOnInit() {
     if (!this.auth.isAuthenticated()) {
       alert("Not logged in!");
@@ -53,18 +68,35 @@ export class MyflatsComponent implements OnInit {
   }
 
   deleteFlat() {
-    this.requestSent = false;
-    this.error = false;
+    this.resetErrors();
+
     this.app.getUserLoggedInUser().subscribe(loggedInMateResp => {
       this.app.getUserByEmail(loggedInMateResp["name"]).subscribe(resp => {
         let delReq = this.createDeleteFlatRequest(resp);
-        this.notificationService.createDeleteFlatRequestsForUser(delReq).subscribe(resp => {
-          this.requestSent = true;
-        }, err => {
-          if (err.status === 400) {
-            this.requestAlreadyExists = true;
-          }
-        });
+
+        let tempArr = delReq.flatToDelete.flatMates
+          .filter(mate => mate["email"] === delReq.flatToDelete.userEmail);
+
+        if (tempArr.length === 0) { // scenario for iShare
+          this.app.getUserByEmail(delReq.flatToDelete.userEmail).subscribe(user => {
+            delReq.receivers.push(<User>user);
+            this.notificationService.createDeleteFlatRequestsForUser(delReq).subscribe(resp => {
+              this.requestSent = true;
+            }, err => {
+              if (err.status === 400) {
+                this.requestAlreadyExists = true;
+              }
+            });
+          });
+        } else {
+          this.notificationService.createDeleteFlatRequestsForUser(delReq).subscribe(resp => {
+            this.requestSent = true;
+          }, err => {
+            if (err.status === 400) {
+              this.requestAlreadyExists = true;
+            }
+          });
+        }
       }, err=> {
         this.error = true;
       })
@@ -73,8 +105,7 @@ export class MyflatsComponent implements OnInit {
     });
   }
   getFlatsForUser() {
-    this.noFlats = false;
-    this.error = false;
+    this.resetErrors();
 
     this.http.get('http://localhost:8080/user').subscribe(resp => {
 
@@ -82,13 +113,6 @@ export class MyflatsComponent implements OnInit {
       this.flatService.getFlatsForUser(resp["name"]).subscribe(resp => {
         if (resp != null) {
           this.flat = resp;
-          /*let arr = [];
-          for (let u of resp["flatMates"]) {
-            this.app.getUserByEmail(u["email"]).subscribe(userResp => {
-              arr.push(userResp);
-            })
-          }
-          this.flat["flatMates"] = arr;*/
         }
         }, err => {
         if (err.status == 404) {
@@ -110,11 +134,7 @@ export class MyflatsComponent implements OnInit {
 
 
   deleteMate(email) {
-    this.cantDeleteMainMate = false;
-    this.requestAlreadyExists = false;
-    this.requestSent = false;
-    this.cantDeleteLastFlatMate = false;
-    this.error = false;
+    this.resetErrors();
 
     let flatMates = this.flat["flatMates"];
     if (flatMates.length == 1) {
@@ -131,13 +151,31 @@ export class MyflatsComponent implements OnInit {
       this.app.getUserLoggedInUser().subscribe(loggedInMateResp => {
         this.app.getUserByEmail(loggedInMateResp["name"]).subscribe( resp => {
           let deleteRequest = this.createDeleteMateRequest(resp, deleteMateResp);
-          this.notificationService.createDeleteMateRequestsForUser(deleteRequest).subscribe(resp => {
-            this.requestSent = true;
-          }, err => {
-            if (err.status === 400) {
-              this.requestAlreadyExists = true;
-            }
-          });
+
+          // For iShare its possible that the main user is not in among flatmates
+          let tempArr = deleteRequest.flat.flatMates
+            .filter(mate => mate["email"] === deleteRequest.flat.userEmail);
+
+          if (tempArr.length === 0) {
+            this.app.getUserByEmail(deleteRequest.flat.userEmail).subscribe(user => {
+              deleteRequest.receivers.push(<User>user);
+              this.notificationService.createDeleteMateRequestsForUser(deleteRequest).subscribe(resp => {
+                this.requestSent = true;
+              }, err => {
+                if (err.status === 400) {
+                  this.requestAlreadyExists = true;
+                }
+              });
+            })
+          } else {
+            this.notificationService.createDeleteMateRequestsForUser(deleteRequest).subscribe(resp => {
+              this.requestSent = true;
+            }, err => {
+              if (err.status === 400) {
+                this.requestAlreadyExists = true;
+              }
+            });
+          }
         }, err => {
           this.error = true;
           return;
@@ -152,8 +190,7 @@ export class MyflatsComponent implements OnInit {
   }
 
   addMate() {
-    this.requestAlreadyExists = false;
-    this.requestSent = false;
+    this.resetErrors();
 
     let coll = this.flat["flatMates"]
       .filter(mate => mate["email"] == this.newFlatMateEmail);
@@ -163,17 +200,42 @@ export class MyflatsComponent implements OnInit {
       return;
     }
 
+    if (coll.length === 0 && this.flat["userEmail"] === this.newFlatMateEmail) {
+      this.iShareError = true;
+      return;
+    }
+
     this.app.getUserByEmail(this.newFlatMateEmail).subscribe(addMateResp => {
       this.app.getUserLoggedInUser().subscribe(loggedInMateResp => {
         this.app.getUserByEmail(loggedInMateResp["name"]).subscribe(resp => {
           let addRequest = this.createAddMateRequest(resp, addMateResp);
-          this.notificationService.createAddMateRequestsForUser(addRequest).subscribe(resp => {
-            this.requestSent = true;
-          }, err => {
-            if (err.status === 400) {
-              this.requestAlreadyExists = true;
-            }
-          });
+
+          // For iShare its possible that the main user is not in among flatmates
+          let tempArr = addRequest.flat.flatMates
+            .filter(mate => mate["email"] === addRequest.flat.userEmail);
+
+          if (tempArr.length === 0) {
+            this.app.getUserByEmail(addRequest.flat.userEmail).subscribe(user => {
+              addRequest.receivers.push(<User>user);
+              this.notificationService.createAddMateRequestsForUser(addRequest).subscribe(resp => {
+
+                this.requestSent = true;
+              }, err => {
+                if (err.status === 400) {
+                  this.requestAlreadyExists = true;
+                }
+              });
+            })
+          } else {
+            this.notificationService.createAddMateRequestsForUser(addRequest).subscribe(resp => {
+
+              this.requestSent = true;
+            }, err => {
+              if (err.status === 400) {
+                this.requestAlreadyExists = true;
+              }
+            });
+          }
         })
       })
     });
@@ -194,7 +256,9 @@ export class MyflatsComponent implements OnInit {
     deleteRequest.sender = <User>resp;
     deleteRequest.flat = <Flat>this.flat;
     deleteRequest.mateToDelete = <User>deleteMateResp;
-    deleteRequest.receivers = this.flat["flatMates"];
+    let arr = [];
+    arr = arr.concat(this.flat['flatMates']);
+    deleteRequest.receivers = arr;
     deleteRequest.requestStatus = "PENDING";
     deleteRequest.approvers = [];
     deleteRequest.rejecters = [];
@@ -212,7 +276,6 @@ export class MyflatsComponent implements OnInit {
     arr = arr.concat(this.flat['flatMates']);
     arr.push(addRequest.mateToAdd);
     addRequest.receivers = arr;
-    //addRequest.receivers.push(addMateResp);
     addRequest.requestStatus = "PENDING";
     addRequest.approvers = [];
     addRequest.rejecters = [];
@@ -225,7 +288,9 @@ export class MyflatsComponent implements OnInit {
     let deleteRequest = new DeleteFlatRequest();
     deleteRequest.sender = <User>resp;
     deleteRequest.flatToDelete = <Flat>this.flat;
-    deleteRequest.receivers = this.flat["flatMates"];
+    let arr = [];
+    arr = arr.concat(this.flat['flatMates']);
+    deleteRequest.receivers = arr;
     deleteRequest.requestStatus = "PENDING";
     deleteRequest.approvers = [];
     deleteRequest.rejecters = [];
@@ -234,8 +299,8 @@ export class MyflatsComponent implements OnInit {
     return deleteRequest;
   }
   makeMainMate(mate: User) {
-    this.notMainUserError = false;
-    this.mainMateSuccess = false;
+    this.resetErrors();
+
     this.app.getUserLoggedInUser().subscribe(resp => {
       if (resp["name"] === this.flat["userEmail"]) {
         this.flat["userEmail"] = mate.email;

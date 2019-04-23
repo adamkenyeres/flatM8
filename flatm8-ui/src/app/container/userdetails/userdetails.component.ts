@@ -72,15 +72,13 @@ export class UserdetailsComponent implements OnInit {
     this.error = false;
     this.app.updateUser(this.user).subscribe(resp => {
       this.flatService.updateUserInFlat(this.user).subscribe( resp => {
-        this.notificationService.updateDeleteFlatRequestWithUser(this.user).subscribe();
-        this.notificationService.updateContactRequestWithUser(this.user).subscribe();
-        this.notificationService.updateDeleteMateRequestWithUser(this.user).subscribe();
-        this.notificationService.updateAddMateRequestWithUser(this.user).subscribe();
-        this.success = true;
-        window.location.reload();
-      }, err => {
-        this.error = true;
-      })
+      }, err => { });
+      this.notificationService.updateDeleteFlatRequestWithUser(this.user).subscribe();
+      this.notificationService.updateContactRequestWithUser(this.user).subscribe();
+      this.notificationService.updateDeleteMateRequestWithUser(this.user).subscribe();
+      this.notificationService.updateAddMateRequestWithUser(this.user).subscribe();
+      this.success = true;
+      window.location.reload();
     }, err => {
       this.error = true;
     });

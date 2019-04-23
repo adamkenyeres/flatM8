@@ -62,6 +62,9 @@ public class FlatService {
 
         Flat flat = getFlatForFlatMate(user.getEmail());
 
+        if (flat == null || flat.getFlatMates() == null) {
+            return null;
+        }
         flat.getFlatMates().remove(user);
         flat.getFlatMates().add(user);
 
@@ -83,7 +86,7 @@ public class FlatService {
         }
 
         List<Flat> userInFlats = flats.stream()
-                .filter(f -> f.getFlatMates().contains(u))
+                .filter(f -> f.getFlatMates().contains(u) || f.getUserEmail().equals(email))
                 .collect(Collectors.toList());
 
         if (userInFlats.size() == 1) {

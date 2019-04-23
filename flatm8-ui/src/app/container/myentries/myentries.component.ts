@@ -29,7 +29,7 @@ export class MyentriesComponent implements OnInit {
   GENDER_CRITERIAS = {
     "NONE": "Not given",
     "FEMALE": "Room for female",
-    "Male": "Room for male"
+    "MALE": "Room for male"
   };
 
   LIFESTYLE_CRITERIAS = {

@@ -25,6 +25,7 @@ export class CreateflatComponent implements OnInit {
   private flatMate;
   private mainSelectedMate: number;
   private iShareError = false;
+  private userEmail: string;
 
   public FLAT_TYPES = {
     "FLAT": "Flat",
@@ -41,16 +42,17 @@ export class CreateflatComponent implements OnInit {
       }
     });
 
+    this.app.getUserLoggedInUser().subscribe(resp => {
+      this.userEmail = resp["name"];
+    });
+
     if (this.type == "ilive") {
       this.app.getUserLoggedInUser().subscribe(resp => {
-        console.log(resp["name"]);
         this.app.getUserByEmail(resp["name"]).subscribe(respo => {
           this.flatMates.push(respo);
         });
       });
     }
-
-    console.log(this.flatMates);
   }
 
   ngOnInit() {
@@ -66,7 +68,11 @@ export class CreateflatComponent implements OnInit {
 
   createFlat() {
     this.flat.address = this.address;
-    this.flat.userEmail = this.flatMates[this.mainSelectedMate]["email"];
+    if (this.type === "ilive") {
+      this.flat.userEmail = this.flatMates[this.mainSelectedMate]["email"];
+    } else {
+      this.flat.userEmail = this.userEmail;
+    }
     this.flat.flatMates = this.flatMates;
 
     console.log(this.flat);

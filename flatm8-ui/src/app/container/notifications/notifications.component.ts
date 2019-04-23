@@ -157,8 +157,8 @@ export class NotificationsComponent implements OnInit {
         } else if (request.requestType === "FLAT_DELETE") {
           if (this.isRequestFulfilled(request)) {
             this.flatService.deleteFlat(request.flatToDelete).subscribe(resp => {
+              this.requestCompleted = true;
               this.entryService.deleteAllForFlat(request.flatToDelete).subscribe(resp => {
-                this.requestCompleted = true;
               }, err => {
               })
             }, err => {

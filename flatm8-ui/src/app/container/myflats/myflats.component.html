@@ -16,6 +16,10 @@
   Only main mate can pass "Main Mate" privilege! :(
 </div>
 
+<div *ngIf="iShareError" class="alert alert-danger">
+  You used iShare so you can't add yourself to the flat!
+</div>
+
 <div *ngIf="mainMateSuccess" class="alert alert-success">
   Main Mate change succeeded!
 </div>

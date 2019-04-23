@@ -22,20 +22,29 @@ export class CreateentryComponent implements OnInit {
   flats = [];
   selectedFlat: Flat;
   userEmail: string;
+
+  objectKeys = Object.keys;
+
+  // Models for criteria
+  baseCriteria: BaseCriteria = new BaseCriteria(10);
+  roomCriteria: RoomCriteria = new RoomCriteria();
+
+  additionalDetails = [];
+  sumOfMatesWithEntries = 0;
+
+  // Details Adding
+  newDetail: string;
+  detailAlreadyAdded: boolean = false;
+  addingDetail = false;
+  selectedNumber: number = 1;
+
+  // Errors
+  flatFull: boolean = false;
+  mainUserError: boolean = false;
+  entryCreated: boolean = false;
   noFlats: boolean = false;
   error: boolean = false;
-  flatFull: boolean = false;
-  objectKeys = Object.keys;
-  selectedAge: number;
-  selectedGender: string;
-  selectedLifeStyle: string;
-  selectedRoomType: string;
-  selectedNumber: number;
-
-  mainUserError: boolean = false;
-  ageOffset: number = 10;
-  currentEntries: Array<FlatMateEntry>;
-  entryCreated: boolean = false;
+  flatFullWithEntries: boolean = false;
 
   ROOMTYPE_CRITERIAS = {
     "NONE": "Not given",
@@ -61,8 +70,17 @@ export class CreateentryComponent implements OnInit {
     ceil: 30
   };
 
+  resetErrors() {
+    this.flatFull = false;
+    this.mainUserError = false;
+    this.entryCreated = false;
+    this.noFlats = false;
+    this.error = false;
+    this.flatFull = false;
+  }
   constructor(private entryService: EntryService,private app: AppService,
-              private auth: AuthService, private router: Router, private http: HttpClient, private flatService: FlatService) { }
+              private auth: AuthService, private router: Router, private http: HttpClient,
+              private flatService: FlatService) { }
 
   ngOnInit() {
 
@@ -71,12 +89,10 @@ export class CreateentryComponent implements OnInit {
       this.router.navigateByUrl('');
     }
 
-    this.http.get('http://localhost:8080/user').subscribe(resp => {
+    this.app.getUserLoggedInUser().subscribe(resp => {
       this.userEmail = resp["name"];
       this.flatService.getFlatsForUser(resp["name"]).subscribe(resp => {
         this.flats.push(<Flat>resp);
-        this.error = false;
-        this.noFlats = false;
       }, err => {
         if (err.status == 404) {
           this.noFlats = true;
@@ -87,25 +103,39 @@ export class CreateentryComponent implements OnInit {
     }, err => {
       this.error = true;
     });
-
   }
 
   update(){
-    this.flatFull = false;
+    this.resetErrors();
+
+    this.sumOfMatesWithEntries = 0;
+    let sum = 0;
+
+    this.entryService.getEntriesForFlat(<Flat>this.selectedFlat).subscribe(entries => {
+      for (let e of <FlatMateEntry[]>entries) {
+        this.sumOfMatesWithEntries += e.roomCriteria.capacity;
+        sum += e.roomCriteria.capacity;
+      }
+      if (sum + this.selectedFlat.flatMates.length >= this.selectedFlat.capacity) {
+        this.flatFullWithEntries = true;
+      }
+    });
+
+    console.log(this.userEmail);
     this.mainUserError = this.userEmail !== this.selectedFlat.userEmail;
 
     if (this.selectedFlat.flatMates.length >= this.selectedFlat.capacity) {
       this.flatFull = true;
     }
-
-    this.entryService.getEntriesForFlat(this.selectedFlat).subscribe(entries => {
-      this.currentEntries = <FlatMateEntry[]>entries;
-    });
   }
 
   createEntry() {
-    this.entryCreated = false;
+    this.resetErrors();
+
     let entry = this.assembleCreateEntry(this.selectedFlat);
+
+    console.log(entry);
+
     this.entryService.createEntry(entry).subscribe(resp => {
       this.entryCreated = true;
     }, err => {
@@ -116,20 +146,30 @@ export class CreateentryComponent implements OnInit {
   assembleCreateEntry(flat: Flat) {
     let e = new FlatMateEntry();
     e.flat = flat;
-
-    let bc = new BaseCriteria();
-    bc.ageCriteria = this.selectedAge;
-    bc.genderCriteria = this.selectedGender;
-    bc.lifestyleCriteria = this.selectedLifeStyle;
-    bc.roomTypeCriteria = this.selectedRoomType;
-    bc.ageOffset = this.ageOffset;
-
-    let c = new RoomCriteria();
-    c.capacity = this.selectedNumber;
-    c.criteria = bc;
-
-    e.roomCriteria = c;
+    this.roomCriteria.additionalDetails = this.additionalDetails;
+    this.roomCriteria.criteria = this.baseCriteria;
+    this.roomCriteria.capacity = this.selectedNumber;
+    e.roomCriteria = this.roomCriteria;
 
     return e;
+  }
+
+  addDetail() {
+    this.addingDetail = !this.addingDetail;
+  }
+
+  stopAddingDetail() {
+    this.addingDetail = false;
+  }
+
+  addToList() {
+    this.resetErrors();
+
+    this.detailAlreadyAdded = false;
+    if (this.additionalDetails.indexOf(this.newDetail) === -1) {
+      this.additionalDetails.push(this.newDetail);
+    } else {
+      this.detailAlreadyAdded = true;
+    }
   }
 }

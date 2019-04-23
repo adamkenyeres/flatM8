@@ -37,6 +37,11 @@
       <p>Age: {{ entry.roomCriteria.criteria.ageCriteria }}</p>
       <p>Age Offset: {{ entry.roomCriteria.criteria.ageOffset }}</p>
       <p>Room Capacity: {{ entry.roomCriteria.capacity }}</p>
+      <p>Room Size: {{ entry.roomCriteria.size }}</p>
+      <p>Additional Details:</p>
+      <ul>
+        <li *ngFor="let detail of entry.roomCriteria.additionalDetails">{{ detail }}</li>
+      </ul>
     </mat-expansion-panel>
   </div>
 </div>

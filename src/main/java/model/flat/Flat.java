@@ -19,10 +19,13 @@ public class Flat {
     @Id
     private String id;
     private Address address;
-    private FlatType type;
+    private FlatType flatType;
     private Integer roomCount;
     private String userEmail;
-    private List<AdditionalDetail> additionalDetails;
+
+    @Deprecated
+    private List<AdditionalDetail> additionalDetails; // Not used for now
+
     private List<User> flatMates;
     private Integer capacity;
 
