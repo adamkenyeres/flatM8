@@ -12,7 +12,7 @@
 </div>
 
 <div *ngIf="authenticated()">
-  <div *ngIf="!userHasFlat">
+  <div *ngIf="!userHasFlat && ultimateEntries.length === 0">
     <h4>Entries recommended for you by age</h4>
     <p *ngIf="ageRecommendedEntries.length === 0">Sorry, no recommended entries! :( Please Browse for more! </p>
     <div *ngFor="let entry of ageRecommendedEntries; let i = index" [attr.data-index]="i">
@@ -45,7 +45,7 @@
       </mat-expansion-panel>
     </div>
   </div>
-  <div *ngIf="!userHasFlat">
+  <div *ngIf="!userHasFlat && ultimateEntries.length === 0">
     <h4>Entries recommended for you by lifestyle</h4>
     <p *ngIf="lifeStyleRecommendedEntries.length === 0">Sorry, no recommended entries! :( Please Browse for more! </p>
     <div *ngFor="let entry of lifeStyleRecommendedEntries; let i = index" [attr.data-index]="i">

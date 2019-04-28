@@ -12,6 +12,6 @@ export class User {
   tenantStayTypeComment: string;
   age: number;
   roles = [];
-  contacts: Array<ChatContact> = [];
+  contacts: Array<ChatContact>;
 }
 

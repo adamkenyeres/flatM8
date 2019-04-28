@@ -10,7 +10,6 @@ import model.tenant.User;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class ChatContact {
     private FlatMateEntry contactEntry;
     private String senderEmail;

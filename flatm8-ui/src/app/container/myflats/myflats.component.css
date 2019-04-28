@@ -12,6 +12,7 @@
   width: 3px;
   height: 25px;
   background: #000;
+  color: #FFFF;
   border-radius: 10px;
   position: absolute;
   left: calc(50% - 1.5px);

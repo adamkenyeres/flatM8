@@ -9,8 +9,8 @@
           </div>
         </div>
 
-        <div *ngFor="let c of contacts" class="inbox_chat">
-          <div class="chat_list">
+        <div class="inbox_chat">
+          <div *ngFor="let c of contacts" class="chat_list">
             <div class="chat_people">
               <div class="chat_ib">
                 <h5 (click)="selectConvo(c)"> {{c.senderEmail}} | {{c.contactEntry.flat.address.city}}
@@ -30,14 +30,14 @@
               <div class="received_msg">
                 <div class="received_withd_msg">
                   <p>{{msg.message}}</p>
-                  <span class="time_date">{{msg.sender.email}}| {{msg.timestamp}}</span></div>
+                  <span class="time_date">{{msg.sender.email}} | {{msg.timestamp | date: 'medium' }}</span></div>
               </div>
             </div>
 
             <div *ngIf="msg.sender.email === loggedInUser.email" class="outgoing_msg">
               <div class="sent_msg">
                 <p>{{msg.message}}</p>
-                <span class="time_date">{{msg.sender.email}}| {{msg.timestamp}}</span></div>
+                <span class="time_date">{{msg.sender.email}} | {{ msg.timestamp | date: 'medium' }}</span></div>
             </div>
           </div>
           </div>

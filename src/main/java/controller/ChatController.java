@@ -25,18 +25,7 @@ public class ChatController extends AbstractBaseController<ChatMessage> {
         this.chatMessageService = chatMessageService;
     }
 
-    @RequestMapping(value = "/getAllForSender", method = RequestMethod.POST)
-    public ResponseEntity getAllForSender(@RequestBody User user) {
-        List<ChatMessage> messages = chatMessageService.getMessagesBySender(user);
-
-        if (messages.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(messages);
-        }
-    }
-
-    @RequestMapping(value = "/getAllForReciever", method = RequestMethod.POST)
+    @RequestMapping(value = "/getAllForReceiver", method = RequestMethod.POST)
     public ResponseEntity getAllForReceiver(@RequestBody User user) {
         List<ChatMessage> messages = chatMessageService.getMessagesByReceiver(user);
 

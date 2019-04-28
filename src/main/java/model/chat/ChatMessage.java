@@ -13,9 +13,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatMessage {
+    private ChatContact chatContact;
     private String message;
-    private FlatMateEntry entry;
-    private User sender;
     private Date timestamp;
+    private User sender;
     private Set<User> receivers;
 }

@@ -7,6 +7,7 @@ import {FlatService} from "../../service/FlatService";
 import {Flat} from "../../model/Flat";
 import {EntryService} from "../../service/EntryService";
 import {ChatContact} from "../../model/ChatContact";
+import {ContactRequest} from "../../model/ContactRequest";
 
 @Component({
   selector: 'app-notifications',
@@ -148,20 +149,28 @@ export class NotificationsComponent implements OnInit {
 
         } else if (request.requestType === "CONTACT_REQUEST") {
           if (this.isRequestFulfilled(request)) {
+            let rq = <ContactRequest>request;
             let contact = new ChatContact();
-            contact.contactEntry = request.entry;
-            contact.senderEmail = request.sender.email;
-            request.sender.contacts.push(contact);
 
-            request.receivers.forEach(us => {
-              us.contacts.push(contact);
-              this.app.updateUser(us).subscribe();
+            contact.senderEmail = rq.sender.email;
+            contact.contactEntry = rq.entry;
+
+            this.app.getUserByEmail(rq.sender.email).subscribe(resp => {
+              let userResp = <User>resp;
+              userResp.contacts.push(contact);
+              this.app.updateUser(userResp).subscribe();
+              console.log(userResp);
             });
-            this.app.updateUser(request.sender).subscribe();
+            rq.receivers.forEach(e => {
+              this.app.getUserByEmail(e.email).subscribe(resp => {
+                let userResp = <User>resp;
+                userResp.contacts.push(contact);
+                this.app.updateUser(userResp).subscribe();
+                console.log(userResp);
+              });
+            })
           }
           this.notificationService.updateContactRequestsForUser(request).subscribe();
-
-
 
         } else if (request.requestType === "MATE_ADD") {
           if (this.isRequestFulfilled(request)) {

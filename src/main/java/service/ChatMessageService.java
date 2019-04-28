@@ -22,30 +22,6 @@ public class ChatMessageService extends AbstractBaseService<ChatMessage> {
         this.repository = repository;
     }
 
-    public List<ChatMessage> getMessagesBySender(User sender){
-        if (sender == null) {
-            throw new IllegalArgumentException("User can't be null!");
-        }
-
-        return repository.findAllBySender(sender);
-    }
-
-    public List<ChatMessage> getMessagesByEntry(FlatMateEntry entry) {
-        if (entry == null) {
-            throw new IllegalArgumentException("Entry can't be null!");
-        }
-
-        return repository.findAllByEntry(entry);
-    }
-
-    public List<ChatMessage> getMessagesByEntryAndSender(FlatMateEntry entry, User sender) {
-        if (entry == null || sender == null) {
-            throw new IllegalArgumentException("Entry and User can't be null!");
-        }
-
-        return repository.findAllByEntryAndSender(entry, sender);
-    }
-
     public List<ChatMessage> getMessagesByReceiver(User u) {
         return repository.findAll()
                 .stream()

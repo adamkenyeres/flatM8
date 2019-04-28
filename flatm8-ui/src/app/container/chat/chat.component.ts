@@ -16,7 +16,7 @@ export class ChatComponent implements OnInit {
   constructor(private app: AppService, private chatService: ChatService) { }
 
   loggedInUser: User;
-  contacts: Array<ChatContact> = [];
+  contacts: Array<ChatContact>;
   selectedConvo: ChatContact;
   currentMessages: Array<ChatMessage> = [];
 
@@ -31,9 +31,16 @@ export class ChatComponent implements OnInit {
 
   refreshMessages() {
     this.currentMessages = [];
+    this.app.getUserLoggedInUser().subscribe(resp => {
+      this.app.getUserByEmail(resp["name"]).subscribe(userResp => {
+        this.loggedInUser = <User>userResp;
+        this.contacts = this.loggedInUser.contacts;
+        console.log(this.loggedInUser);
+      });
+    });
     this.chatService.getMessagesByReceiver(this.loggedInUser).subscribe(msgs => {
       for (let msg of <ChatMessage[]>msgs) {
-        if (msg.entry.id == this.selectedConvo.contactEntry.id &&
+        if (msg.chatContact.contactEntry.id == this.selectedConvo.contactEntry.id &&
           msg.receivers.filter(u => u.email === this.selectedConvo.senderEmail).length > 0) {
           this.currentMessages.push(msg);
         }
@@ -41,7 +48,6 @@ export class ChatComponent implements OnInit {
     });
 
     this.currentMessages.sort((msg1, msg2) => msg1.timestamp > msg2.timestamp ? -1 : 1);
-    console.log(this.currentMessages);
   }
 
   selectConvo(c: ChatContact) {
@@ -70,10 +76,14 @@ export class ChatComponent implements OnInit {
 
   assembleMsg(msgText) {
     let msg = new ChatMessage();
+    let contact = new ChatContact();
+    contact.senderEmail = this.selectedConvo.senderEmail;
+    contact.contactEntry = this.selectedConvo.contactEntry;
+
+    msg.chatContact = contact;
     msg.sender = this.loggedInUser;
     msg.timestamp = new Date(Date.now());
     msg.message = msgText;
-    msg.entry = this.selectedConvo.contactEntry;
 
     return msg;
   }

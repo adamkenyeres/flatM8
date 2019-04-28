@@ -8,12 +8,8 @@ export class ChatService {
   constructor(private http: HttpClient) {
   }
 
-  getMessagesBySender(sender: User) {
-    return this.http.post("http://localhost:8080/chatMessages/getAllForSender/", sender);
-  }
-
   getMessagesByReceiver(rec: User) {
-    return this.http.post("http://localhost:8080/chatMessages/getAllForReciever/", rec);
+    return this.http.post("http://localhost:8080/chatMessages/getAllForReceiver/", rec);
   }
 
   createMsg(msg: ChatMessage) {
