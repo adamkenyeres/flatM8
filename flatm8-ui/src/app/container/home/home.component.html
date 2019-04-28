@@ -3,9 +3,18 @@
   <p>Please login or register!</p>
 </div>
 
+<div *ngIf="error" class="alert alert-danger">
+  <p>Error creating Request!</p>
+</div>
+
+<div *ngIf="requestCreated" class="alert alert-success">
+  <p>Request created successfully!</p>
+</div>
+
 <div *ngIf="authenticated()">
-  <div *ngIf="!userHasFlat && ageRecommendedEntries.length !== 0">
+  <div *ngIf="!userHasFlat">
     <h4>Entries recommended for you by age</h4>
+    <p *ngIf="ageRecommendedEntries.length === 0">Sorry, no recommended entries! :( Please Browse for more! </p>
     <div *ngFor="let entry of ageRecommendedEntries; let i = index" [attr.data-index]="i">
       <mat-expansion-panel>
         <mat-expansion-panel-header>
@@ -13,7 +22,8 @@
             Entry #{{i+1}}
           </mat-panel-title>
           <mat-panel-description>
-            Address: {{ entry.flat.address.streetAddress }} {{ entry.flat.address.streetNumber }}
+            Address: {{entry.flat.address.city }} ({{entry.flat.address.district }}),
+            {{ entry.flat.address.streetAddress }} {{ entry.flat.address.streetNumber }}
             {{ entry.flat.address.floor + " / " + entry.flat.address.door }}
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -31,11 +41,13 @@
         <ul>
           <li *ngFor="let detail of entry.roomCriteria.additionalDetails">{{ detail }}</li>
         </ul>
+        <button mat-raised-button color="accent" (click)="requestContact(entry)">Request Contact</button>
       </mat-expansion-panel>
     </div>
   </div>
-  <div *ngIf="!userHasFlat && lifeStyleRecommendedEntries.length !== 0">
+  <div *ngIf="!userHasFlat">
     <h4>Entries recommended for you by lifestyle</h4>
+    <p *ngIf="lifeStyleRecommendedEntries.length === 0">Sorry, no recommended entries! :( Please Browse for more! </p>
     <div *ngFor="let entry of lifeStyleRecommendedEntries; let i = index" [attr.data-index]="i">
       <mat-expansion-panel>
         <mat-expansion-panel-header>
@@ -91,6 +103,7 @@
         <ul>
           <li *ngFor="let detail of entry.roomCriteria.additionalDetails">{{ detail }}</li>
         </ul>
+        <button mat-raised-button color="accent" (click)="requestContact(entry)">Request Contact</button>
       </mat-expansion-panel>
     </div>
   </div>

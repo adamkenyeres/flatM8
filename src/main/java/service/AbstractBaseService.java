@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AbstractBaseService<Entity> {
+public abstract class AbstractBaseService<Entity> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBaseService.class);
 

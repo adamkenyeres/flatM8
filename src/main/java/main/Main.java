@@ -51,6 +51,9 @@ public class Main implements CommandLineRunner {
     @Autowired
     private FlatMateEntryRepository flatMateEntryRepository;
 
+    @Autowired
+    private ChatMessageRepository chatMessageRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
@@ -68,7 +71,8 @@ public class Main implements CommandLineRunner {
         contactRequestRepository.deleteAll();
         deleteFlatRequestRepository.deleteAll();
         flatMateEntryRepository.deleteAll();
+        flatRepository.deleteAll();
+        chatMessageRepository.deleteAll();
+        repository.deleteAll();
     }
-
-
 }

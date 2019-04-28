@@ -1,0 +1,53 @@
+<div class="container">
+  <h3 class=" text-center">Messaging</h3>
+  <div class="messaging">
+    <div class="inbox_msg">
+      <div class="inbox_people">
+        <div class="headind_srch">
+          <div class="recent_heading">
+            <h4>Recent</h4>
+          </div>
+        </div>
+
+        <div *ngFor="let c of contacts" class="inbox_chat">
+          <div class="chat_list">
+            <div class="chat_people">
+              <div class="chat_ib">
+                <h5 (click)="selectConvo(c)"> {{c.senderEmail}} | {{c.contactEntry.flat.address.city}}
+                  ({{c.contactEntry.flat.address.district}}), {{c.contactEntry.flat.address.streetAddress}}
+                  {{c.contactEntry.flat.address.streetNumber}} {{c.contactEntry.flat.address.floor}}/{{c.contactEntry.flat.address.door}}
+                  <span class="chat_date"></span></h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="mesgs" *ngIf="selectedConvo">
+          <div class="msg_history">
+          <div *ngFor="let msg of currentMessages">
+
+            <div *ngIf="msg.sender.email !== loggedInUser.email" class="incoming_msg">
+              <div class="received_msg">
+                <div class="received_withd_msg">
+                  <p>{{msg.message}}</p>
+                  <span class="time_date">{{msg.sender.email}}| {{msg.timestamp}}</span></div>
+              </div>
+            </div>
+
+            <div *ngIf="msg.sender.email === loggedInUser.email" class="outgoing_msg">
+              <div class="sent_msg">
+                <p>{{msg.message}}</p>
+                <span class="time_date">{{msg.sender.email}}| {{msg.timestamp}}</span></div>
+            </div>
+          </div>
+          </div>
+          <div class="type_msg">
+            <div class="input_msg_write">
+              <input type="text" #msg class="write_msg" placeholder="Type a message" />
+              <button (click)="sendMsg(msg.value)" class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

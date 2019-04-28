@@ -36,7 +36,7 @@ public abstract class AbstractBaseController<Entity> implements GenericControlle
     }
 
     @Override
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity getEntityById(@PathVariable String id) {
         Entity entry = service.getEntryById(id);
         if (entry == null) {

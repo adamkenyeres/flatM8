@@ -1,3 +1,6 @@
+import {FlatMateEntry} from "./FlatMateEntry";
+import {ChatContact} from "./ChatContact";
+
 export class User {
   password: string;
   email: string;
@@ -8,7 +11,7 @@ export class User {
   tenantStayType: string;
   tenantStayTypeComment: string;
   age: number;
-  additionalDetails = [];
   roles = [];
+  contacts: Array<ChatContact> = [];
 }
 

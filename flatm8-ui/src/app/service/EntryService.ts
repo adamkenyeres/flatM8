@@ -37,4 +37,8 @@ export class EntryService {
     return this.http.get("http://localhost:8080/flatmateEntries/getEntriesForLifeStyle?lifestyleCriteria=" + lifestyle
     + "&age="+age);
   }
+
+  getEntryById(id) {
+    return this.http.get("http://localhost:8080/flatmateEntries/"+id);
+  }
 }

@@ -30,6 +30,8 @@ export class RegisterComponent implements OnInit {
       "name": "USER"
     }];
 
+    this.credentials.contacts = [];
+
     console.log(this.credentials.email);
       this.app.register(this.credentials).subscribe(resp => {
         this.router.navigateByUrl("/login");

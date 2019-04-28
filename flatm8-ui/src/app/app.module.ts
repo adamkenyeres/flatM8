@@ -34,6 +34,10 @@ import {
 } from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {Ng5SliderModule} from "ng5-slider";
+import { BrowseComponent } from './container/browse/browse.component';
+import { SlashnComponent } from './container/slashn/slashn.component';
+import { ChatComponent } from './container/chat/chat.component';
+import {ChatService} from "./service/ChatService";
 
 const appRoutes: Routes = [
   {
@@ -77,6 +81,14 @@ const appRoutes: Routes = [
     path: 'notifications',
     component: NotificationsComponent
   },
+  {
+    path: 'slashn',
+    component: SlashnComponent
+  },
+  {
+    path: 'chat',
+    component: ChatComponent
+  },
   { path: '**', component: PagenotfoundComponent }
 ];
 
@@ -97,7 +109,10 @@ export function tokenGetter() {
     UserdetailsComponent,
     MyentriesComponent,
     CreateentryComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    BrowseComponent,
+    SlashnComponent,
+    ChatComponent
   ],
   imports: [
     MatExpansionModule,
@@ -126,7 +141,7 @@ export function tokenGetter() {
       { enableTracing: true }
     )
   ],
-  providers: [EntryService, FlatService, AppService, NotificationService,
+  providers: [EntryService, FlatService, AppService, NotificationService, ChatService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

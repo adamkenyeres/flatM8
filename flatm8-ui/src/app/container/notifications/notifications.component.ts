@@ -6,6 +6,7 @@ import {User} from "../../model/User";
 import {FlatService} from "../../service/FlatService";
 import {Flat} from "../../model/Flat";
 import {EntryService} from "../../service/EntryService";
+import {ChatContact} from "../../model/ChatContact";
 
 @Component({
   selector: 'app-notifications',
@@ -22,10 +23,14 @@ export class NotificationsComponent implements OnInit {
   error = false;
   loggedInEmail;
   requestCompleted = false;
+  userLoggedIn: User;
 
   ngOnInit() {
     this.app.getUserLoggedInUser().subscribe(resp => {
       this.loggedInEmail = resp["name"];
+      this.app.getUserByEmail(this.loggedInEmail).subscribe(us => {
+        this.userLoggedIn = <User>us;
+      })
     });
     this.app.getUserLoggedInUser().subscribe(resp => {
       this.notificationService.getAddMateRequestsForUser(resp["name"]).subscribe(resp => {
@@ -138,11 +143,26 @@ export class NotificationsComponent implements OnInit {
               })
           }
           this.notificationService.updateDeleteMateRequestsForUser(request).subscribe();
+
+
+
         } else if (request.requestType === "CONTACT_REQUEST") {
           if (this.isRequestFulfilled(request)) {
+            let contact = new ChatContact();
+            contact.contactEntry = request.entry;
+            contact.senderEmail = request.sender.email;
+            request.sender.contacts.push(contact);
 
+            request.receivers.forEach(us => {
+              us.contacts.push(contact);
+              this.app.updateUser(us).subscribe();
+            });
+            this.app.updateUser(request.sender).subscribe();
           }
           this.notificationService.updateContactRequestsForUser(request).subscribe();
+
+
+
         } else if (request.requestType === "MATE_ADD") {
           if (this.isRequestFulfilled(request)) {
             this.flatService.getFlatsForUser(request.sender.email).subscribe(resp => {

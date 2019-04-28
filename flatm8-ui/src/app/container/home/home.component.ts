@@ -7,6 +7,8 @@ import {FlatService} from "../../service/FlatService";
 import {EntryService} from "../../service/EntryService";
 import {FlatMateEntry} from "../../model/FlatMateEntry";
 import {User} from "../../model/User";
+import {NotificationService} from "../../service/NotificationService";
+import {ContactRequest} from "../../model/ContactRequest";
 
 @Component({
   selector: 'home',
@@ -20,7 +22,13 @@ export class HomeComponent implements OnInit {
   ageRecommendedEntries: Array<FlatMateEntry> = [];
   lifeStyleRecommendedEntries: Array<FlatMateEntry> = [];
   ultimateEntries: Array<FlatMateEntry> = [];
+
+
   userHasFlat: boolean = false;
+  requestCreated: boolean = false;
+  error: boolean = false;
+
+  loggedInUser: User;
 
   ROOMTYPE_CRITERIAS = {
     "NONE": "Not given",
@@ -45,12 +53,14 @@ export class HomeComponent implements OnInit {
 
   constructor(private app: AppService, private http: HttpClient,
               private router: Router, private auth: AuthService, private flatService: FlatService,
-              private entryService: EntryService) {
+              private entryService: EntryService, private notificationService: NotificationService) {
 
     if (this.auth.isAuthenticated()) {
       this.app.getUserLoggedInUser().subscribe(data => {
         this.greeting = data;
-        console.log(data);
+        this.app.getUserByEmail(data["name"]).subscribe(user => {
+          this.loggedInUser = <User>user;
+        }, err => { });
       });
     }
   }
@@ -102,5 +112,28 @@ export class HomeComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  requestContact(entry: FlatMateEntry) {
+    let cr = this.assembleContactRequest(entry);
+    this.requestCreated = false;
+    this.error = false;
+    this.notificationService.createContactRequestsForUser(cr).subscribe(req => {
+      this.requestCreated = true;
+    }, err => {
+      this.error = true;
+    });
+  }
+
+  assembleContactRequest(entry: FlatMateEntry): ContactRequest {
+    let cr = new ContactRequest();
+    cr.entry = entry;
+    cr.receivers = entry.flat.flatMates;
+    cr.sender = this.loggedInUser;
+    cr.requestType = "CONTACT_REQUEST";
+    cr.requestStatus = "PENDING";
+    cr.rejecters = [];
+    cr.approvers = [];
+    return cr;
   }
 }

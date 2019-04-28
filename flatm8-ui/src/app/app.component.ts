@@ -46,4 +46,7 @@ export class AppComponent {
   notifications() {
     this.router.navigateByUrl('notifications');
   }
+  chat() {
+    this.router.navigateByUrl('chat');
+  }
 }

@@ -26,37 +26,27 @@
           <p style="color:#9b870c;" *ngIf="noti.requestStatus === 'PENDING'">PENDING</p>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <p>Created By: {{noti.sender.firstName + " " + noti.sender.lastName + " (" + noti.sender.email + ")" }}</p>
+      <p>Created By: {{noti.sender.firstName}}  {{noti.sender.lastName}}
+        <a [attr.href]="'/slashn?email='+noti.sender.email">({{noti.sender.email}})</a></p>
       <p>Type: <b>{{getTypeHR(noti)}}</b></p>
       <p *ngIf="noti.requestType == 'MATE_DELETE'">Mate to be deleted:
         {{noti.mateToDelete.firstName + " " + noti.mateToDelete.lastName + "(" + noti.mateToDelete.email + ")" }}</p>
       <p *ngIf="noti.requestTye == 'MATE_ADD'">Mate to be added:</p>
-      <div *ngIf="noti.requestType == 'MATE_ADD'">
-        <p>Email: {{noti.mateToAdd.email}}</p>
-        <p>First Name: {{noti.mateToAdd.firstName}}</p>
-        <p>Last Name: {{noti.mateToAdd.lastName}}</p>
-        <p>Age: {{noti.mateToAdd.age}}</p>
-        <p>Stay at Home Type: {{noti.mateToAdd.tenantStayType}}</p>
-        <p>Stay at Home Type Comment: {{noti.mateToAdd.tenantStayTypeComment}}</p>
-        <p>Lifestyle Type: {{noti.mateToAdd.tenantType}}</p>
-        <p>Lifestyle Type Comment: {{noti.mateToAdd.tenantTypeComment}}</p>
-      </div>
-      <div *ngIf="noti.requestType == 'CONTACT_REQUEST'">
-        <p>Email: {{noti.sender.email}}</p>
-        <p>First Name: {{noti.sender.firstName}}</p>
-        <p>Last Name: {{noti.sender.lastName}}</p>
-        <p>Age: {{noti.sender.age}}</p>
-        <p>Stay at Home Type: {{noti.sender.tenantStayType}}</p>
-        <p>Stay at Home Type Comment: {{noti.sender.tenantStayTypeComment}}</p>
-        <p>Lifestyle Type: {{noti.sender.tenantType}}</p>
-        <p>Lifestyle Type Comment: {{noti.sender.tenantTypeComment}}</p>
-      </div>
       <div *ngIf="noti.requestType == 'FLAT_DELETE'">
-        <p> City: {{ noti.flatToDelete.address.city }} </p>
+        <p>City: {{ noti.flatToDelete.address.city }} </p>
         <p>District: {{ noti.flatToDelete.address.district }}</p>
         <p>Street: {{ noti.flatToDelete.address.streetAddress }}</p>
         <p>Number: {{ noti.flatToDelete.address.streetNumber }}</p>
         <p>Floor/Door: {{ noti.flatToDelete.address.floor + " / " + noti.flatToDelete.address.door }}</p>
+      </div>
+      <div *ngIf="noti.requestType == 'CONTACT_REQUEST'">
+        <h4>Receivers: </h4>
+        <p *ngFor="let u of noti.receivers">
+          <a [attr.href]="'/slashn?email='+u.email">{{u.firstName + " " + u.lastName + " (" + u.email + ")"}}</a>
+        </p>
+        <p>
+          <a [attr.href]="'/slashn?entry='+noti.entry.id">Entry Details</a>
+        </p>
       </div>
       <h4>Request accepted by:</h4>
       <div *ngFor="let accepter of noti.approvers;" [attr.data-index]="i">
@@ -88,34 +78,26 @@
 
       <p>Type: <b>{{getTypeHR(noti)}}</b></p>
       <p *ngIf="noti.requestType == 'MATE_DELETE'">Mate to be deleted:
-        {{noti.mateToDelete.firstName + " " + noti.mateToDelete.lastName + "(" + noti.mateToDelete.email + ")" }}</p>
-      <p *ngIf="noti.requestTye == 'MATE_ADD'">Mate to be added:</p>
-      <div *ngIf="noti.requestType == 'MATE_ADD'">
-        <p>Email: {{noti.mateToAdd.email}}</p>
-        <p>First Name: {{noti.mateToAdd.firstName}}</p>
-        <p>Last Name: {{noti.mateToAdd.lastName}}</p>
-        <p>Age: {{noti.mateToAdd.age}}</p>
-        <p>Stay at Home Type: {{noti.mateToAdd.tenantStayType}}</p>
-        <p>Stay at Home Type Comment: {{noti.mateToAdd.tenantStayTypeComment}}</p>
-        <p>Lifestyle Type: {{noti.mateToAdd.tenantType}}</p>
-        <p>Lifestyle Type Comment: {{noti.mateToAdd.tenantTypeComment}}</p>
-      </div>
-      <div *ngIf="noti.requestType == 'CONTACT_REQUEST'">
-        <p>Email: {{noti.sender.email}}</p>
-        <p>First Name: {{noti.sender.firstName}}</p>
-        <p>Last Name: {{noti.sender.lastName}}</p>
-        <p>Age: {{noti.sender.age}}</p>
-        <p>Stay at Home Type: {{noti.sender.tenantStayType}}</p>
-        <p>Stay at Home Type Comment: {{noti.sender.tenantStayTypeComment}}</p>
-        <p>Lifestyle Type: {{noti.sender.tenantType}}</p>
-        <p>Lifestyle Type Comment: {{noti.sender.tenantTypeComment}}</p>
-      </div>
+        <a [attr.href]="'/slashn?email='+noti.mateToDelete.email">({{noti.mateToDelete.email}})</a>
+      </p>
+      <p *ngIf="noti.requestTye == 'MATE_ADD'">Mate to be added:
+        <a [attr.href]="'/slashn?email='+noti.mateToAdd.email">({{noti.mateToAdd.email}})</a>
+      </p>
       <div *ngIf="noti.requestType == 'FLAT_DELETE'">
         <p>City: {{ noti.flatToDelete.address.city }} </p>
         <p>District: {{ noti.flatToDelete.address.district }}</p>
         <p>Street: {{ noti.flatToDelete.address.streetAddress }}</p>
         <p>Number: {{ noti.flatToDelete.address.streetNumber }}</p>
         <p>Floor/Door: {{ noti.flatToDelete.address.floor + " / " + noti.flatToDelete.address.door }}</p>
+      </div>
+      <div *ngIf="noti.requestType == 'CONTACT_REQUEST'">
+        <h4>Receivers: </h4>
+        <p *ngFor="let u of noti.receivers">
+          <a [attr.href]="'/slashn?email='+u.email">{{u.firstName + " " + u.lastName + " (" + u.email + ")"}}</a>
+        </p>
+        <p>
+          <a [attr.href]="'/slashn?entry='+noti.entry.id">Entry Details</a>
+        </p>
       </div>
       <h4>Request accepted by:</h4>
       <div *ngFor="let accepter of noti.approvers;" [attr.data-index]="i">
