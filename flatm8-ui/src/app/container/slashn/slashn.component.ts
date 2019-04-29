@@ -5,6 +5,7 @@ import {User} from "../../model/User";
 import {FlatMateEntry} from "../../model/FlatMateEntry";
 import {Flat} from "../../model/Flat";
 import {EntryService} from "../../service/EntryService";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-slashn',
@@ -17,8 +18,10 @@ export class SlashnComponent implements OnInit {
   entry: FlatMateEntry;
   flat: Flat;
 
+  avatarError: boolean;
   error: boolean;
-
+  userAvatar;
+  imageType = "data:image/JPEG;base64,";
   ROOMTYPE_CRITERIAS = {
     "NONE": "Not given",
     "PRIVATE_ROOM": "Private Room",
@@ -40,11 +43,13 @@ export class SlashnComponent implements OnInit {
     "OTHER": "Other",
   };
 
-  constructor(private activatedRoute: ActivatedRoute, private app: AppService, private entryService: EntryService) {
+  constructor(private activatedRoute: ActivatedRoute, private app: AppService, private entryService: EntryService,
+              private sanitizer: DomSanitizer) {
     this.activatedRoute.queryParams.subscribe(params => {
       if (params['email']) {
         this.app.getUserByEmail(params['email']).subscribe(userResp => {
           this.user = <User>userResp;
+          this.getAvatar();
         }, error => {
           this.error = true;
         })
@@ -57,6 +62,18 @@ export class SlashnComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  getAvatar() {
+    console.log(this.user);
+    this.avatarError = false;
+    this.app.getUserAvatarByUser(this.user).subscribe(resp => {
+      if (resp['content']) {
+        this.userAvatar = this.sanitizer.bypassSecurityTrustUrl(this.imageType + resp['content']);
+      }
+    }, err => {
+      this.avatarError = true;
+    });
   }
 
 }

@@ -6,6 +6,9 @@
     <div *ngIf="success" class="alert alert-success">
       Successfully updated account details!
     </div>
+    <div *ngIf="avatarError" class="alert alert-danger">
+      Couldn't fetch or upload avatar please try again!
+    </div>
     <div class="panel-heading">
       Your account details
     </div>
@@ -72,7 +75,26 @@
       <button type="button" (click)="editAge()" class="btn">✎</button>
       <div *ngIf="isAgedPressed">
         <input type="text" name="name" [(ngModel)]="user.age" class="form-control"/>
+      </div><br/>
+
+      <div *ngIf="currentFileUpload" class="progress">
+        <div class="progress-bar progress-bar-info progress-bar-striped"
+             role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
+             aria-valuemin="0" aria-valuemax="100"
+             [ngStyle]="{width:progress.percentage+'%'}">
+          {{progress.percentage}}%</div>
       </div>
+
+      <label class="btn btn-default">
+        <input type="file" accept=".jpg,.jpeg" (change)="selectFile($event)">
+      </label>
+
+      <button type="button" class="btn btn-success" [disabled]="!selectedFile"
+              (click)="upload()">Upload</button>
+
+      <br/>
+
+      <img *ngIf="!avatarError" class="avatar" [src]="userAvatar"/>
 
       <div *ngIf="isFirstNamePressed
       || isLastNamePressed

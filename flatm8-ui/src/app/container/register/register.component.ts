@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../auth/auth.service";
 import {Form, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormUploadComponent} from "../form.upload/form.upload.component";
 
 @Component({
   selector: 'app-register',

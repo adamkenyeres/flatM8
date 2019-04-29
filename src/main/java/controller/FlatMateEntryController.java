@@ -1,25 +1,18 @@
 package controller;
 
-import model.criteria.BaseCriteria;
-import model.criteria.LifestyleCriteria;
+import model.chat.ChatMessage;
 import model.flat.Flat;
 import model.flatmate.FlatMateEntry;
-import model.tenant.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import repository.FlatMateEntryRepository;
-import repository.UserRepository;
-import service.AbstractBaseService;
+import service.ChatMessageService;
 import service.FlatMateEntryService;
+import service.UserService;
 
-import javax.swing.text.html.parser.Entity;
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,10 +24,16 @@ public class FlatMateEntryController extends AbstractBaseController<FlatMateEntr
 
     private final FlatMateEntryService flatMateEntryService;
 
+    private final ChatMessageService chatMessageService;
+
+    private final UserService userService;
+
     @Autowired
-    public FlatMateEntryController(FlatMateEntryService flatMateEntryService) {
+    public FlatMateEntryController(FlatMateEntryService flatMateEntryService, ChatMessageService chatMessageService, UserService userService) {
         super(flatMateEntryService);
         this.flatMateEntryService = flatMateEntryService;
+        this.chatMessageService = chatMessageService;
+        this.userService = userService;
     }
 
 
@@ -42,6 +41,19 @@ public class FlatMateEntryController extends AbstractBaseController<FlatMateEntr
     public ResponseEntity deleteEntry(@Valid @RequestBody FlatMateEntry entry) {
         try {
             flatMateEntryService.deleteEntry(entry);
+            List<ChatMessage> msgs = chatMessageService.getAllEntries()
+                    .stream()
+                    .filter(msg -> msg.getChatContact().getContactEntry().equals(entry))
+                    .collect(Collectors.toList());
+
+            msgs.forEach(chatMessageService::deleteEntry);
+
+            userService.getAllEntries()
+                    .forEach(u -> {
+                        u.getContacts().removeIf(e -> e.getContactEntry().equals(entry));
+                        userService.save(u);
+                    });
+
             return ResponseEntity.ok().build();
         } catch (Exception ex) {
             return ResponseEntity.notFound().build();

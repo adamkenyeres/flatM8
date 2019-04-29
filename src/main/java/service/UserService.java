@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService extends AbstractBaseService<User> {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -22,6 +22,7 @@ public class UserService {
 
     @Autowired
     public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        super(userRepository);
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;

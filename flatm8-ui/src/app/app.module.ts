@@ -38,6 +38,10 @@ import { BrowseComponent } from './container/browse/browse.component';
 import { SlashnComponent } from './container/slashn/slashn.component';
 import { ChatComponent } from './container/chat/chat.component';
 import {ChatService} from "./service/ChatService";
+import {ListUploadComponent} from './container/list.upload/list.upload.component';
+import {DetailsUploadComponent} from './container/details.upload/details.upload.component';
+import {FormUploadComponent} from './container/form.upload/form.upload.component';
+import {UploadFileService} from "./service/UploadFileService";
 
 const appRoutes: Routes = [
   {
@@ -112,7 +116,10 @@ export function tokenGetter() {
     NotificationsComponent,
     BrowseComponent,
     SlashnComponent,
-    ChatComponent
+    ChatComponent,
+    ListUploadComponent,
+    DetailsUploadComponent,
+    FormUploadComponent
   ],
   imports: [
     MatExpansionModule,
@@ -141,7 +148,7 @@ export function tokenGetter() {
       { enableTracing: true }
     )
   ],
-  providers: [EntryService, FlatService, AppService, NotificationService, ChatService,
+  providers: [EntryService, FlatService, AppService, NotificationService, ChatService, UploadFileService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

@@ -30,6 +30,7 @@ public class User implements Serializable {
     private int age;
     private Set<Role> roles;
     private Set<ChatContact> contacts;
+    private String avatarPath;
 
     @Override
     public boolean equals(Object o) {

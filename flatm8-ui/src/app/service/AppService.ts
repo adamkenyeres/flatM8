@@ -2,6 +2,8 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {tap} from "rxjs/operators";
 import {Observable} from "rxjs/Observable";
+import 'rxjs/add/operator/map';
+import {User} from "../model/User";
 
 @Injectable()
 export class AppService {
@@ -46,5 +48,13 @@ export class AppService {
 
   updateUser(user) {
     return this.http.post('http://localhost:8080/updateUser', user);
+  }
+
+  getUserAvatar() {
+    return this.http.get('http://localhost:8080/getAvatar');
+  }
+
+  getUserAvatarByUser(user) {
+    return this.http.post('http://localhost:8080/getAvatarByUser', user);
   }
 }

@@ -17,6 +17,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import repository.*;
+import service.StorageService;
+
+import javax.annotation.Resource;
 
 @SpringBootApplication
 @EnableMongoRepositories(basePackages = "repository")
@@ -54,6 +57,9 @@ public class Main implements CommandLineRunner {
     @Autowired
     private ChatMessageRepository chatMessageRepository;
 
+    @Resource
+    private StorageService storageService;
+
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
@@ -73,6 +79,8 @@ public class Main implements CommandLineRunner {
         flatMateEntryRepository.deleteAll();
         flatRepository.deleteAll();
         chatMessageRepository.deleteAll();
-        repository.deleteAll();
+        //repository.deleteAll();
+        storageService.deleteAll();
+        storageService.init();
     }
 }

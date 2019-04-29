@@ -3,7 +3,9 @@
     <div *ngIf="error" class="alert alert-danger">
       Unknown error occurred, please try again later!
     </div>
-
+    <div *ngIf="avatarError" class="alert alert-danger">
+      Couldn't fetch or upload avatar please try again!
+    </div>
     <div class="panel-body" *ngIf="!error && user">
       <div class="panel-heading">
         Account details for {{ user.email }}:
@@ -17,6 +19,7 @@
       <label>Stay at home habits:</label> <br/> {{ app.CONST_TENANT_STAY_TYPES[user.tenantStayType] }}<br />
       <label>Comments on stay at home habits:</label> <br/> {{ user.tenantStayTypeComment }}<br />
       <label>Age: </label> <br/>{{ user.age }}<br/>
+      <img *ngIf="!avatarError" class="avatar" [src]="userAvatar"/>
     </div>
 
     <div class="panel-body" *ngIf="!error && entry">
