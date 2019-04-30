@@ -1,24 +1,31 @@
-<div id="custom-bootstrap-menu" class="navbar navbar-default" role="navigation">
-  <div class="container">
-    <div class="navbar-header"><a class="navbar-brand" href="#"><span class="glyphicon glyphicon-home"></span></a>
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-      </button>
-    </div>
-    <div class="collapse navbar-collapse navbar-menubuilder">
-      <ul class="nav navbar-nav navbar-left">
-        <li class="hvr-underline-reveal"><a (click)="home()">Home</a></li>
-        <li class="hvr-underline-reveal"><a *ngIf="auth.isAuthenticated() == false" (click)="login()">Login</a></li>
-        <li class="hvr-underline-reveal"><a *ngIf="auth.isAuthenticated() == false" (click)="register()">Registration</a></li>
-        <li class="hvr-underline-reveal"><a *ngIf="auth.isAuthenticated()== true" (click)="accountDetails()">Account</a></li>
-        <li class="hvr-underline-reveal"><a *ngIf="auth.isAuthenticated()== true" (click)="myflats()">MyFlat</a></li>
-        <li class="hvr-underline-reveal"><a *ngIf="auth.isAuthenticated() == true" (click)="myentries()">MyEntries</a></li>
-        <li class="hvr-underline-reveal"><a *ngIf="auth.isAuthenticated() == true" (click)="notifications()">Notifications</a></li>
-        <li class="hvr-underline-reveal"><a *ngIf="auth.isAuthenticated() == true" (click)="chat()"><i class="material-icons">chat</i></a></li>
-        <li class="hvr-underline-reveal"><a *ngIf="auth.isAuthenticated() == true" (click)="logout()">Logout</a></li>
+<nav class="navbar navbar-expand-md navbar-light bg-light justify-content-end">
+    <a class="navbar-brand mr-auto" (click)="home()"><span class="glyphicon glyphicon-home"></span></a>
+    <button class="navbar-toggler align-self-center" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == false" (click)="login()">Login</a></li>
+        <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == false" (click)="register()">Registration</a></li>
+        <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == true" (click)="accountDetails()">Account</a></li>
+        <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == true" (click)="myflats()">MyFlat</a></li>
+        <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == true" (click)="myentries()">MyEntries</a></li>
+        <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == true" (click)="notifications()">Notifications</a></li>
+        <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == true" (click)="logout()">Logout</a></li>
+      </ul>
+      <ul *ngIf="auth.isAuthenticated()" class="navbar-nav navbar-right">
+        <li class="nav-item hvr-underline-reveal">
+          <div id="container-avatar">
+            <div id="badge">12</div>
+            <img src="https://1.bp.blogspot.com/-JtED2x_7XAw/UfhHlD-TXmI/AAAAAAAAD9Q/lugUa6id_9Y/s1600/-Teen-Vogue-by-Barrett-Sweger-2013-emma-watson-34892202-1063-1440.jpg" />
+          </div>
+        </li>
+        <li class="nav-item hvr-underline-reveal">
+          <a class="nav-link" *ngIf="auth.isAuthenticated() == true" (click)="chat()"><i class="material-icons">chat</i></a>
+        </li>
       </ul>
   </div>
-</div>
-</div>
+</nav>
   <div class="router">
     <router-outlet></router-outlet>
   </div>
