@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NotificationService} from "../../service/NotificationService";
 import {AppService} from "../../service/AppService";
 import {BaseRequest} from "../../model/BaseRequest";
@@ -16,15 +16,16 @@ import {ContactRequest} from "../../model/ContactRequest";
 })
 export class NotificationsComponent implements OnInit {
 
-  constructor(private notificationService: NotificationService, private app: AppService,
-              private flatService: FlatService, private entryService: EntryService) { }
-
   notifications = [];
   myRequests = [];
   error = false;
   loggedInEmail;
   requestCompleted = false;
   userLoggedIn: User;
+
+  constructor(private notificationService: NotificationService, private app: AppService,
+              private flatService: FlatService, private entryService: EntryService) {
+  }
 
   ngOnInit() {
     this.app.getUserLoggedInUser().subscribe(resp => {
@@ -38,14 +39,16 @@ export class NotificationsComponent implements OnInit {
         for (let req of <Object[]>resp) {
           this.notifications.push(req);
         }
-      }, err => {});
+      }, err => {
+      });
 
 
       this.notificationService.getMyAddMateRequestsForUser(resp["name"]).subscribe(resp => {
         for (let req of <Object[]>resp) {
           this.myRequests.push(req);
         }
-      }, err => {});
+      }, err => {
+      });
 
 
       this.notificationService.getDeleteMateRequestsForUser(resp["name"]).subscribe(resp => {
@@ -53,41 +56,47 @@ export class NotificationsComponent implements OnInit {
           this.notifications.push(req);
           console.log(req);
         }
-      }, err => {});
+      }, err => {
+      });
 
 
       this.notificationService.getMyDeleteMateRequestsForUser(resp["name"]).subscribe(resp => {
         for (let req of <Object[]>resp) {
           this.myRequests.push(req);
         }
-      }, err => {});
+      }, err => {
+      });
 
 
       this.notificationService.getContactRequestsForUser(resp["name"]).subscribe(resp => {
         for (let req of <Object[]>resp) {
           this.notifications.push(req);
         }
-      }, err => {});
+      }, err => {
+      });
 
 
       this.notificationService.getMyContactRequestsForUser(resp["name"]).subscribe(resp => {
         for (let req of <Object[]>resp) {
           this.myRequests.push(req);
         }
-      }, err => {});
+      }, err => {
+      });
 
       this.notificationService.getMyDeleteFlatRequestsForUser(resp["name"]).subscribe(resp => {
         for (let req of <Object[]>resp) {
           this.myRequests.push(req);
         }
-      }, err => {});
+      }, err => {
+      });
 
 
       this.notificationService.getDeleteFlatRequestsForUser(resp["name"]).subscribe(resp => {
         for (let req of <Object[]>resp) {
           this.notifications.push(req);
         }
-      }, err => {});
+      }, err => {
+      });
 
 
     }, err => {
@@ -111,8 +120,8 @@ export class NotificationsComponent implements OnInit {
 
   isAcceptOrRejectNeeded(notification): boolean {
     return (notification.approvers.length + notification.rejecters.length) < notification.receivers.length
-          && notification.approvers.filter(u => u.email === this.loggedInEmail).length === 0
-          && notification.rejecters.filter(u => u.email === this.loggedInEmail).length === 0
+      && notification.approvers.filter(u => u.email === this.loggedInEmail).length === 0
+      && notification.rejecters.filter(u => u.email === this.loggedInEmail).length === 0
   }
 
   isRequestFulfilled(request): boolean {
@@ -135,16 +144,15 @@ export class NotificationsComponent implements OnInit {
         if (request.requestType === "MATE_DELETE") {
           if (this.isRequestFulfilled(request)) {
             this.flatService.getFlatsForUser(request.mateToDelete.email).subscribe(resp => {
-                let flat = <Flat>resp;
-                flat.flatMates = flat.flatMates.filter(fmate => fmate.email != request.mateToDelete.email);
-                this.flatService.updateFlat(flat).subscribe(resp => {
-                  this.requestCompleted = true;
-                  // window.location.reload(); // TODO needed?
-                });
-              })
+              let flat = <Flat>resp;
+              flat.flatMates = flat.flatMates.filter(fmate => fmate.email != request.mateToDelete.email);
+              this.flatService.updateFlat(flat).subscribe(resp => {
+                this.requestCompleted = true;
+                // window.location.reload(); // TODO needed?
+              });
+            })
           }
           this.notificationService.updateDeleteMateRequestsForUser(request).subscribe();
-
 
 
         } else if (request.requestType === "CONTACT_REQUEST") {
@@ -214,7 +222,9 @@ export class NotificationsComponent implements OnInit {
         } else if (request.requestType === "FLAT_DELETE") {
           this.notificationService.updateDeleteFlatRequestsForUser(request).subscribe();
         }
-      }, err => {})
-    }, error1 => {});
+      }, err => {
+      })
+    }, error1 => {
+    });
   }
 }

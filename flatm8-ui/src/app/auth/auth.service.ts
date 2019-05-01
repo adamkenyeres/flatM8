@@ -7,6 +7,7 @@ export class AuthService {
   constructor(public jwtHelper: JwtHelperService) {
 
   }
+
   public getToken(): string {
     return sessionStorage.getItem('token');
   }

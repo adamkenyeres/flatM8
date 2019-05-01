@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CreateflatComponent } from './createflat.component';
+import {CreateflatComponent} from './createflat.component';
 
 describe('CreateflatComponent', () => {
   let component: CreateflatComponent;
@@ -8,9 +8,9 @@ describe('CreateflatComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateflatComponent ]
+      declarations: [CreateflatComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

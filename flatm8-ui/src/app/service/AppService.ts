@@ -25,15 +25,16 @@ export class AppService {
     "STAY_AT_HOME": "I am staying at home.",
     "OTHER": "Other, will describe in the comments."
   };
+  innerdata = {};
 
   constructor(private http: HttpClient) {
   }
 
-  innerdata = {};
   register(user): Observable<Object> {
     return this.http.post('http://localhost:8080/registration', user);
 
   }
+
   authenticate(credentials): Observable<Object> {
     return this.http.post('http://localhost:8080/signin', credentials);
   }

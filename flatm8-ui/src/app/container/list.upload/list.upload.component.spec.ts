@@ -1,6 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { List.UploadComponent } from './list.upload.component';
+import {List
+
+.
+UploadComponent
+}
+from
+'./list.upload.component';
 
 describe('List.UploadComponent', () => {
   let component: List.UploadComponent;
@@ -8,9 +14,9 @@ describe('List.UploadComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ List.UploadComponent ]
+      declarations: [List.UploadComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

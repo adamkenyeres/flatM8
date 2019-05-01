@@ -1,57 +1,58 @@
 <div class="container">
-<link href="https://unpkg.com/@angular/material@2.0.0-beta.8/prebuilt-themes/deeppurple-amber.css" rel="stylesheet">
-<div *ngIf="error" class="alert alert-danger">
-  Unknown error occurred while fetching entries, please try again later!
-</div>
-<div *ngIf="noEntries" class="alert alert-info">
-  No entries are present. Would you like to add one?
-</div>
-<div *ngIf="noFlat" class="alert alert-warning">
-  No flats are present. Please create one under <a href="/myflats">MyFlats</a>!
-</div>
-<div *ngIf="!noFlat">
-  <div (click)="addEntry()" class="centered">
-    <div class="plus" id="plus">
-      <div class="plus__line plus__line--v">
+  <link href="https://unpkg.com/@angular/material@2.0.0-beta.8/prebuilt-themes/deeppurple-amber.css" rel="stylesheet">
+  <div *ngIf="error" class="alert alert-danger">
+    Unknown error occurred while fetching entries, please try again later!
+  </div>
+  <div *ngIf="noEntries" class="alert alert-info">
+    No entries are present. Would you like to add one?
+  </div>
+  <div *ngIf="noFlat" class="alert alert-warning">
+    No flats are present. Please create one under <a href="/myflats">MyFlats</a>!
+  </div>
+  <div *ngIf="!noFlat">
+    <div (click)="addEntry()" class="centered">
+      <div class="plus" id="plus">
+        <div class="plus__line plus__line--v">
+        </div>
+        <div class="plus__line plus__line--h"></div>
       </div>
-      <div class="plus__line plus__line--h"></div>
     </div>
   </div>
-</div>
 
-<div *ngIf="!noEntries && !noFlat">
-  <h4>Current entries: </h4>
-  <div *ngFor="let entry of entries; let i = index" [attr.data-index]="i">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Entry #{{i+1}}
-        </mat-panel-title>
-        <mat-panel-description>
-          Address: {{ entry.flat.address.streetAddress }} {{ entry.flat.address.streetNumber }}
-          {{ entry.flat.address.floor + " / " + entry.flat.address.door }}
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <button *ngIf="entry.flat.userEmail === loggedInUserEmail" type="button" (click)="deleteEntry(entry)" mat-icon-button>
-        <mat-icon aria-label="Add new FlatMate">delete</mat-icon>
-      </button>
-      <p>RoomType: {{ ROOMTYPE_CRITERIAS[entry.roomCriteria.criteria.roomTypeCriteria] }}</p>
-      <p>LifeStyle: {{ LIFESTYLE_CRITERIAS[entry.roomCriteria.criteria.lifestyleCriteria] }}</p>
-      <p>Gender: {{ GENDER_CRITERIAS[entry.roomCriteria.criteria.genderCriteria] }}</p>
-      <p>Age: {{ entry.roomCriteria.criteria.ageCriteria }}</p>
-      <p>Age Offset: {{ entry.roomCriteria.criteria.ageOffset }}</p>
-      <p>Room Capacity: {{ entry.roomCriteria.capacity }}</p>
-      <p>Room Size: {{ entry.roomCriteria.size }}</p>
-      <p>Additional Details:</p>
-      <ul>
-        <li *ngFor="let detail of entry.roomCriteria.additionalDetails">{{ detail }}</li>
-      </ul>
-      <div class="row text-center text-lg-left">
-        <div *ngFor="let image of loadedImages.get(entry.id)" class="col-lg-3 col-md-4 col-6">
-          <img class="img-fluid img-thumbnail" [src]="image"/>
+  <div *ngIf="!noEntries && !noFlat">
+    <h4>Current entries: </h4>
+    <div *ngFor="let entry of entries; let i = index" [attr.data-index]="i">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Entry #{{i+1}}
+          </mat-panel-title>
+          <mat-panel-description>
+            Address: {{ entry.flat.address.streetAddress }} {{ entry.flat.address.streetNumber }}
+            {{ entry.flat.address.floor + " / " + entry.flat.address.door }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <button *ngIf="entry.flat.userEmail === loggedInUserEmail" type="button" (click)="deleteEntry(entry)"
+                mat-icon-button>
+          <mat-icon aria-label="Add new FlatMate">delete</mat-icon>
+        </button>
+        <p>RoomType: {{ ROOMTYPE_CRITERIAS[entry.roomCriteria.criteria.roomTypeCriteria] }}</p>
+        <p>LifeStyle: {{ LIFESTYLE_CRITERIAS[entry.roomCriteria.criteria.lifestyleCriteria] }}</p>
+        <p>Gender: {{ GENDER_CRITERIAS[entry.roomCriteria.criteria.genderCriteria] }}</p>
+        <p>Age: {{ entry.roomCriteria.criteria.ageCriteria }}</p>
+        <p>Age Offset: {{ entry.roomCriteria.criteria.ageOffset }}</p>
+        <p>Room Capacity: {{ entry.roomCriteria.capacity }}</p>
+        <p>Room Size: {{ entry.roomCriteria.size }}</p>
+        <p>Additional Details:</p>
+        <ul>
+          <li *ngFor="let detail of entry.roomCriteria.additionalDetails">{{ detail }}</li>
+        </ul>
+        <div class="row text-center text-lg-left">
+          <div *ngFor="let image of loadedImages.get(entry.id)" class="col-lg-3 col-md-4 col-6">
+            <img class="img-fluid img-thumbnail" [src]="image"/>
+          </div>
         </div>
-      </div>
-    </mat-expansion-panel>
+      </mat-expansion-panel>
+    </div>
   </div>
-</div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FlatService} from "../../service/FlatService";
 import {AppService} from "../../service/AppService";
 import {AuthService} from "../../auth/auth.service";
@@ -19,10 +19,6 @@ import {DeleteFlatRequest} from "../../model/DeleteFlatRequest";
 })
 export class MyflatsComponent implements OnInit {
 
-  constructor(private flatService: FlatService, private app: AppService,
-              private auth: AuthService, private router: Router, private http: HttpClient,
-              private notificationService: NotificationService) { }
-
   flat: Object;
   noFlats = false;
   error = false;
@@ -38,6 +34,11 @@ export class MyflatsComponent implements OnInit {
   mainMateSuccess = false;
   iShareError = false;
 
+  constructor(private flatService: FlatService, private app: AppService,
+              private auth: AuthService, private router: Router, private http: HttpClient,
+              private notificationService: NotificationService) {
+  }
+
   resetErrors() {
     this.noFlats = false;
     this.error = false;
@@ -52,6 +53,7 @@ export class MyflatsComponent implements OnInit {
     this.mainMateSuccess = false;
     this.iShareError = false;
   }
+
   ngOnInit() {
     if (!this.auth.isAuthenticated()) {
       alert("Not logged in!");
@@ -97,13 +99,14 @@ export class MyflatsComponent implements OnInit {
             }
           });
         }
-      }, err=> {
+      }, err => {
         this.error = true;
       })
     }, err => {
       this.error = true;
     });
   }
+
   getFlatsForUser() {
     this.resetErrors();
 
@@ -114,7 +117,7 @@ export class MyflatsComponent implements OnInit {
         if (resp != null) {
           this.flat = resp;
         }
-        }, err => {
+      }, err => {
         if (err.status == 404) {
           this.noFlats = true;
         } else {
@@ -149,7 +152,7 @@ export class MyflatsComponent implements OnInit {
 
     this.app.getUserByEmail(email).subscribe(deleteMateResp => {
       this.app.getUserLoggedInUser().subscribe(loggedInMateResp => {
-        this.app.getUserByEmail(loggedInMateResp["name"]).subscribe( resp => {
+        this.app.getUserByEmail(loggedInMateResp["name"]).subscribe(resp => {
           let deleteRequest = this.createDeleteMateRequest(resp, deleteMateResp);
 
           // For iShare its possible that the main user is not in among flatmates
@@ -298,6 +301,7 @@ export class MyflatsComponent implements OnInit {
 
     return deleteRequest;
   }
+
   makeMainMate(mate: User) {
     this.resetErrors();
 

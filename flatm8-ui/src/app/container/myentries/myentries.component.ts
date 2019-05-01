@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {EntryService} from "../../service/EntryService";
 import {HttpClient} from "@angular/common/http";
 import {AppService} from "../../service/AppService";
@@ -47,7 +47,7 @@ export class MyentriesComponent implements OnInit {
     "OTHER": "Other",
   };
 
-  constructor(private entryService: EntryService,private app: AppService,
+  constructor(private entryService: EntryService, private app: AppService,
               private auth: AuthService, private router: Router, private http: HttpClient, private flatService: FlatService,
               private uploadService: UploadFileService, private sanitizer: DomSanitizer) {
 

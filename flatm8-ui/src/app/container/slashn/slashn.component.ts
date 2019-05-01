@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {AppService} from "../../service/AppService";
 import {User} from "../../model/User";
@@ -71,7 +71,7 @@ export class SlashnComponent implements OnInit {
     this.app.getUserAvatarByUser(this.user).subscribe(resp => {
       if (resp['content']) {
         this.userAvatar = this.sanitizer.bypassSecurityTrustUrl(this.imageType + resp['content']);
-        this.userAvatarPreview = this.sanitizer.bypassSecurityTrustStyle('url('+this.imageType + resp['content']+')');
+        this.userAvatarPreview = this.sanitizer.bypassSecurityTrustStyle('url(' + this.imageType + resp['content'] + ')');
       }
     }, err => {
       this.avatarError = true;

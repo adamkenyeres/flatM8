@@ -34,17 +34,18 @@ export class RegisterComponent implements OnInit {
     this.credentials.contacts = [];
 
     console.log(this.credentials.email);
-      this.app.register(this.credentials).subscribe(resp => {
+    this.app.register(this.credentials).subscribe(resp => {
         this.router.navigateByUrl("/login");
       },
-        err => {
+      err => {
         if (err.status === 404) {
           this.userExistsError = true;
         } else {
           this.error = true;
         }
-    });
+      });
   }
+
   ngOnInit() {
     if (this.auth.isAuthenticated()) {
       alert("Already logged in!");

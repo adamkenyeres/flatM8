@@ -94,54 +94,62 @@ export class NotificationService {
       for (let req of <Object[]>resp) {
         notifications.push(req);
       }
-    }, err => {});
+    }, err => {
+    });
 
 
     this.getMyAddMateRequestsForUser(email).subscribe(resp => {
       for (let req of <Object[]>resp) {
         myRequests.push(req);
       }
-    }, err => {});
+    }, err => {
+    });
 
 
     this.getDeleteMateRequestsForUser(email).subscribe(resp => {
       for (let req of <Object[]>resp) {
         notifications.push(req);
       }
-    }, err => {});
+    }, err => {
+    });
 
 
     this.getMyDeleteMateRequestsForUser(email).subscribe(resp => {
       for (let req of <Object[]>resp) {
         myRequests.push(req);
       }
-    }, err => {});
+    }, err => {
+    });
 
 
     this.getContactRequestsForUser(email).subscribe(resp => {
       for (let req of <Object[]>resp) {
         notifications.push(req);
       }
-    }, err => {});
+    }, err => {
+    });
 
 
     this.getMyContactRequestsForUser(email).subscribe(resp => {
       for (let req of <Object[]>resp) {
         myRequests.push(req);
       }
-    }, err => {});
+    }, err => {
+    });
 
     this.getMyDeleteFlatRequestsForUser(email).subscribe(resp => {
       for (let req of <Object[]>resp) {
         myRequests.push(req);
       }
-    }, err => {});
+    }, err => {
+    });
 
 
     this.getDeleteFlatRequestsForUser(email).subscribe(resp => {
       for (let req of <Object[]>resp) {
         notifications.push(req);
       }
-    }, err => {});
+    }, err => {
+    });
   }
 }

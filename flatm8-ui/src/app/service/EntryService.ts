@@ -29,16 +29,17 @@ export class EntryService {
   getEntriesForAge(age) {
     return this.http.get("http://localhost:8080/flatmateEntries/getEntriesForAge?age=" + age);
   }
+
   getEntriesForLifestyle(lifestyle) {
     return this.http.get("http://localhost:8080/flatmateEntries/getEntriesForLifeStyle?lifestyleCriteria=" + lifestyle);
   }
 
   getUltimateMatches(lifestyle, age) {
     return this.http.get("http://localhost:8080/flatmateEntries/getEntriesForLifeStyle?lifestyleCriteria=" + lifestyle
-    + "&age="+age);
+      + "&age=" + age);
   }
 
   getEntryById(id) {
-    return this.http.get("http://localhost:8080/flatmateEntries/"+id);
+    return this.http.get("http://localhost:8080/flatmateEntries/" + id);
   }
 }

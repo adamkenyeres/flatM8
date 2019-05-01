@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {EntryService} from "../../service/EntryService";
 import {User} from "../../model/User";
 import {HttpClient, HttpEventType, HttpResponse} from "@angular/common/http";
@@ -78,6 +78,12 @@ export class CreateentryComponent implements OnInit {
     ceil: 30
   };
 
+  constructor(private entryService: EntryService, private app: AppService,
+              private auth: AuthService, private router: Router, private http: HttpClient,
+              private flatService: FlatService, private uploadService: UploadFileService,
+              private sanitizer: DomSanitizer) {
+  }
+
   resetErrors() {
     this.flatFull = false;
     this.mainUserError = false;
@@ -86,10 +92,6 @@ export class CreateentryComponent implements OnInit {
     this.error = false;
     this.flatFull = false;
   }
-  constructor(private entryService: EntryService,private app: AppService,
-              private auth: AuthService, private router: Router, private http: HttpClient,
-              private flatService: FlatService, private uploadService: UploadFileService,
-              private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
 
@@ -114,7 +116,7 @@ export class CreateentryComponent implements OnInit {
     });
   }
 
-  update(){
+  update() {
     this.resetErrors();
 
     this.sumOfMatesWithEntries = 0;

@@ -1,134 +1,136 @@
 <div class="container">
-<div *ngIf="step==0">
-  <h1>Please provide Address details</h1>
-  <form role="form" (submit)="incrStep()" ngNativeValidate>
-    <div class="form-group">
-      <label for="city">City*:</label> <input type="text"
-                                                  class="form-control" id="city" name="city" required
-                                              [(ngModel)]="address.city"/>
-    </div>
-    <div class="form-group">
-      <label for="address">Street Address*:</label> <input type="text"
-                                                      class="form-control" id="address" name="address" required
-                                                           [(ngModel)]="address.streetAddress"/>
-    </div>
-    <div class="form-group">
-      <label for="streetNumber">Street Number*:</label> <input type="number"
-                                                        class="form-control" id="streetNumber"
-                                                        name="streetNumber" required
-                                                        [(ngModel)]="address.streetNumber"/>
-    </div>
-    <div class="form-group">
-      <label for="district">District*:</label> <input type="number"
-                                                       class="form-control" id="district"
-                                                       name="district" required
-                                                       [(ngModel)]="address.district"/>
-    </div>
-    <div class="form-group">
-      <label for="floor">Floor*:</label> <input type="number"
-                                                   class="form-control" id="floor"
-                                                   name="floor" required
-                                                   [(ngModel)]="address.floor"/>
-    </div>
-    <div class="form-group">
-      <label for="door">Door:*</label> <input type="number"
-                                                  class="form-control"
-                                              name="door"
-                                                  id="door" required
-                                              [(ngModel)]="address.door"/>
-    </div>
-    <button type="submit" mat-raised-button color="primary">Continue</button>
-  </form>
-
-</div>
-
-
-<div *ngIf="step==1">
-  <h1>Please provide Flat details</h1>
-  <form role="form" (submit)="incrStep()" ngNativeValidate>
-
-    <div class="form-group">
-      <label for="flatType">Flat Type*:</label><br/>
-      <select [(ngModel)]="flat.flatType" id="flatType" name="flatType" required>
-        <option *ngFor="let key of objectKeys(FLAT_TYPES)" [value]="key"
-                [label]="FLAT_TYPES[key]"></option>
-      </select>
-    </div>
-
-    <div class="form-group">
-    <label for="roomCount">Room Count*:</label> <input type="number"
-                                                       class="form-control" id="roomCount" name="roomCount" required
-                                                       [(ngModel)]="flat.roomCount"/>
-  </div>
-
-    <div class="form-group">
-      <label for="flatCapacity">Flat Capacity*:</label> <input type="number"
-                                                         class="form-control" id="flatCapacity" name="flatCapacity" required
-                                                         [(ngModel)]="flat.capacity"/>
-    </div>
-
-    <button type="submit" mat-raised-button color="primary">Continue</button>
-  </form>
-</div>
-
-
-<div *ngIf="step==2">
-  <h1>Please provide roommate details</h1>
-
-  <div class="plus" id="plus" *ngIf="this.flatMates.length < flat.capacity" (click)="addNewFlatMate()">
-    <div class="plus__line plus__line--v"></div>
-    <div class="plus__line plus__line--h"></div>
-  </div>
-
-  <div *ngIf="errorAddingUser" class="alert alert-danger">
-    User doesn't exist!
-  </div>
-
-  <div *ngIf="iShareError" class="alert alert-danger">
-    If you live in the flat please use iLive instead!
-  </div>
-
-  <form role="form" (submit)="createFlatMate()" *ngIf="addingUser" ngNativeValidate>
-    <div class="form-group">
-      <label for="flatMateEmail">Email*:</label> <input type="email"
-                                                   class="form-control" id="flatMateEmail" name="flatMateEmail" required
-                                                   [(ngModel)]="flatMateEmail"/>
-      <button type="submit" mat-raised-button color="primary">Submit</button>
-      <button type="button" (click)="stopAddingNewFlatmate()" mat-stroked-button color="primary">Cancel</button>
-    </div>
-  </form>
-
-  <form role="form" (submit)="incrStep()" ngNativeValidate>
-  <div class="form-group">
-    <div class="panel-body">
-      <div *ngFor="let user of flatMates; let i = index" [attr.data-index]="i">
-        <h3>Flatmate #{{i+1}}</h3>
-        <label>First Name: {{ user.firstName}} </label> <br/>
-        <label>Last Name: {{ user.lastName}} </label> <br/>
-        <label>Age: {{ user.age}} </label> <br/>
-        <label>LifeStyle: {{ app.CONST_TENANT_TYPES[user.tenantType]}} </label> <br/>
-        <label>LifeStyle Comments: {{ user.tenantTypeComment}} </label> <br/>
-        <label>Stay At Home: {{ app.CONST_TENANT_STAY_TYPES[user.tenantStayType]}} </label> <br/>
-        <label>Stay At Home Comments: {{ user.tenantStayTypeComment}} </label> <br/>
+  <div *ngIf="step==0">
+    <h1>Please provide Address details</h1>
+    <form role="form" (submit)="incrStep()" ngNativeValidate>
+      <div class="form-group">
+        <label for="city">City*:</label> <input type="text"
+                                                class="form-control" id="city" name="city" required
+                                                [(ngModel)]="address.city"/>
       </div>
-    </div>
-    <div *ngIf="type === 'ilive'" class="form-group">
-      <label for="mainSelectedMate">Main Mate*:</label><br/>
-      <select [(ngModel)]="mainSelectedMate" id="mainSelectedMate" name="mainSelectedMate" required>
-        <option *ngFor="let user of flatMates; let i = index" [value]="i"
-                [label]="i+1"></option>
-      </select>
-    </div>
-    <div *ngIf="type === 'ishare'" class="form-group">
-      <label for="mainSelectedMateShare">Main Mate:</label><br/>
-      <select [(ngModel)]="mainSelectedMate" id="mainSelectedMateShare" name="mainSelectedMateShare">
-        <option *ngFor="let user of flatMates; let i = index" [value]="i"
-                [label]="i+1"></option>
-      </select>
-    </div>
-    <button type="submit" mat-raised-button color="primary">Create Flat</button>
-  </div>
-  </form>
+      <div class="form-group">
+        <label for="address">Street Address*:</label> <input type="text"
+                                                             class="form-control" id="address" name="address" required
+                                                             [(ngModel)]="address.streetAddress"/>
+      </div>
+      <div class="form-group">
+        <label for="streetNumber">Street Number*:</label> <input type="number"
+                                                                 class="form-control" id="streetNumber"
+                                                                 name="streetNumber" required
+                                                                 [(ngModel)]="address.streetNumber"/>
+      </div>
+      <div class="form-group">
+        <label for="district">District*:</label> <input type="number"
+                                                        class="form-control" id="district"
+                                                        name="district" required
+                                                        [(ngModel)]="address.district"/>
+      </div>
+      <div class="form-group">
+        <label for="floor">Floor*:</label> <input type="number"
+                                                  class="form-control" id="floor"
+                                                  name="floor" required
+                                                  [(ngModel)]="address.floor"/>
+      </div>
+      <div class="form-group">
+        <label for="door">Door:*</label> <input type="number"
+                                                class="form-control"
+                                                name="door"
+                                                id="door" required
+                                                [(ngModel)]="address.door"/>
+      </div>
+      <button type="submit" mat-raised-button color="primary">Continue</button>
+    </form>
 
-</div>
+  </div>
+
+
+  <div *ngIf="step==1">
+    <h1>Please provide Flat details</h1>
+    <form role="form" (submit)="incrStep()" ngNativeValidate>
+
+      <div class="form-group">
+        <label for="flatType">Flat Type*:</label><br/>
+        <select [(ngModel)]="flat.flatType" id="flatType" name="flatType" required>
+          <option *ngFor="let key of objectKeys(FLAT_TYPES)" [value]="key"
+                  [label]="FLAT_TYPES[key]"></option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="roomCount">Room Count*:</label> <input type="number"
+                                                           class="form-control" id="roomCount" name="roomCount" required
+                                                           [(ngModel)]="flat.roomCount"/>
+      </div>
+
+      <div class="form-group">
+        <label for="flatCapacity">Flat Capacity*:</label> <input type="number"
+                                                                 class="form-control" id="flatCapacity"
+                                                                 name="flatCapacity" required
+                                                                 [(ngModel)]="flat.capacity"/>
+      </div>
+
+      <button type="submit" mat-raised-button color="primary">Continue</button>
+    </form>
+  </div>
+
+
+  <div *ngIf="step==2">
+    <h1>Please provide roommate details</h1>
+
+    <div class="plus" id="plus" *ngIf="this.flatMates.length < flat.capacity" (click)="addNewFlatMate()">
+      <div class="plus__line plus__line--v"></div>
+      <div class="plus__line plus__line--h"></div>
+    </div>
+
+    <div *ngIf="errorAddingUser" class="alert alert-danger">
+      User doesn't exist!
+    </div>
+
+    <div *ngIf="iShareError" class="alert alert-danger">
+      If you live in the flat please use iLive instead!
+    </div>
+
+    <form role="form" (submit)="createFlatMate()" *ngIf="addingUser" ngNativeValidate>
+      <div class="form-group">
+        <label for="flatMateEmail">Email*:</label> <input type="email"
+                                                          class="form-control" id="flatMateEmail" name="flatMateEmail"
+                                                          required
+                                                          [(ngModel)]="flatMateEmail"/>
+        <button type="submit" mat-raised-button color="primary">Submit</button>
+        <button type="button" (click)="stopAddingNewFlatmate()" mat-stroked-button color="primary">Cancel</button>
+      </div>
+    </form>
+
+    <form role="form" (submit)="incrStep()" ngNativeValidate>
+      <div class="form-group">
+        <div class="panel-body">
+          <div *ngFor="let user of flatMates; let i = index" [attr.data-index]="i">
+            <h3>Flatmate #{{i+1}}</h3>
+            <label>First Name: {{ user.firstName}} </label> <br/>
+            <label>Last Name: {{ user.lastName}} </label> <br/>
+            <label>Age: {{ user.age}} </label> <br/>
+            <label>LifeStyle: {{ app.CONST_TENANT_TYPES[user.tenantType]}} </label> <br/>
+            <label>LifeStyle Comments: {{ user.tenantTypeComment}} </label> <br/>
+            <label>Stay At Home: {{ app.CONST_TENANT_STAY_TYPES[user.tenantStayType]}} </label> <br/>
+            <label>Stay At Home Comments: {{ user.tenantStayTypeComment}} </label> <br/>
+          </div>
+        </div>
+        <div *ngIf="type === 'ilive'" class="form-group">
+          <label for="mainSelectedMate">Main Mate*:</label><br/>
+          <select [(ngModel)]="mainSelectedMate" id="mainSelectedMate" name="mainSelectedMate" required>
+            <option *ngFor="let user of flatMates; let i = index" [value]="i"
+                    [label]="i+1"></option>
+          </select>
+        </div>
+        <div *ngIf="type === 'ishare'" class="form-group">
+          <label for="mainSelectedMateShare">Main Mate:</label><br/>
+          <select [(ngModel)]="mainSelectedMate" id="mainSelectedMateShare" name="mainSelectedMateShare">
+            <option *ngFor="let user of flatMates; let i = index" [value]="i"
+                    [label]="i+1"></option>
+          </select>
+        </div>
+        <button type="submit" mat-raised-button color="primary">Create Flat</button>
+      </div>
+    </form>
+
+  </div>
 </div>

@@ -10,6 +10,7 @@
   position: relative;
   overflow: hidden;
 }
+
 .hvr-underline-reveal a {
   cursor: pointer;
 }
@@ -32,6 +33,7 @@
   -webkit-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
 }
+
 .hvr-underline-reveal:hover:before, .hvr-underline-reveal:focus:before, .hvr-underline-reveal:active:before {
   -webkit-transform: translateY(0);
   transform: translateY(0);
@@ -71,12 +73,15 @@
 .nopad {
   line-height: 0 !important;
 }
+
 .navbar-brand {
   cursor: pointer;
 }
+
 .navbar {
   align-items: stretch;
 }
+
 .dropdown-item {
   cursor: pointer;
 }

@@ -3,7 +3,8 @@
        role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
        aria-valuemin="0" aria-valuemax="100"
        [ngStyle]="{width:progress.percentage+'%'}">
-    {{progress.percentage}}%</div>
+    {{progress.percentage}}%
+  </div>
 </div>
 
 <label class="btn btn-default">
@@ -11,4 +12,5 @@
 </label>
 
 <button type="button" class="btn btn-success" [disabled]="!selectedFiles"
-        (click)="upload()">Upload</button>
+        (click)="upload()">Upload
+</button>

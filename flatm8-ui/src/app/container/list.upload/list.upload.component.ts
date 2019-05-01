@@ -13,7 +13,8 @@ export class ListUploadComponent implements OnInit {
   showFile = false;
   fileUploads: Observable<Object>;
 
-  constructor(private uploadService: UploadFileService) {}
+  constructor(private uploadService: UploadFileService) {
+  }
 
   ngOnInit() {
   }

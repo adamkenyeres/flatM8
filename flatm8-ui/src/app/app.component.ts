@@ -66,6 +66,7 @@ export class AppComponent implements OnInit {
   notificationsRedir() {
     this.router.navigateByUrl('notifications');
   }
+
   chat() {
     this.router.navigateByUrl('chat');
   }

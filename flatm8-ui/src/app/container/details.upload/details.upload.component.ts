@@ -9,7 +9,8 @@ export class DetailsUploadComponent implements OnInit {
 
   @Input() fileUpload: string;
 
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit() {
   }

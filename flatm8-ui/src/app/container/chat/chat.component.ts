@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from "../../model/User";
 import {AppService} from "../../service/AppService";
 import {FlatMateEntry} from "../../model/FlatMateEntry";
@@ -15,15 +15,16 @@ import {Router} from "@angular/router";
 })
 export class ChatComponent implements OnInit {
 
-  constructor(private app: AppService, private chatService: ChatService,
-              private sanitizer: DomSanitizer, private router: Router) { }
-
   loggedInUser: User;
   contacts: Array<ChatContact>;
   selectedConvo: ChatContact;
   currentMessages: Array<ChatMessage> = [];
   avatars: Map<string, string> = new Map<string, string>();
   imageType = "data:image/JPEG;base64,";
+
+  constructor(private app: AppService, private chatService: ChatService,
+              private sanitizer: DomSanitizer, private router: Router) {
+  }
 
   ngOnInit() {
     this.app.getUserLoggedInUser().subscribe(resp => {
@@ -105,6 +106,6 @@ export class ChatComponent implements OnInit {
   }
 
   slashnRedirect(email: string) {
-    this.router.navigateByUrl('slashn?email='+email);
+    this.router.navigateByUrl('slashn?email=' + email);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs/internal/Observable";
@@ -26,18 +26,18 @@ export class LoginComponent implements OnInit {
     this.loginError = false;
     this.unknownError = false;
     this.app.authenticate(this.credentials).subscribe(response => {
-      if (response["token"]) {
-        sessionStorage.setItem("token", response["token"]);
-        this.router.navigateByUrl("");
-      }
-    },
+        if (response["token"]) {
+          sessionStorage.setItem("token", response["token"]);
+          this.router.navigateByUrl("");
+        }
+      },
       err => {
         if (err.status == 404 || err.status == 403) {
           this.loginError = true;
         } else {
           this.unknownError = true;
         }
-    });
+      });
   }
 
   ngOnInit() {

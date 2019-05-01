@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AppService} from "../../service/AppService";
 import {HttpClient, HttpEventType, HttpResponse} from "@angular/common/http";
 import {Router} from "@angular/router";
@@ -16,28 +16,30 @@ import {DomSanitizer} from "@angular/platform-browser";
 export class UserdetailsComponent implements OnInit {
 
   objectKeys = Object.keys;
+  user = {};
+  userAvatar;
+  userAvatarPreview;
+  isFirstNamePressed = false;
+  isLastNamePressed = false;
+  isTenantTypePressed = false;
+  isTenantTypeCommentsPressed = false;
+  isTenantStayTypesPressed = false;
+  isTenantStayTypesCommentsPressed = false;
+  isAgedPressed = false;
+  success = false;
+  error = false;
+  avatarError = false;
+  selectedImage: string;
+  imageType = "data:image/JPEG;base64,";
+  selectedFile: File;
+  currentFileUpload: File;
+  progress: { percentage: number } = {percentage: 0};
 
   constructor(private app: AppService, private http: HttpClient, private router: Router,
               private flatService: FlatService, private notificationService: NotificationService,
               private uploadService: UploadFileService, private sanitizer: DomSanitizer) {
   }
 
-  user = {};
-  userAvatar;
-  userAvatarPreview;
-  isFirstNamePressed = false;
-  isLastNamePressed= false;
-  isTenantTypePressed= false;
-  isTenantTypeCommentsPressed= false;
-  isTenantStayTypesPressed= false;
-  isTenantStayTypesCommentsPressed= false;
-  isAgedPressed= false;
-
-  success = false;
-  error = false;
-  avatarError = false;
-  selectedImage: string;
-  imageType = "data:image/JPEG;base64,";
   ngOnInit() {
     this.http.get('http://localhost:8080/user').subscribe(resp => {
       this.http.get('http://localhost:8080/getUserByEmail?email=' + resp["name"]).subscribe(data => {
@@ -59,6 +61,7 @@ export class UserdetailsComponent implements OnInit {
   editTenantStayType() {
     this.isTenantStayTypesPressed = !this.isTenantStayTypesPressed;
   }
+
   editTenantTypeComment() {
     this.isTenantTypeCommentsPressed = !this.isTenantTypeCommentsPressed;
   }
@@ -79,8 +82,9 @@ export class UserdetailsComponent implements OnInit {
     this.success = false;
     this.error = false;
     this.app.updateUser(this.user).subscribe(resp => {
-      this.flatService.updateUserInFlat(this.user).subscribe( resp => {
-      }, err => { });
+      this.flatService.updateUserInFlat(this.user).subscribe(resp => {
+      }, err => {
+      });
       this.notificationService.updateDeleteFlatRequestWithUser(this.user).subscribe();
       this.notificationService.updateContactRequestWithUser(this.user).subscribe();
       this.notificationService.updateDeleteMateRequestWithUser(this.user).subscribe();
@@ -91,10 +95,6 @@ export class UserdetailsComponent implements OnInit {
       this.error = true;
     });
   }
-
-  selectedFile: File;
-  currentFileUpload: File;
-  progress: { percentage: number } = { percentage: 0 };
 
   selectFile(event) {
     this.selectedFile = event.target.files[0];
@@ -118,7 +118,7 @@ export class UserdetailsComponent implements OnInit {
     this.app.updateUser(this.user).subscribe(resp => {
       this.getAvatar();
       this.currentFileUpload = null;
-      this.router.navigateByUrl('dummy', {skipLocationChange: true}).then(()=>
+      this.router.navigateByUrl('dummy', {skipLocationChange: true}).then(() =>
         this.router.navigateByUrl("/userdetails"));
     });
   }
@@ -128,7 +128,7 @@ export class UserdetailsComponent implements OnInit {
     this.app.getUserAvatar().subscribe(resp => {
       if (resp['content']) {
         this.userAvatar = this.sanitizer.bypassSecurityTrustUrl(this.imageType + resp['content']);
-        this.userAvatarPreview = this.sanitizer.bypassSecurityTrustStyle('url('+this.imageType + resp['content']+')');
+        this.userAvatarPreview = this.sanitizer.bypassSecurityTrustStyle('url(' + this.imageType + resp['content'] + ')');
       }
     }, err => {
       this.avatarError = true;

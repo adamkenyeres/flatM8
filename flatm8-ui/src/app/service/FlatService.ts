@@ -23,7 +23,7 @@ export class FlatService {
   }
 
   deleteFlat(flat): Observable<Object> {
-    return this.http.delete("http://localhost:8080/flats/"+flat.id);
+    return this.http.delete("http://localhost:8080/flats/" + flat.id);
   }
 
   updateUserInFlat(user) {

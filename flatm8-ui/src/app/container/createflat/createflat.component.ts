@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Address} from "../../model/Address";
 import {Flat} from "../../model/Flat";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -13,24 +13,23 @@ import {FlatService} from "../../service/FlatService";
 })
 export class CreateflatComponent implements OnInit {
 
+  objectKeys = Object.keys;
+  public FLAT_TYPES = {
+    "FLAT": "Flat",
+    "HOUSE": "House"
+  };
   private address: Address = new Address();
   private flatMates: Array<Object> = [];
   private flat: Flat = new Flat();
   private step = 0;
   private type: string;
   private addingUser: boolean = false;
-  objectKeys = Object.keys;
   private flatMateEmail: string;
   private errorAddingUser: boolean = false;
   private flatMate;
   private mainSelectedMate: number;
   private iShareError = false;
   private userEmail: string;
-
-  public FLAT_TYPES = {
-    "FLAT": "Flat",
-    "HOUSE": "House"
-  };
 
   constructor(private activatedRoute: ActivatedRoute, private app: AppService, private fService: FlatService, private router: Router) {
     this.activatedRoute.queryParams.subscribe(params => {

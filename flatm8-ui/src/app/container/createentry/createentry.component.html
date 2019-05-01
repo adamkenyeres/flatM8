@@ -52,19 +52,21 @@
       </div>
 
       <div class="form-group">
-      <label>Room Type: </label><br/><select class="form-control" [(ngModel)]="baseCriteria.roomTypeCriteria" name="roomCrit" required>
-      <option *ngFor="let crit of objectKeys(ROOMTYPE_CRITERIAS)" [ngValue]="crit"
-              [label]="ROOMTYPE_CRITERIAS[crit]"></option>
-    </select>
+        <label>Room Type: </label><br/><select class="form-control" [(ngModel)]="baseCriteria.roomTypeCriteria"
+                                               name="roomCrit" required>
+        <option *ngFor="let crit of objectKeys(ROOMTYPE_CRITERIAS)" [ngValue]="crit"
+                [label]="ROOMTYPE_CRITERIAS[crit]"></option>
+      </select>
       </div>
 
       <div class="form-group">
-        <label>Room Capacity:</label> <select [(ngModel)]="selectedNumber" class="form-control" name="capacity" required>
-      <option
-        *ngFor="let item of [].constructor((selectedFlat.capacity - selectedFlat.flatMates.length) - sumOfMatesWithEntries); let i = index"
-        [ngValue]="i+1"
-        [label]="i+1"></option>
-    </select>
+        <label>Room Capacity:</label> <select [(ngModel)]="selectedNumber" class="form-control" name="capacity"
+                                              required>
+        <option
+          *ngFor="let item of [].constructor((selectedFlat.capacity - selectedFlat.flatMates.length) - sumOfMatesWithEntries); let i = index"
+          [ngValue]="i+1"
+          [label]="i+1"></option>
+      </select>
       </div>
 
       <div class="form-group">
@@ -73,22 +75,23 @@
       </div>
 
       <div class="form-group">
-        <label>  Age Offset: </label><br/>
-      <ng5-slider [(value)]="baseCriteria.ageOffset" [options]="options" name="ageOffset" required></ng5-slider>
+        <label> Age Offset: </label><br/>
+        <ng5-slider [(value)]="baseCriteria.ageOffset" [options]="options" name="ageOffset" required></ng5-slider>
       </div>
 
       <div class="form-group">
-        <label>Room Size (m2): </label><br/><input class="form-control" type="number" [(ngModel)]="roomCriteria.size" name="size" required/><br/>
+        <label>Room Size (m2): </label><br/><input class="form-control" type="number" [(ngModel)]="roomCriteria.size"
+                                                   name="size" required/><br/>
       </div>
 
       <div class="form-group">
         <label>Additional details:</label> <br/>
-      <ul>
-        <li *ngFor="let detail of additionalDetails">{{ detail }}</li>
-      </ul>
-      <button type="button" (click)="addDetail()" mat-icon-button formnovalidate>
-        <mat-icon aria-label="Add new FlatMate">add</mat-icon>
-      </button>
+        <ul>
+          <li *ngFor="let detail of additionalDetails">{{ detail }}</li>
+        </ul>
+        <button type="button" (click)="addDetail()" mat-icon-button formnovalidate>
+          <mat-icon aria-label="Add new FlatMate">add</mat-icon>
+        </button>
       </div>
       <div class="form-group" *ngIf="addingDetail">
         <form role="form" (submit)="addToList()" ngNativeValidate>

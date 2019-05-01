@@ -1,8 +1,10 @@
 <button type="button" class="button btn-info" *ngIf='showFile'
-        (click)='showFiles(false)'>Hide Files</button>
+        (click)='showFiles(false)'>Hide Files
+</button>
 
 <button type="button" class="button btn-info" *ngIf='!showFile'
-        (click)='showFiles(true)'>Show Files</button>
+        (click)='showFiles(true)'>Show Files
+</button>
 
 <div [hidden]="!showFile">
   <div class="panel panel-primary">

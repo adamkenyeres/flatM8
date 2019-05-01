@@ -62,7 +62,8 @@ export class HomeComponent implements OnInit {
         this.greeting = data;
         this.app.getUserByEmail(data["name"]).subscribe(user => {
           this.loggedInUser = <User>user;
-        }, err => { });
+        }, err => {
+        });
       });
     }
   }

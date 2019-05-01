@@ -1,64 +1,67 @@
 <div class="container">
-<div *ngIf="error" class="alert alert-danger">
-  Unknown error occurred while registering, please try again later!
-</div>
-<div *ngIf="userExistsError" class="alert alert-danger">
-  A user with this email is already registered! Please try another one.
-</div>
-<h4>Please fill out the form. The fields marked with * must be filled.</h4>
-<form role="form" (submit)="register()" ngNativeValidate>
-  <div class="form-group">
-    <label for="username">Email*:</label> <input type="email"
+  <div *ngIf="error" class="alert alert-danger">
+    Unknown error occurred while registering, please try again later!
+  </div>
+  <div *ngIf="userExistsError" class="alert alert-danger">
+    A user with this email is already registered! Please try another one.
+  </div>
+  <h4>Please fill out the form. The fields marked with * must be filled.</h4>
+  <form role="form" (submit)="register()" ngNativeValidate>
+    <div class="form-group">
+      <label for="username">Email*:</label> <input type="email"
                                                    class="form-control" id="username" name="username" required
-                                                 [(ngModel)]="credentials.email"/>
-  </div>
-  <div class="form-group">
-    <label for="password">Password*:</label> <input type="password"
-                                                   class="form-control" id="password" name="password" required
-                                                    [(ngModel)]="credentials.password"/>
-  </div>
-  <div class="form-group">
-    <label for="password">First Name*:</label> <input type="text"
-                                                           class="form-control" id="firstName"
-                                                           name="firstName" required
-                                                      [(ngModel)]="credentials.firstName"/>
-  </div>
-  <div class="form-group">
-    <label for="password">Last Name*:</label> <input type="text"
-                                                           class="form-control" id="lastName"
-                                                           name="lastName" required
-                                                     [(ngModel)]="credentials.lastName"/>
-  </div>
-  <div class="form-group">
-    <label for="password">Your lifestyle*:</label><br/>
-    <select [(ngModel)]="credentials.tenantType" id="tenantType" name="tenantTypeOption" required>
-      <option *ngFor="let key of objectKeys(app.CONST_TENANT_TYPES)" [value]="key"
-              [label]="app.CONST_TENANT_TYPES[key]"></option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="password">Comment on Your lifestyle:</label> <input type="text"
-                                                           class="form-control" id="tenantTypeComment"
-                                                           name="tenantTypeComment" [(ngModel)]="credentials.tenantTypeComment"/>
-  </div>
-  <div class="form-group">
-    <label for="password">Your stay at home habits*:</label><br/>
-    <select [(ngModel)]="credentials.tenantStayType" id="tenantStayTypeOption" name="tenantStayTypeOption" required>
-      <option *ngFor="let key of objectKeys(app.CONST_TENANT_STAY_TYPES)" [value]="key"
-              [label]="app.CONST_TENANT_STAY_TYPES[key]"></option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="password">Comment Your stay at home habits:</label> <input type="text"
-                                                           class="form-control" id="tenantStayTypeComment"
-                                                                           name="tenantStayTypeComment" [(ngModel)]="credentials.tenantStayTypeComment"/>
-  </div>
-  <div class="form-group">
-    <label for="password">Your age*:</label> <input type="number"
-                                                            class="form-control" id="tenantAge"
-                                                            name="tenantAge" required
-                                                    [(ngModel)]="credentials.age"/>
-  </div>
-  <button type="submit" mat-raised-button color="primary">Register</button>
-</form>
+                                                   [(ngModel)]="credentials.email"/>
+    </div>
+    <div class="form-group">
+      <label for="password">Password*:</label> <input type="password"
+                                                      class="form-control" id="password" name="password" required
+                                                      [(ngModel)]="credentials.password"/>
+    </div>
+    <div class="form-group">
+      <label for="password">First Name*:</label> <input type="text"
+                                                        class="form-control" id="firstName"
+                                                        name="firstName" required
+                                                        [(ngModel)]="credentials.firstName"/>
+    </div>
+    <div class="form-group">
+      <label for="password">Last Name*:</label> <input type="text"
+                                                       class="form-control" id="lastName"
+                                                       name="lastName" required
+                                                       [(ngModel)]="credentials.lastName"/>
+    </div>
+    <div class="form-group">
+      <label for="password">Your lifestyle*:</label><br/>
+      <select [(ngModel)]="credentials.tenantType" id="tenantType" name="tenantTypeOption" required>
+        <option *ngFor="let key of objectKeys(app.CONST_TENANT_TYPES)" [value]="key"
+                [label]="app.CONST_TENANT_TYPES[key]"></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="password">Comment on Your lifestyle:</label> <input type="text"
+                                                                      class="form-control" id="tenantTypeComment"
+                                                                      name="tenantTypeComment"
+                                                                      [(ngModel)]="credentials.tenantTypeComment"/>
+    </div>
+    <div class="form-group">
+      <label for="password">Your stay at home habits*:</label><br/>
+      <select [(ngModel)]="credentials.tenantStayType" id="tenantStayTypeOption" name="tenantStayTypeOption" required>
+        <option *ngFor="let key of objectKeys(app.CONST_TENANT_STAY_TYPES)" [value]="key"
+                [label]="app.CONST_TENANT_STAY_TYPES[key]"></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="password">Comment Your stay at home habits:</label> <input type="text"
+                                                                             class="form-control"
+                                                                             id="tenantStayTypeComment"
+                                                                             name="tenantStayTypeComment"
+                                                                             [(ngModel)]="credentials.tenantStayTypeComment"/>
+    </div>
+    <div class="form-group">
+      <label for="password">Your age*:</label> <input type="number"
+                                                      class="form-control" id="tenantAge"
+                                                      name="tenantAge" required
+                                                      [(ngModel)]="credentials.age"/>
+    </div>
+    <button type="submit" mat-raised-button color="primary">Register</button>
+  </form>
 </div>

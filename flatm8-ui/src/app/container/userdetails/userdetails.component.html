@@ -1,106 +1,107 @@
 <div class="container">
-<div class="dark-panel">
-  <div class="panel panel-default login-container">
-    <div *ngIf="error" class="alert alert-danger">
-      Unknown error occurred, please try again later!
-    </div>
-    <div *ngIf="success" class="alert alert-success">
-      Successfully updated account details!
-    </div>
-    <div *ngIf="avatarError" class="alert alert-danger">
-      Couldn't fetch or upload avatar please try again!
-    </div>
-    <div class="panel-heading">
-      Your account details
-    </div>
-
-    <div class="panel-body">
-
-      <label>E-mail: </label> <br/>{{ user.email }}
-      <br />
-
-      <label>First Name: </label><br/>{{ user.firstName}}
-      <button type="button" (click)="editFirstName()" class="btn">✎</button>
-      <div *ngIf="isFirstNamePressed">
-        <input type="text" name="name" [(ngModel)]="user.firstName" class="form-control">
+  <div class="dark-panel">
+    <div class="panel panel-default login-container">
+      <div *ngIf="error" class="alert alert-danger">
+        Unknown error occurred, please try again later!
+      </div>
+      <div *ngIf="success" class="alert alert-success">
+        Successfully updated account details!
+      </div>
+      <div *ngIf="avatarError" class="alert alert-danger">
+        Couldn't fetch or upload avatar please try again!
+      </div>
+      <div class="panel-heading">
+        Your account details
       </div>
 
-      <br />
+      <div class="panel-body">
 
-      <label>Last Name: </label>  <br/> {{ user.lastName }}
-      <button type="button" (click)="editLastName()" class="btn">✎</button>
-      <div *ngIf="isLastNamePressed">
-        <input type="text" name="name" [(ngModel)]="user.lastName" class="form-control">
-      </div>
+        <label>E-mail: </label> <br/>{{ user.email }}
+        <br/>
 
-      <br />
-
-      <label>Lifestyle: </label>  <br/> {{ app.CONST_TENANT_TYPES[user.tenantType] }}
-      <button type="button" (click)="editTenantType()" class="btn">✎</button>
-      <div *ngIf="isTenantTypePressed">
-        <select [(ngModel)]="user.tenantType" id="tenantType" name="tenantTypeOption" required>
-          <option *ngFor="let key of objectKeys(app.CONST_TENANT_TYPES)" [value]="key"
-                  [label]="app.CONST_TENANT_TYPES[key]"></option>
-        </select>
-      </div>
-
-      <br />
-
-      <label>Comments on Lifestyle:</label>  <br/> {{ user.tenantTypeComment}}
-      <button type="button" (click)="editTenantTypeComment()" class="btn">✎</button>
-      <div *ngIf="isTenantTypeCommentsPressed">
-        <input type="text" name="name" [(ngModel)]="user.tenantTypeComment" class="form-control"/>
-      </div>
-
-      <br />
-
-      <label>Stay at home habits:</label> <br/> {{ app.CONST_TENANT_STAY_TYPES[user.tenantStayType] }}
-      <button type="button" (click)="editTenantStayType()" class="btn">✎</button>
-      <div *ngIf="isTenantStayTypesPressed">
-        <select [(ngModel)]="user.tenantStayType" id="tenantStayType" name="tenantStayType" required>
-          <option *ngFor="let key of objectKeys(app.CONST_TENANT_STAY_TYPES)" [value]="key"
-                  [label]="app.CONST_TENANT_STAY_TYPES[key]"></option>
-        </select>
-      </div>
-
-      <br />
-
-      <label>Comments on stay at home habits:</label> <br/> {{ user.tenantStayTypeComment }}
-      <button type="button" (click)="editTenantStayTypeComment()" class="btn">✎</button>
-      <div *ngIf="isTenantStayTypesCommentsPressed">
-        <input type="text" name="name" [(ngModel)]="user.tenantStayTypeComment" class="form-control"/>
-      </div>
-
-      <br />
-      <label>Age: </label> <br/>{{ user.age }}
-      <button type="button" (click)="editAge()" class="btn">✎</button>
-      <div *ngIf="isAgedPressed">
-        <input type="text" name="name" [(ngModel)]="user.age" class="form-control"/>
-      </div><br/>
-
-      <label>Avatar: </label><br/>
-
-      <div class="avatar-upload">
-        <div class="avatar-edit">
-          <input type="file" id="imageUpload" accept=".jpg,.jpeg" (change)="selectFile($event)">
-          <label for="imageUpload"></label>
+        <label>First Name: </label><br/>{{ user.firstName}}
+        <button type="button" (click)="editFirstName()" class="btn">✎</button>
+        <div *ngIf="isFirstNamePressed">
+          <input type="text" name="name" [(ngModel)]="user.firstName" class="form-control">
         </div>
-        <div class="avatar-preview">
-          <div id="imagePreview" [style.background-image]="userAvatarPreview">
+
+        <br/>
+
+        <label>Last Name: </label> <br/> {{ user.lastName }}
+        <button type="button" (click)="editLastName()" class="btn">✎</button>
+        <div *ngIf="isLastNamePressed">
+          <input type="text" name="name" [(ngModel)]="user.lastName" class="form-control">
+        </div>
+
+        <br/>
+
+        <label>Lifestyle: </label> <br/> {{ app.CONST_TENANT_TYPES[user.tenantType] }}
+        <button type="button" (click)="editTenantType()" class="btn">✎</button>
+        <div *ngIf="isTenantTypePressed">
+          <select [(ngModel)]="user.tenantType" id="tenantType" name="tenantTypeOption" required>
+            <option *ngFor="let key of objectKeys(app.CONST_TENANT_TYPES)" [value]="key"
+                    [label]="app.CONST_TENANT_TYPES[key]"></option>
+          </select>
+        </div>
+
+        <br/>
+
+        <label>Comments on Lifestyle:</label> <br/> {{ user.tenantTypeComment}}
+        <button type="button" (click)="editTenantTypeComment()" class="btn">✎</button>
+        <div *ngIf="isTenantTypeCommentsPressed">
+          <input type="text" name="name" [(ngModel)]="user.tenantTypeComment" class="form-control"/>
+        </div>
+
+        <br/>
+
+        <label>Stay at home habits:</label> <br/> {{ app.CONST_TENANT_STAY_TYPES[user.tenantStayType] }}
+        <button type="button" (click)="editTenantStayType()" class="btn">✎</button>
+        <div *ngIf="isTenantStayTypesPressed">
+          <select [(ngModel)]="user.tenantStayType" id="tenantStayType" name="tenantStayType" required>
+            <option *ngFor="let key of objectKeys(app.CONST_TENANT_STAY_TYPES)" [value]="key"
+                    [label]="app.CONST_TENANT_STAY_TYPES[key]"></option>
+          </select>
+        </div>
+
+        <br/>
+
+        <label>Comments on stay at home habits:</label> <br/> {{ user.tenantStayTypeComment }}
+        <button type="button" (click)="editTenantStayTypeComment()" class="btn">✎</button>
+        <div *ngIf="isTenantStayTypesCommentsPressed">
+          <input type="text" name="name" [(ngModel)]="user.tenantStayTypeComment" class="form-control"/>
+        </div>
+
+        <br/>
+        <label>Age: </label> <br/>{{ user.age }}
+        <button type="button" (click)="editAge()" class="btn">✎</button>
+        <div *ngIf="isAgedPressed">
+          <input type="text" name="name" [(ngModel)]="user.age" class="form-control"/>
+        </div>
+        <br/>
+
+        <label>Avatar: </label><br/>
+
+        <div class="avatar-upload">
+          <div class="avatar-edit">
+            <input type="file" id="imageUpload" accept=".jpg,.jpeg" (change)="selectFile($event)">
+            <label for="imageUpload"></label>
+          </div>
+          <div class="avatar-preview">
+            <div id="imagePreview" [style.background-image]="userAvatarPreview">
+            </div>
           </div>
         </div>
-      </div>
 
-      <div *ngIf="isFirstNamePressed
+        <div *ngIf="isFirstNamePressed
       || isLastNamePressed
       || isTenantTypePressed
       || isTenantTypeCommentsPressed
       || isTenantStayTypesPressed
       || isAgedPressed">
-        <button mat-stroked-button color="primary" (click)="update()">Apply</button>
-      </div>
+          <button mat-stroked-button color="primary" (click)="update()">Apply</button>
+        </div>
 
+      </div>
     </div>
   </div>
-</div>
 </div>
