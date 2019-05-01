@@ -1,8 +1,5 @@
 package controller;
 
-import java.io.File;
-import java.io.IOException;
-
 import model.tenant.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +10,8 @@ import service.StorageService;
 import service.UserService;
 
 import javax.servlet.ServletContext;
+import java.io.File;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/")

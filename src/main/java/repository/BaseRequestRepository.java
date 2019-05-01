@@ -4,7 +4,6 @@ import model.request.BaseRequest;
 import model.tenant.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface BaseRequestRepository<T extends BaseRequest> extends MongoRepository<T, String> {

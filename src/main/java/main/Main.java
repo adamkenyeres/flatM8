@@ -1,12 +1,6 @@
 package main;
 
-import controller.FlatController;
-import controller.FlatMateEntryController;
 import controller.UserController;
-import model.flat.Flat;
-import model.flat.FlatType;
-import model.request.AddMateRequest;
-import model.request.DeleteFlatRequest;
 import model.tenant.Role;
 import model.tenant.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,8 +81,5 @@ public class Main implements CommandLineRunner {
             user.getContacts().clear();
             repository.save(user);
         }
-        //storageService.deleteAll();
-        //storageService.init();
-        flatService.delete(null);
     }
 }

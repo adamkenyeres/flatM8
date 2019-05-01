@@ -1,10 +1,7 @@
 package repository;
 
-import model.flatmate.FlatMateEntry;
-import model.request.ContactRequest;
 import model.request.DeleteFlatRequest;
 import model.request.RequestStatus;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 

@@ -2,13 +2,9 @@ package model.request;
 
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import model.flat.Flat;
-import model.flatmate.FlatMateEntry;
 import model.tenant.User;
-import org.springframework.data.annotation.Id;
 
-import java.util.List;
 import java.util.Objects;
 
 @Data

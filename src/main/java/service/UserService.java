@@ -3,7 +3,6 @@ package service;
 import annotation.ImplicitNullCheck;
 import model.tenant.Role;
 import model.tenant.User;
-import model.tenant.UserLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +12,6 @@ import repository.RoleRepository;
 import repository.UserRepository;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 

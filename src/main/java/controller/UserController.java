@@ -20,7 +20,8 @@ import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
-import static auth.JWTAuthenticationFilter.*;
+import static auth.JWTAuthenticationFilter.EXPIRATION_TIME;
+import static auth.JWTAuthenticationFilter.SECRET;
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 
 @RestController

@@ -2,13 +2,8 @@ package model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import model.flatmate.FlatMateEntry;
-import model.tenant.User;
-import org.springframework.data.annotation.Id;
 
-import java.util.List;
 import java.util.Objects;
 
 @AllArgsConstructor

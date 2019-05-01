@@ -2,8 +2,8 @@ package service;
 
 import annotation.ImplicitNullCheck;
 import jersey.repackaged.com.google.common.collect.ImmutableList;
-import jersey.repackaged.com.google.common.collect.Lists;
-import model.request.*;
+import model.request.BaseRequest;
+import model.request.RequestStatus;
 import model.tenant.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

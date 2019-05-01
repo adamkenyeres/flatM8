@@ -4,7 +4,6 @@ import model.request.AddMateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.AddMateRequestRepository;
-import repository.BaseRequestRepository;
 
 @Service
 public class AddMateRequestService extends AbstractRequestService<AddMateRequest> {

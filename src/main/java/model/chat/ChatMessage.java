@@ -3,7 +3,6 @@ package model.chat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import model.flatmate.FlatMateEntry;
 import model.tenant.User;
 
 import java.util.Date;
