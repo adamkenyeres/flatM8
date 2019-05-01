@@ -37,7 +37,7 @@
                                                   id="door" required
                                               [(ngModel)]="address.door"/>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" mat-raised-button color="primary">Continue</button>
   </form>
 
 </div>
@@ -67,7 +67,7 @@
                                                          [(ngModel)]="flat.capacity"/>
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" mat-raised-button color="primary">Continue</button>
   </form>
 </div>
 
@@ -93,8 +93,8 @@
       <label for="flatMateEmail">Email*:</label> <input type="email"
                                                    class="form-control" id="flatMateEmail" name="flatMateEmail" required
                                                    [(ngModel)]="flatMateEmail"/>
-      <button type="submit" class="btn btn-primary">Submit</button>
-      <button (click)="stopAddingNewFlatmate()" class="btn btn-primary">Cancel</button>
+      <button type="submit" mat-raised-button color="primary">Submit</button>
+      <button type="button" (click)="stopAddingNewFlatmate()" mat-stroked-button color="primary">Cancel</button>
     </div>
   </form>
 
@@ -126,7 +126,7 @@
                 [label]="i+1"></option>
       </select>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" mat-raised-button color="primary">Create Flat</button>
   </div>
   </form>
 
