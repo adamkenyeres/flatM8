@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static auth.JWTAuthenticationFilter.HEADER_STRING;
-import static auth.JWTAuthenticationFilter.SECRET;
-import static auth.JWTAuthenticationFilter.TOKEN_PREFIX;
+import static auth.JWTAuthenticationFilter.*;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 

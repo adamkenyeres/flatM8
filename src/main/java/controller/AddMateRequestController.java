@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import service.AddMateRequestService;
-import service.ContactRequestService;
 
 @RequestMapping("/addMateRequests")
 @RestController

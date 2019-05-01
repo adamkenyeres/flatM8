@@ -2,12 +2,9 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.*;
 
 import model.tenant.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -22,30 +19,21 @@ import javax.servlet.ServletContext;
 public class UploadController {
 
     private final StorageService storageService;
-
     private final UserService userService;
-
-    private List<String> files = new ArrayList<String>();
 
     @Autowired
     public UploadController(StorageService storageService, UserService userService, ServletContext servletContext) {
         this.storageService = storageService;
         this.userService = userService;
-        this.files = storageService.getFiles();
     }
 
     @RequestMapping(value = "/post", method = RequestMethod.POST)
     public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
-        String message = "";
         try {
-            storageService.store(file);
-            files.add(file.getOriginalFilename());
-
-            message = "You successfully uploaded " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.OK).body(message);
-        } catch (Exception e) {
-            message = "FAIL to upload " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+            storageService.storeFile(file);
+            return ResponseEntity.ok().build();
+        } catch (Exception ex) {
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -57,47 +45,27 @@ public class UploadController {
         return getAvatarByUser(u);
     }
 
-    private ResponseEntity placeholderImageResponse() throws IOException {
-        Map<String, String> jsonMap = new HashMap<>();
-        File f = new File("src/main/upload-dir/placeholder.jpg");
-
-        String encodeImage = Base64.getEncoder().withoutPadding().encodeToString(Files.readAllBytes(f.toPath()));
-        jsonMap.put("content", encodeImage);
-        return ResponseEntity.ok(jsonMap);
-    }
-
     @RequestMapping(value = "/getAvatarByUser", method = RequestMethod.POST)
     public ResponseEntity getAvatarByUser(@RequestBody User u) throws IOException {
+        File f = new File("src/main/upload-dir/placeholder.jpg");
         try {
-
             if (u.getAvatarPath() == null) {
-                return placeholderImageResponse();
+                return ResponseEntity.ok(storageService.assemblePicturePayload(f));
             }
-
-            File f = new File("src/main/upload-dir/" + u.getAvatarPath());
-
-            String encodeImage = Base64.getEncoder().withoutPadding().encodeToString(Files.readAllBytes(f.toPath()));
-            Map<String, String> jsonMap = new HashMap<>();
-            jsonMap.put("content", encodeImage);
-
-            return ResponseEntity.ok(jsonMap);
+            return ResponseEntity.ok(storageService.assemblePicturePayloadForUser(u));
         } catch (Exception ex) {
-            return placeholderImageResponse();
+            return ResponseEntity.ok(storageService.assemblePicturePayload(f));
         }
     }
 
     @RequestMapping(value = "/getFileByName", method = RequestMethod.GET)
     public ResponseEntity getAvatarByUser(@RequestParam String file) throws IOException {
-        boolean exists = files.stream()
+        boolean exists = storageService.getFiles().stream()
                 .anyMatch(f -> f.equals(file));
 
         if (exists) {
             File f = new File("src/main/upload-dir/" + file);
-
-            String encodeImage = Base64.getEncoder().withoutPadding().encodeToString(Files.readAllBytes(f.toPath()));
-            Map<String, String> jsonMap = new HashMap<>();
-            jsonMap.put("content", encodeImage);
-            return ResponseEntity.ok(jsonMap);
+            return ResponseEntity.ok(storageService.assemblePicturePayload(f));
         } else {
             return ResponseEntity.notFound().build();
         }

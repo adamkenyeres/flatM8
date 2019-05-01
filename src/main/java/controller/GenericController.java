@@ -2,8 +2,6 @@ package controller;
 
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-
 public interface GenericController<Entity> {
 
     ResponseEntity getAllEntities();

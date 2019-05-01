@@ -1,10 +1,14 @@
 package service;
 
 import annotation.ImplicitNullCheck;
+import jersey.repackaged.com.google.common.collect.ImmutableMap;
+import model.tenant.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,18 +19,21 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class StorageService {
 
     private final Path rootLocation = Paths.get("src/main/upload-dir");
+    private List<String> files;
+
+    public StorageService() {
+        this.files = initFiles();
+    }
 
     @ImplicitNullCheck
-    public void store(MultipartFile file) {
+    private void store(MultipartFile file) {
         try {
             Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
         } catch (Exception e) {
@@ -34,7 +41,7 @@ public class StorageService {
         }
     }
 
-    public List<String> getFiles() {
+    private List<String> initFiles() {
         try {
             File folder = new File(rootLocation.toUri());
             File[] listOfFiles = folder.listFiles();
@@ -45,5 +52,27 @@ public class StorageService {
         }catch (Exception e) {
             return Collections.emptyList();
         }
+    }
+
+    public void storeFile(MultipartFile file) {
+        store(file);
+        files.add(file.getOriginalFilename());
+    }
+
+    public List<String> getFiles() {
+        return files;
+    }
+
+    public Map<String, String> assemblePicturePayload(File f) throws IOException {
+        return ImmutableMap.of("content", encodeImage(f));
+    }
+
+    public Map<String, String> assemblePicturePayloadForUser(User u) throws IOException {
+        File f = new File("src/main/upload-dir/" + u.getAvatarPath());
+        return ImmutableMap.of("content", encodeImage(f));
+    }
+
+    public String encodeImage(File f) throws IOException {
+        return Base64.getEncoder().withoutPadding().encodeToString(Files.readAllBytes(f.toPath()));
     }
 }
