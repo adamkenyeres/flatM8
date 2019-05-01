@@ -32,6 +32,7 @@ public abstract class AbstractBaseService<Entity> {
         return repository.findOne(id);
     }
 
+    @ImplicitNullCheck
     public Entity createOrUpdate(Entity entry) {
         return repository.save(entry);
     }

@@ -40,7 +40,7 @@ public class FlatService extends AbstractBaseService<Flat> {
     @ImplicitNullCheck
     public Flat saveFlat(Flat f) throws MultipleFlatForUserException {
         if (f.getUserEmail() == null) {
-            LOGGER.error("Couldn't save flat (user not present).");
+            LOGGER.error("Couldn't save flat (user email not present).");
             throw new IllegalArgumentException();
         }
 

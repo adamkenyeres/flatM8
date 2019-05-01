@@ -115,6 +115,7 @@ public abstract class AbstractRequestController<T extends BaseRequest> extends A
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
     public ResponseEntity updateUser(@RequestBody User user) {
         List<T> updated = abstractRequestService.updateUsersInRequests(user);
+        List<T> myUpdated = abstractRequestService.updateMyRequestsForUser(user);
         if (isEmpty(updated)) {
             return ResponseEntity.notFound().build();
         } else {

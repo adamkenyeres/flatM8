@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import repository.ChatMessageRepository;
 import repository.FlatMateEntryRepository;
+import repository.UserRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,15 +21,15 @@ public class FlatMateEntryService extends AbstractBaseService<FlatMateEntry> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FlatMateEntryService.class);
     private final FlatMateEntryRepository repository;
-    private final ChatMessageService chatMessageService;
-    private final UserService userService;
+    private final ChatMessageRepository chatMessageRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public FlatMateEntryService(FlatMateEntryRepository repository, ChatMessageService chatMessageService, UserService userService) {
+    public FlatMateEntryService(FlatMateEntryRepository repository, ChatMessageRepository chatMessageService, UserRepository userService) {
         super(repository);
         this.repository = repository;
-        this.chatMessageService = chatMessageService;
-        this.userService = userService;
+        this.chatMessageRepository = chatMessageService;
+        this.userRepository = userService;
     }
 
     @ImplicitNullCheck
@@ -70,17 +72,15 @@ public class FlatMateEntryService extends AbstractBaseService<FlatMateEntry> {
     public void deleteEntryWithConversations(FlatMateEntry entry) {
 
         delete(entry);
-        List<ChatMessage> msgs = chatMessageService.getAll()
+        chatMessageRepository.findAll()
                 .stream()
                 .filter(msg -> msg.getChatContact().getContactEntry().equals(entry))
-                .collect(Collectors.toList());
+                .forEach(chatMessageRepository::delete);
 
-        msgs.forEach(chatMessageService::delete);
-
-        userService.getAll()
+        userRepository.findAll()
                 .forEach(u -> {
                     u.getContacts().removeIf(e -> e.getContactEntry().equals(entry));
-                    userService.createOrUpdate(u);
+                    userRepository.save(u);
                 });
 
     }

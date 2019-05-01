@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.BaseRequestRepository;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -64,8 +65,6 @@ public abstract class AbstractRequestService<T extends BaseRequest> extends Abst
     @ImplicitNullCheck
     public List<T> updateUsersInRequests(User user) {
         List<T> requests = getRequestsForUsers(user.getEmail());
-        List<T> myRequests = getMyRequests(user.getEmail());
-
 
         if (isEmpty(requests)) {
             return Collections.emptyList();
@@ -79,6 +78,17 @@ public abstract class AbstractRequestService<T extends BaseRequest> extends Abst
                 }
             });
 
+            requests.forEach(this::createOrUpdate);
+            return requests;
+        }
+    }
+
+    public List<T> updateMyRequestsForUser(User user) {
+        List<T> myRequests = getMyRequests(user.getEmail());
+
+        if (isEmpty(myRequests)) {
+            return Collections.emptyList();
+        } else {
             myRequests.forEach(r -> {
                 r.setSender(user);
                 if (r.getReceivers().contains(user)) {
@@ -86,10 +96,8 @@ public abstract class AbstractRequestService<T extends BaseRequest> extends Abst
                     r.getReceivers().add(user);
                 }
             });
-
-            requests.forEach(this::createOrUpdate);
             myRequests.forEach(this::createOrUpdate);
-            return requests;
+            return myRequests;
         }
     }
 }
