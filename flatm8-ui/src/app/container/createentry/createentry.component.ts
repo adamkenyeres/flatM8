@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {EntryService} from "../../service/EntryService";
 import {User} from "../../model/User";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpEventType, HttpResponse} from "@angular/common/http";
 import {AppService} from "../../service/AppService";
 import {AuthService} from "../../auth/auth.service";
 import {Router} from "@angular/router";
@@ -11,6 +11,8 @@ import {FlatMateEntry} from "../../model/FlatMateEntry";
 import {RoomCriteria} from "../../model/RoomCriteria";
 import {BaseCriteria} from "../../model/BaseCriteria";
 import {Options} from "ng5-slider";
+import {UploadFileService} from "../../service/UploadFileService";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-createentry',
@@ -19,10 +21,14 @@ import {Options} from "ng5-slider";
 })
 export class CreateentryComponent implements OnInit {
 
+  imageType = "data:image/JPEG;base64,";
   flats = [];
   selectedFlat: Flat;
   userEmail: string;
-
+  selectedFile: File;
+  currentFileUpload: File;
+  entryToBeCreated: FlatMateEntry = new FlatMateEntry();
+  loadedImages = [];
   objectKeys = Object.keys;
 
   // Models for criteria
@@ -82,7 +88,8 @@ export class CreateentryComponent implements OnInit {
   }
   constructor(private entryService: EntryService,private app: AppService,
               private auth: AuthService, private router: Router, private http: HttpClient,
-              private flatService: FlatService) { }
+              private flatService: FlatService, private uploadService: UploadFileService,
+              private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
 
@@ -147,14 +154,13 @@ export class CreateentryComponent implements OnInit {
   }
 
   assembleCreateEntry(flat: Flat) {
-    let e = new FlatMateEntry();
-    e.flat = flat;
+    this.entryToBeCreated.flat = flat;
     this.roomCriteria.additionalDetails = this.additionalDetails;
     this.roomCriteria.criteria = this.baseCriteria;
     this.roomCriteria.capacity = this.selectedNumber;
-    e.roomCriteria = this.roomCriteria;
+    this.entryToBeCreated.roomCriteria = this.roomCriteria;
 
-    return e;
+    return this.entryToBeCreated;
   }
 
   addDetail() {
@@ -174,5 +180,32 @@ export class CreateentryComponent implements OnInit {
     } else {
       this.detailAlreadyAdded = true;
     }
+  }
+
+  selectFile(event) {
+    this.selectedFile = event.target.files[0];
+    this.upload();
+  }
+
+  upload() {
+
+    this.currentFileUpload = this.selectedFile;
+    this.uploadService.pushFileToStorage(this.currentFileUpload).subscribe(event => {
+    }, err => {//FIXME handle error here
+    });
+
+    this.selectedFile = undefined;
+
+    this.entryToBeCreated.photos.push(this.currentFileUpload.name);
+    this.getImages();
+  }
+
+  getImages() {
+    this.loadedImages = [];
+    this.entryToBeCreated.photos.forEach(photo => {
+      this.uploadService.getFileByName(photo).subscribe(resp => {
+        this.loadedImages.push(this.sanitizer.bypassSecurityTrustUrl(this.imageType + resp['content']))
+      })
+    });
   }
 }

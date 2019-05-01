@@ -8,11 +8,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StorageService {
@@ -28,6 +33,18 @@ public class StorageService {
         }
     }
 
+    public List<String> getFiles() {
+        try {
+            File folder = new File(rootLocation.toUri());
+            File[] listOfFiles = folder.listFiles();
+
+            return Arrays.stream(listOfFiles)
+                    .map(File::getName)
+                    .collect(Collectors.toList());
+        }catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
     public Resource loadFile(String filename) {
         try {
             Path file = rootLocation.resolve(filename);

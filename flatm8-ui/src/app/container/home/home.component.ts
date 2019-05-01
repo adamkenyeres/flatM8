@@ -9,6 +9,8 @@ import {FlatMateEntry} from "../../model/FlatMateEntry";
 import {User} from "../../model/User";
 import {NotificationService} from "../../service/NotificationService";
 import {ContactRequest} from "../../model/ContactRequest";
+import {UploadFileService} from "../../service/UploadFileService";
+import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 
 @Component({
   selector: 'home',
@@ -22,12 +24,11 @@ export class HomeComponent implements OnInit {
   ageRecommendedEntries: Array<FlatMateEntry> = [];
   lifeStyleRecommendedEntries: Array<FlatMateEntry> = [];
   ultimateEntries: Array<FlatMateEntry> = [];
-
-
+  loadedImages: Map<string, SafeUrl[]> = new Map<string, SafeUrl[]>();
   userHasFlat: boolean = false;
   requestCreated: boolean = false;
   error: boolean = false;
-
+  imageType = "data:image/JPEG;base64,";
   loggedInUser: User;
 
   ROOMTYPE_CRITERIAS = {
@@ -53,7 +54,8 @@ export class HomeComponent implements OnInit {
 
   constructor(private app: AppService, private http: HttpClient,
               private router: Router, private auth: AuthService, private flatService: FlatService,
-              private entryService: EntryService, private notificationService: NotificationService) {
+              private entryService: EntryService, private notificationService: NotificationService,
+              private uploadService: UploadFileService, private sanitizer: DomSanitizer) {
 
     if (this.auth.isAuthenticated()) {
       this.app.getUserLoggedInUser().subscribe(data => {
@@ -100,6 +102,7 @@ export class HomeComponent implements OnInit {
               this.lifeStyleRecommendedEntries.push(e);
             }
           }
+          this.loadEntryImages();
         });
       })
     });
@@ -135,5 +138,35 @@ export class HomeComponent implements OnInit {
     cr.rejecters = [];
     cr.approvers = [];
     return cr;
+  }
+
+  loadEntryImages() {
+    let allEntries = [];
+    this.ageRecommendedEntries.forEach(e => {
+      allEntries.push(e);
+    });
+
+    this.ultimateEntries.forEach(e => {
+      allEntries.push(e);
+    });
+
+    this.lifeStyleRecommendedEntries.forEach(e => {
+      allEntries.push(e);
+    });
+
+    allEntries.forEach(entry => {
+      entry.photos.forEach(photo => {
+        this.uploadService.getFileByName(photo).subscribe(resp => {
+          let arr = this.loadedImages.get(entry.id);
+          if (arr) {
+            arr.push(this.sanitizer.bypassSecurityTrustUrl(this.imageType + resp['content']));
+          } else {
+            arr = [];
+            arr.push(this.sanitizer.bypassSecurityTrustUrl(this.imageType + resp['content']));
+          }
+          this.loadedImages.set(entry.id, arr);
+        })
+      })
+    });
   }
 }

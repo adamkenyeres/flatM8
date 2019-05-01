@@ -1,3 +1,4 @@
+<div class="container">
 <div class="dark-panel">
   <div class="panel panel-default login-container">
     <div *ngIf="error" class="alert alert-danger">
@@ -19,7 +20,13 @@
       <label>Stay at home habits:</label> <br/> {{ app.CONST_TENANT_STAY_TYPES[user.tenantStayType] }}<br />
       <label>Comments on stay at home habits:</label> <br/> {{ user.tenantStayTypeComment }}<br />
       <label>Age: </label> <br/>{{ user.age }}<br/>
-      <img *ngIf="!avatarError" class="avatar" [src]="userAvatar"/>
+      <label *ngIf="!avatarError">Avatar: </label>
+      <div *ngIf="!avatarError" class="avatar-upload">
+        <div class="avatar-preview">
+          <div id="imagePreview" [style.background-image]="userAvatarPreview">
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="panel-body" *ngIf="!error && entry">
@@ -43,4 +50,5 @@
       </ul>
     </div>
   </div>
+</div>
 </div>

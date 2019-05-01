@@ -1,3 +1,4 @@
+<div class="container">
 <div *ngIf="error" class="alert alert-danger">
   Unknown error occurred while fetching flats, please try again later!
 </div>
@@ -77,6 +78,21 @@
       </form>
     </div>
     <br/>
+    <div class="avatar-upload">
+      <div class="avatar-edit">
+        <input type="file" id="imageUpload" accept=".jpg,.jpeg" (change)="selectFile($event)">
+        <label for="imageUpload"></label>
+      </div>
+      <div class="row text-center text-lg-left">
+
+        <!-- Grid column -->
+        <div *ngFor="let image of loadedImages" class="col-lg-3 col-md-4 col-6">
+          <img class="img-fluid img-thumbnail" [src]="image"/>
+        </div>
+      </div>
+    </div>
+    <br/>
   <button type="submit" class="btn btn-primary">Create Entry</button>
   </form>
+</div>
 </div>

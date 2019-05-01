@@ -7,17 +7,19 @@
       <ul class="navbar-nav">
         <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == false" (click)="login()">Login</a></li>
         <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == false" (click)="register()">Registration</a></li>
-        <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == true" (click)="accountDetails()">Account</a></li>
         <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == true" (click)="myflats()">MyFlat</a></li>
-        <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == true" (click)="myentries()">MyEntries</a></li>
-        <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == true" (click)="notifications()">Notifications</a></li>
-        <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == true" (click)="logout()">Logout</a></li>
-      </ul>
+        <li class="nav-item hvr-underline-reveal"><a class="nav-link" *ngIf="auth.isAuthenticated() == true" (click)="myentries()">MyEntries</a></li></ul>
       <ul *ngIf="auth.isAuthenticated()" class="navbar-nav navbar-right">
-        <li class="nav-item hvr-underline-reveal">
-          <div id="container-avatar">
-            <div id="badge">12</div>
-            <img src="https://1.bp.blogspot.com/-JtED2x_7XAw/UfhHlD-TXmI/AAAAAAAAD9Q/lugUa6id_9Y/s1600/-Teen-Vogue-by-Barrett-Sweger-2013-emma-watson-34892202-1063-1440.jpg" />
+        <li class="nav-item dropdown">
+          <div class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="container-avatar">
+            <div *ngIf="getAllAcceptedNotificationCount() > 0" id="badge">{{getAllAcceptedNotificationCount()}}</div>
+            <img [src]="userAvatar"/>
+          </div>
+          <div class="dropdown-menu" aria-labelledby="container-avatar">
+            <a class="dropdown-item" *ngIf="auth.isAuthenticated() == true" (click)="accountDetails()">Account</a>
+            <a class="dropdown-item" *ngIf="auth.isAuthenticated() == true" (click)="notificationsRedir()">Notifications</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" *ngIf="auth.isAuthenticated() == true" (click)="logout()">Logout</a>
           </div>
         </li>
         <li class="nav-item hvr-underline-reveal">

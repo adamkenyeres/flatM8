@@ -5,6 +5,8 @@ import {FlatMateEntry} from "../../model/FlatMateEntry";
 import {ChatMessage} from "../../model/ChatMessage";
 import {ChatService} from "../../service/ChatService";
 import {ChatContact} from "../../model/ChatContact";
+import {DomSanitizer} from "@angular/platform-browser";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-chat',
@@ -13,12 +15,15 @@ import {ChatContact} from "../../model/ChatContact";
 })
 export class ChatComponent implements OnInit {
 
-  constructor(private app: AppService, private chatService: ChatService) { }
+  constructor(private app: AppService, private chatService: ChatService,
+              private sanitizer: DomSanitizer, private router: Router) { }
 
   loggedInUser: User;
   contacts: Array<ChatContact>;
   selectedConvo: ChatContact;
   currentMessages: Array<ChatMessage> = [];
+  avatars: Map<string, string> = new Map<string, string>();
+  imageType = "data:image/JPEG;base64,";
 
   ngOnInit() {
     this.app.getUserLoggedInUser().subscribe(resp => {
@@ -39,7 +44,13 @@ export class ChatComponent implements OnInit {
       });
     });
     this.chatService.getMessagesByReceiver(this.loggedInUser).subscribe(msgs => {
+      this.avatars = new Map();
       for (let msg of <ChatMessage[]>msgs) {
+        this.app.getUserByEmail(msg.sender.email).subscribe(refreshedUser => {
+          this.app.getUserAvatarByUser(refreshedUser).subscribe(avatar => {
+            this.avatars.set(msg.sender.email, avatar["content"]);
+          });
+        });
         if (msg.chatContact.contactEntry.id == this.selectedConvo.contactEntry.id &&
           msg.receivers.filter(u => u.email === this.selectedConvo.senderEmail).length > 0) {
           this.currentMessages.push(msg);
@@ -55,7 +66,7 @@ export class ChatComponent implements OnInit {
     this.refreshMessages();
   }
 
-  sendMsg(msg) {
+  sendMsg(msg, msgBox: HTMLInputElement) {
     let msgObj = this.assembleMsg(msg);
     let array = [];
 
@@ -72,6 +83,7 @@ export class ChatComponent implements OnInit {
 
       });
     });
+    msgBox.value = "";
   }
 
   assembleMsg(msgText) {
@@ -86,5 +98,13 @@ export class ChatComponent implements OnInit {
     msg.message = msgText;
 
     return msg;
+  }
+
+  getAvatar(user) {
+    return this.sanitizer.bypassSecurityTrustUrl(this.imageType + this.avatars.get(user['email']));
+  }
+
+  slashnRedirect(email: string) {
+    this.router.navigateByUrl('slashn?email='+email);
   }
 }

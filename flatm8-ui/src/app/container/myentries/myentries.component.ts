@@ -8,6 +8,8 @@ import {FlatService} from "../../service/FlatService";
 import {FlatMateEntry} from "../../model/FlatMateEntry";
 import {Flat} from "../../model/Flat";
 import {User} from "../../model/User";
+import {UploadFileService} from "../../service/UploadFileService";
+import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-myentries',
@@ -21,7 +23,9 @@ export class MyentriesComponent implements OnInit {
   noFlat: boolean = false;
   entries: Array<FlatMateEntry> = [];
   loggedInUserEmail: string;
+  loadedImages: Map<string, SafeUrl[]> = new Map<string, SafeUrl[]>();
 
+  imageType = "data:image/JPEG;base64,";
   ROOMTYPE_CRITERIAS = {
     "NONE": "Not given",
     "PRIVATE_ROOM": "Private Room",
@@ -44,7 +48,10 @@ export class MyentriesComponent implements OnInit {
   };
 
   constructor(private entryService: EntryService,private app: AppService,
-              private auth: AuthService, private router: Router, private http: HttpClient, private flatService: FlatService) { }
+              private auth: AuthService, private router: Router, private http: HttpClient, private flatService: FlatService,
+              private uploadService: UploadFileService, private sanitizer: DomSanitizer) {
+
+  }
 
   ngOnInit() {
     if (!this.auth.isAuthenticated()) {
@@ -60,6 +67,7 @@ export class MyentriesComponent implements OnInit {
             this.entries.push(entry);
             this.noEntries = false;
           }
+          this.loadEntryImages();
         }, err => {
           this.noEntries = true;
         })
@@ -78,5 +86,22 @@ export class MyentriesComponent implements OnInit {
   deleteEntry(entry) {
     this.entryService.deleteEntry(entry).subscribe();
     window.location.reload();
+  }
+
+  loadEntryImages() {
+    this.entries.forEach(entry => {
+      entry.photos.forEach(photo => {
+        this.uploadService.getFileByName(photo).subscribe(resp => {
+          let arr = this.loadedImages.get(entry.id);
+          if (arr) {
+            arr.push(this.sanitizer.bypassSecurityTrustUrl(this.imageType + resp['content']));
+          } else {
+            arr = [];
+            arr.push(this.sanitizer.bypassSecurityTrustUrl(this.imageType + resp['content']));
+          }
+          this.loadedImages.set(entry.id, arr);
+        })
+      })
+    });
   }
 }

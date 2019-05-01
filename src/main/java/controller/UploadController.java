@@ -2,6 +2,7 @@ package controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
@@ -34,13 +35,11 @@ public class UploadController {
 
     private List<String> files = new ArrayList<String>();
 
-    private ServletContext servletContext;
-
     @Autowired
     public UploadController(StorageService storageService, UserService userService, ServletContext servletContext) {
         this.storageService = storageService;
         this.userService = userService;
-        this.servletContext = servletContext;
+        this.files = storageService.getFiles();
     }
 
     @RequestMapping(value = "/post", method = RequestMethod.POST)
@@ -60,32 +59,27 @@ public class UploadController {
 
     @RequestMapping(value = "/getAvatar", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity getAvatar() {
-        try {
-            String email = SecurityContextHolder.getContext().getAuthentication().getName();
-            User u = userService.findByUsername(email);
+    public ResponseEntity getAvatar() throws IOException {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User u = userService.findByUsername(email);
+        return getAvatarByUser(u);
+    }
 
-            if (u.getAvatarPath() == null) {
-                return ResponseEntity.notFound().build();
-            }
+    private ResponseEntity placeholderImageResponse() throws IOException {
+        Map<String, String> jsonMap = new HashMap<>();
+        File f = new File("src/main/upload-dir/placeholder.jpg");
 
-            File f = new File("src/main/upload-dir/" + u.getAvatarPath());
-
-            String encodeImage = Base64.getEncoder().withoutPadding().encodeToString(Files.readAllBytes(f.toPath()));
-            Map<String, String> jsonMap = new HashMap<>();
-            jsonMap.put("content", encodeImage);
-
-            return ResponseEntity.ok(jsonMap);
-        } catch (Exception ex) {
-            return ResponseEntity.notFound().build();
-        }
+        String encodeImage = Base64.getEncoder().withoutPadding().encodeToString(Files.readAllBytes(f.toPath()));
+        jsonMap.put("content", encodeImage);
+        return ResponseEntity.ok(jsonMap);
     }
 
     @RequestMapping(value = "/getAvatarByUser", method = RequestMethod.POST)
-    public ResponseEntity getAvatarByUser(@RequestBody User u) {
+    public ResponseEntity getAvatarByUser(@RequestBody User u) throws IOException {
         try {
+
             if (u.getAvatarPath() == null) {
-                return ResponseEntity.notFound().build();
+                return placeholderImageResponse();
             }
 
             File f = new File("src/main/upload-dir/" + u.getAvatarPath());
@@ -96,6 +90,23 @@ public class UploadController {
 
             return ResponseEntity.ok(jsonMap);
         } catch (Exception ex) {
+            return placeholderImageResponse();
+        }
+    }
+
+    @RequestMapping(value = "/getFileByName", method = RequestMethod.GET)
+    public ResponseEntity getAvatarByUser(@RequestParam String file) throws IOException {
+        boolean exists = files.stream()
+                .anyMatch(f -> f.equals(file));
+
+        if (exists) {
+            File f = new File("src/main/upload-dir/" + file);
+
+            String encodeImage = Base64.getEncoder().withoutPadding().encodeToString(Files.readAllBytes(f.toPath()));
+            Map<String, String> jsonMap = new HashMap<>();
+            jsonMap.put("content", encodeImage);
+            return ResponseEntity.ok(jsonMap);
+        } else {
             return ResponseEntity.notFound().build();
         }
     }

@@ -48,4 +48,8 @@ export class LoginComponent implements OnInit {
       sessionStorage.removeItem('token');
     }
   }
+
+  register() {
+    this.router.navigateByUrl('/register');
+  }
 }

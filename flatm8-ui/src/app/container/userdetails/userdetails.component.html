@@ -78,24 +78,18 @@
         <input type="text" name="name" [(ngModel)]="user.age" class="form-control"/>
       </div><br/>
 
-      <div *ngIf="currentFileUpload" class="progress">
-        <div class="progress-bar progress-bar-info progress-bar-striped"
-             role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
-             aria-valuemin="0" aria-valuemax="100"
-             [ngStyle]="{width:progress.percentage+'%'}">
-          {{progress.percentage}}%</div>
+      <label>Avatar: </label><br/>
+
+      <div class="avatar-upload">
+        <div class="avatar-edit">
+          <input type="file" id="imageUpload" accept=".jpg,.jpeg" (change)="selectFile($event)">
+          <label for="imageUpload"></label>
+        </div>
+        <div class="avatar-preview">
+          <div id="imagePreview" [style.background-image]="userAvatarPreview">
+          </div>
+        </div>
       </div>
-
-      <label class="btn btn-default">
-        <input type="file" accept=".jpg,.jpeg" (change)="selectFile($event)">
-      </label>
-
-      <button type="button" class="btn btn-success" [disabled]="!selectedFile"
-              (click)="upload()">Upload</button>
-
-      <br/>
-
-      <img *ngIf="!avatarError" class="avatar" [src]="userAvatar"/>
 
       <div *ngIf="isFirstNamePressed
       || isLastNamePressed

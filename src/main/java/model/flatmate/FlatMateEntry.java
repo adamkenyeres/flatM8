@@ -20,6 +20,7 @@ public class FlatMateEntry {
     private String id;
     private Flat flat;
     private RoomCriteria roomCriteria;
+    private List<String> photos;
 
     @Override
     public boolean equals(Object o) {

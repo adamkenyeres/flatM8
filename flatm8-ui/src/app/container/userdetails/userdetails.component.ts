@@ -24,6 +24,7 @@ export class UserdetailsComponent implements OnInit {
 
   user = {};
   userAvatar;
+  userAvatarPreview;
   isFirstNamePressed = false;
   isLastNamePressed= false;
   isTenantTypePressed= false;
@@ -97,7 +98,7 @@ export class UserdetailsComponent implements OnInit {
 
   selectFile(event) {
     this.selectedFile = event.target.files[0];
-    console.log(this.selectedFile);
+    this.upload();
   }
 
   upload() {
@@ -117,6 +118,8 @@ export class UserdetailsComponent implements OnInit {
     this.app.updateUser(this.user).subscribe(resp => {
       this.getAvatar();
       this.currentFileUpload = null;
+      this.router.navigateByUrl('dummy', {skipLocationChange: true}).then(()=>
+        this.router.navigateByUrl("/userdetails"));
     });
   }
 
@@ -125,6 +128,7 @@ export class UserdetailsComponent implements OnInit {
     this.app.getUserAvatar().subscribe(resp => {
       if (resp['content']) {
         this.userAvatar = this.sanitizer.bypassSecurityTrustUrl(this.imageType + resp['content']);
+        this.userAvatarPreview = this.sanitizer.bypassSecurityTrustStyle('url('+this.imageType + resp['content']+')');
       }
     }, err => {
       this.avatarError = true;

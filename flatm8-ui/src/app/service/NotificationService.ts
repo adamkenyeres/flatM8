@@ -88,4 +88,60 @@ export class NotificationService {
   updateContactRequestWithUser(user) {
     return this.http.post('http://localhost:8080/contactRequests/updateUser/', user);
   }
+
+  getAllRequests(notifications, myRequests, email) {
+    this.getAddMateRequestsForUser(email).subscribe(resp => {
+      for (let req of <Object[]>resp) {
+        notifications.push(req);
+      }
+    }, err => {});
+
+
+    this.getMyAddMateRequestsForUser(email).subscribe(resp => {
+      for (let req of <Object[]>resp) {
+        myRequests.push(req);
+      }
+    }, err => {});
+
+
+    this.getDeleteMateRequestsForUser(email).subscribe(resp => {
+      for (let req of <Object[]>resp) {
+        notifications.push(req);
+      }
+    }, err => {});
+
+
+    this.getMyDeleteMateRequestsForUser(email).subscribe(resp => {
+      for (let req of <Object[]>resp) {
+        myRequests.push(req);
+      }
+    }, err => {});
+
+
+    this.getContactRequestsForUser(email).subscribe(resp => {
+      for (let req of <Object[]>resp) {
+        notifications.push(req);
+      }
+    }, err => {});
+
+
+    this.getMyContactRequestsForUser(email).subscribe(resp => {
+      for (let req of <Object[]>resp) {
+        myRequests.push(req);
+      }
+    }, err => {});
+
+    this.getMyDeleteFlatRequestsForUser(email).subscribe(resp => {
+      for (let req of <Object[]>resp) {
+        myRequests.push(req);
+      }
+    }, err => {});
+
+
+    this.getDeleteFlatRequestsForUser(email).subscribe(resp => {
+      for (let req of <Object[]>resp) {
+        notifications.push(req);
+      }
+    }, err => {});
+  }
 }

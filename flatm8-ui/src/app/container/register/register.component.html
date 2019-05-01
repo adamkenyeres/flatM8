@@ -1,3 +1,4 @@
+<div class="container">
 <div *ngIf="error" class="alert alert-danger">
   Unknown error occurred while registering, please try again later!
 </div>
@@ -58,5 +59,6 @@
                                                             name="tenantAge" required
                                                     [(ngModel)]="credentials.age"/>
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" mat-raised-button color="primary">Register</button>
 </form>
+</div>

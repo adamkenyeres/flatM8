@@ -1,5 +1,5 @@
 <div class="container">
-<h1>Welcome {{greeting.name}}</h1>
+<h1>Welcome {{loggedInUser.firstName}} {{loggedInUser.lastName}}!</h1>
 <div [hidden]="authenticated()">
   <p>Please login or register!</p>
 </div>
@@ -42,6 +42,11 @@
         <ul>
           <li *ngFor="let detail of entry.roomCriteria.additionalDetails">{{ detail }}</li>
         </ul>
+        <div class="row text-center text-lg-left">
+          <div *ngFor="let image of loadedImages.get(entry.id)" class="col-lg-3 col-md-4 col-6">
+            <img class="img-fluid img-thumbnail" [src]="image"/>
+          </div>
+        </div>
         <button mat-raised-button color="accent" (click)="requestContact(entry)">Request Contact</button>
       </mat-expansion-panel>
     </div>
@@ -74,6 +79,12 @@
         <ul>
           <li *ngFor="let detail of entry.roomCriteria.additionalDetails">{{ detail }}</li>
         </ul>
+        <div class="row text-center text-lg-left">
+          <div *ngFor="let image of loadedImages.get(entry.id)" class="col-lg-3 col-md-4 col-6">
+            <img class="img-fluid img-thumbnail" [src]="image"/>
+          </div>
+        </div>
+        <button mat-raised-button color="accent" (click)="requestContact(entry)">Request Contact</button>
       </mat-expansion-panel>
     </div>
   </div>
@@ -104,9 +115,17 @@
         <ul>
           <li *ngFor="let detail of entry.roomCriteria.additionalDetails">{{ detail }}</li>
         </ul>
+        <div class="row text-center text-lg-left">
+          <div *ngFor="let image of loadedImages.get(entry.id)" class="col-lg-3 col-md-4 col-6">
+            <img class="img-fluid img-thumbnail" [src]="image"/>
+          </div>
+        </div>
         <button mat-raised-button color="accent" (click)="requestContact(entry)">Request Contact</button>
       </mat-expansion-panel>
     </div>
   </div>
 </div>
+  <div *ngIf="userHasFlat">
+    <app-myflats></app-myflats>
+  </div>
 </div>

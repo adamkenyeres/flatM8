@@ -79,8 +79,11 @@ public class Main implements CommandLineRunner {
         flatMateEntryRepository.deleteAll();
         flatRepository.deleteAll();
         chatMessageRepository.deleteAll();
-        //repository.deleteAll();
-        storageService.deleteAll();
-        storageService.init();
+        for (User user : repository.findAll()) {
+            user.getContacts().clear();
+            repository.save(user);
+        }
+        //storageService.deleteAll();
+        //storageService.init();
     }
 }

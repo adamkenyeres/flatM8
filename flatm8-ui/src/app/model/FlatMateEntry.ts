@@ -6,4 +6,5 @@ export class FlatMateEntry {
   id: string;
   flat: Flat;
   roomCriteria: RoomCriteria;
+  photos: Array<string> = [];
 }
