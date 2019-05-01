@@ -1,5 +1,6 @@
 package service;
 
+import annotation.ImplicitNullCheck;
 import exception.FlatNotFoundException;
 import exception.MultipleFlatForUserException;
 import model.flat.Address;
@@ -11,13 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.FlatRepository;
 import repository.UserRepository;
-import util.FlatUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class FlatService {
+public class FlatService extends AbstractBaseService<Flat> {
 
     private final FlatRepository flatRepository;
 
@@ -27,21 +27,21 @@ public class FlatService {
 
     @Autowired
     public FlatService(FlatRepository flatRepository, UserRepository userRepository) {
+        super(flatRepository);
         this.flatRepository = flatRepository;
         this.userRepository = userRepository;
     }
 
+    @ImplicitNullCheck
     public Flat updateFlat(Flat f) {
-        if (f == null) {
-            return null;
-        }
         return flatRepository.save(f);
     }
 
+    @ImplicitNullCheck
     public Flat saveFlat(Flat f) throws MultipleFlatForUserException {
-        if (f == null || f.getUserEmail() == null) {
-            LOGGER.error("Couldn't save flat (user or flat not present).");
-            return null;
+        if (f.getUserEmail() == null) {
+            LOGGER.error("Couldn't save flat (user not present).");
+            throw new IllegalArgumentException();
         }
 
         Flat flat = flatRepository.findByUserEmail(f.getUserEmail());
@@ -54,28 +54,22 @@ public class FlatService {
         return flatRepository.save(f);
     }
 
+    @ImplicitNullCheck
     public Flat updateFlatWithUser(User user) {
-        if (user == null || user.getEmail() == null) {
-            LOGGER.error("User or email is null.");
-            return null;
-        }
-
         Flat flat = getFlatForFlatMate(user.getEmail());
 
         if (flat == null || flat.getFlatMates() == null) {
             return null;
         }
+
         flat.getFlatMates().remove(user);
         flat.getFlatMates().add(user);
 
         return updateFlat(flat);
     }
-    public Flat getFlatForFlatMate(String email) {
-        if (email == null || email.isEmpty()) {
-            LOGGER.error("Couldn't find any flats for user, email shouldn't be null or empty.");
-            return null;
-        }
 
+    @ImplicitNullCheck
+    public Flat getFlatForFlatMate(String email) {
         List<Flat> flats = flatRepository.findAll();
 
         User u = userRepository.findByEmail(email);
@@ -98,28 +92,9 @@ public class FlatService {
             return null;
         }
     }
-    public Flat getFlatByUserEmail(String email) {
-        if (email == null || email.isEmpty()) {
-            LOGGER.error("Couldn't find any flats for user, email shouldn't be null or empty.");
-            return null;
-        }
 
-        Flat f = flatRepository.findByUserEmail(email);
-
-        if (f == null) {
-            LOGGER.warn("Couldn't find any flats for user.");
-            return null;
-        }
-
-        return f;
-    }
-
+    @ImplicitNullCheck
     public Flat getFlatByAddress(Address address) {
-        if (address == null) {
-            LOGGER.error("Couldn't find any flats for address, address shouldn't be null.");
-            return null;
-        }
-
         Flat f = flatRepository.findByAddress(address);
 
         if (f == null) {
@@ -130,88 +105,8 @@ public class FlatService {
         return f;
     }
 
-    public Flat getFlatByAddressString(String addressString) {
-
-        if (addressString == null) {
-            LOGGER.error("String address shouldn't be null.");
-            return null;
-        }
-
-        String[] addressParts = addressString.split(",");
-
-        if (addressParts.length != 6) {
-            LOGGER.error("Address string should be: " +
-                    "'city,streetAddress,streetNumber,district,door,floor'. " +
-                    "Returning null.");
-            return null;
-        }
-
-        try {
-            Address address = FlatUtils.addressFromStringArray(addressParts);
-            return flatRepository.findByAddress(address);
-        } catch (Exception e) {
-            LOGGER.error("Malformed Address string.");
-            return null;
-        }
-    }
-
-    public List<Flat> getAllFlats() {
-        List<Flat> flats = flatRepository.findAll();
-
-        if (flats.isEmpty()) {
-            LOGGER.warn("No flats found for getAllFlats call.");
-        }
-        return flats;
-    }
-
-    public void deleteFlat(Flat f) throws FlatNotFoundException {
-
-        if (f == null) {
-            LOGGER.error("Flat is null, can't delete.");
-            throw new FlatNotFoundException("Flat is null");
-        }
-        Flat flat = flatRepository.findById(f.getId());
-
-        if (flat == null) {
-            LOGGER.warn("Can't find flat by id {}, can't delete.", f.getId());
-            throw new FlatNotFoundException("Can't find flat");
-        }
-
-        flatRepository.delete(flat);
-    }
-
-    public Flat getFlatById(String id) {
-        if (id == null || id.isEmpty()) {
-            LOGGER.error("id is null or empty, can't fetch flat.");
-            return null;
-        }
-
-        Flat f = flatRepository.findById(id);
-        if (f == null) {
-            LOGGER.warn("Can't find flat for id: {}, returning null.", id);
-            return null;
-        }
-
-        return f;
-    }
-
-    public void deleteAll() {
-        flatRepository.deleteAll();
-    }
-
+    @ImplicitNullCheck
     public void deleteFlatByAddress(Address address) throws FlatNotFoundException {
-        if (address == null) {
-            LOGGER.error("Can't delete flat by address, address shouldn't be null.");
-            throw new FlatNotFoundException("Address is null");
-        }
-
-        Flat f = flatRepository.findByAddress(address);
-
-        if (f == null) {
-            LOGGER.warn("Can't delete flat by address, flat is not found.");
-            throw new FlatNotFoundException("Couldn't find flat by address.");
-        }
-
-        flatRepository.delete(f);
+        flatRepository.deleteByAddress(address);
     }
 }

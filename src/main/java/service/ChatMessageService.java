@@ -1,5 +1,6 @@
 package service;
 
+import annotation.ImplicitNullCheck;
 import model.chat.ChatMessage;
 import model.flatmate.FlatMateEntry;
 import model.tenant.User;
@@ -22,6 +23,7 @@ public class ChatMessageService extends AbstractBaseService<ChatMessage> {
         this.repository = repository;
     }
 
+    @ImplicitNullCheck
     public List<ChatMessage> getMessagesByReceiver(User u) {
         return repository.findAll()
                 .stream()

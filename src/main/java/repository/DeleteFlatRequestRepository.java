@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface DeleteFlatRequestRepository extends MongoRepository<DeleteFlatRequest, String>  {
+public interface DeleteFlatRequestRepository extends BaseRequestRepository<DeleteFlatRequest>  {
     List<DeleteFlatRequest> findAllByRequestStatus(RequestStatus requestStatus);
     DeleteFlatRequest findById(String id);
 }

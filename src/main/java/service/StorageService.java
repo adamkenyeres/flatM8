@@ -1,5 +1,6 @@
 package service;
 
+import annotation.ImplicitNullCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -22,9 +23,9 @@ import java.util.stream.Collectors;
 @Service
 public class StorageService {
 
-    Logger log = LoggerFactory.getLogger(this.getClass().getName());
     private final Path rootLocation = Paths.get("src/main/upload-dir");
 
+    @ImplicitNullCheck
     public void store(MultipartFile file) {
         try {
             Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
@@ -43,31 +44,6 @@ public class StorageService {
                     .collect(Collectors.toList());
         }catch (Exception e) {
             return Collections.emptyList();
-        }
-    }
-    public Resource loadFile(String filename) {
-        try {
-            Path file = rootLocation.resolve(filename);
-            Resource resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            } else {
-                throw new RuntimeException("FAIL!");
-            }
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("FAIL!");
-        }
-    }
-
-    public void deleteAll() {
-        FileSystemUtils.deleteRecursively(rootLocation.toFile());
-    }
-
-    public void init() {
-        try {
-            Files.createDirectory(rootLocation);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not initialize storage!");
         }
     }
 }

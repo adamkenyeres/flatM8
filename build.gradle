@@ -29,6 +29,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")
     compile("org.springframework.boot:spring-boot-starter-security")
+    compile group: 'org.springframework', name: 'spring-aop', version: '4.3.18.RELEASE'
     compile("com.auth0:java-jwt:3.4.0")
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile group: 'org.apache.commons', name: 'commons-email', version: '1.1'

@@ -1,27 +1,19 @@
 package controller;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 import model.tenant.User;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import service.StorageService;
 import service.UserService;
-import sun.nio.ch.IOUtil;
 
 import javax.servlet.ServletContext;
 
@@ -61,7 +53,7 @@ public class UploadController {
     @ResponseBody
     public ResponseEntity getAvatar() throws IOException {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User u = userService.findByUsername(email);
+        User u = userService.getUserByEmail(email);
         return getAvatarByUser(u);
     }
 

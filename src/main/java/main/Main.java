@@ -17,13 +17,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import repository.*;
+import service.FlatService;
 import service.StorageService;
 
 import javax.annotation.Resource;
 
 @SpringBootApplication
 @EnableMongoRepositories(basePackages = "repository")
-@ComponentScan(basePackages = {"controller", "service", "config"})
+@ComponentScan(basePackages = {"controller", "service", "config", "aop"})
 @EnableAutoConfiguration
 public class Main implements CommandLineRunner {
 
@@ -60,12 +61,15 @@ public class Main implements CommandLineRunner {
     @Resource
     private StorageService storageService;
 
+    @Resource
+    private FlatService flatService;
+
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws Exception {
         roleRepository.deleteAll();
         Role r = new Role();
         r.setName("USER");
@@ -85,5 +89,6 @@ public class Main implements CommandLineRunner {
         }
         //storageService.deleteAll();
         //storageService.init();
+        flatService.delete(null);
     }
 }

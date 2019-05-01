@@ -24,36 +24,17 @@ public class FlatMateEntryController extends AbstractBaseController<FlatMateEntr
 
     private final FlatMateEntryService flatMateEntryService;
 
-    private final ChatMessageService chatMessageService;
-
-    private final UserService userService;
-
     @Autowired
-    public FlatMateEntryController(FlatMateEntryService flatMateEntryService, ChatMessageService chatMessageService, UserService userService) {
+    public FlatMateEntryController(FlatMateEntryService flatMateEntryService) {
         super(flatMateEntryService);
         this.flatMateEntryService = flatMateEntryService;
-        this.chatMessageService = chatMessageService;
-        this.userService = userService;
     }
 
 
     @RequestMapping(value = "/deleteEntry", method = RequestMethod.POST)
     public ResponseEntity deleteEntry(@Valid @RequestBody FlatMateEntry entry) {
         try {
-            flatMateEntryService.deleteEntry(entry);
-            List<ChatMessage> msgs = chatMessageService.getAllEntries()
-                    .stream()
-                    .filter(msg -> msg.getChatContact().getContactEntry().equals(entry))
-                    .collect(Collectors.toList());
-
-            msgs.forEach(chatMessageService::deleteEntry);
-
-            userService.getAllEntries()
-                    .forEach(u -> {
-                        u.getContacts().removeIf(e -> e.getContactEntry().equals(entry));
-                        userService.save(u);
-                    });
-
+            flatMateEntryService.deleteEntryWithConversations(entry);
             return ResponseEntity.ok().build();
         } catch (Exception ex) {
             return ResponseEntity.notFound().build();
@@ -74,12 +55,12 @@ public class FlatMateEntryController extends AbstractBaseController<FlatMateEntr
 
     @RequestMapping(value = "/deleteAllForFlat", method = RequestMethod.POST)
     public ResponseEntity deleteAllForFlat(@RequestBody Flat flat) {
-        List<FlatMateEntry> entries = flatMateEntryService.deleteAllForFlat(flat);
-        if (entries.size() == 0) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok().build();
-        }
+       try {
+           flatMateEntryService.deleteAllForFlat(flat);
+           return ResponseEntity.ok().build();
+       } catch (Exception e) {
+           return ResponseEntity.notFound().build();
+       }
     }
 
     @RequestMapping(value = "/getEntriesForAge", method = RequestMethod.GET)

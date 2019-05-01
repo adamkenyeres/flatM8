@@ -1,9 +1,10 @@
 package service;
 
+import annotation.ImplicitNullCheck;
+import model.chat.ChatMessage;
 import model.criteria.LifestyleCriteria;
 import model.flat.Flat;
 import model.flatmate.FlatMateEntry;
-import model.tenant.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,34 +20,24 @@ public class FlatMateEntryService extends AbstractBaseService<FlatMateEntry> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FlatMateEntryService.class);
     private final FlatMateEntryRepository repository;
+    private final ChatMessageService chatMessageService;
+    private final UserService userService;
 
     @Autowired
-    public FlatMateEntryService(FlatMateEntryRepository repository) {
+    public FlatMateEntryService(FlatMateEntryRepository repository, ChatMessageService chatMessageService, UserService userService) {
         super(repository);
         this.repository = repository;
+        this.chatMessageService = chatMessageService;
+        this.userService = userService;
     }
 
+    @ImplicitNullCheck
     public List<FlatMateEntry> getAllEntriesForFlat(Flat flat) {
-        if (flat == null) {
-            LOGGER.warn("getAllEntriesForFlat received null flat");
-            return Collections.emptyList();
-        }
-
-        return repository.findAll()
-                .stream()
-                .filter(e -> flat.equals(e.getFlat()))
-                .collect(Collectors.toList());
+        return repository.findAllByFlat(flat);
     }
 
-    public List<FlatMateEntry> deleteAllForFlat(Flat flat) {
-        List<FlatMateEntry> entries = repository.findAll()
-                .stream()
-                .filter(e -> flat.equals(e.getFlat()))
-                .collect(Collectors.toList());
-
-        repository.delete(entries);
-
-        return entries;
+    public void deleteAllForFlat(Flat flat) {
+        repository.deleteAllByFlat(flat);
     }
 
     public List<FlatMateEntry> getByAgeRadius(Integer age) {
@@ -58,11 +49,8 @@ public class FlatMateEntryService extends AbstractBaseService<FlatMateEntry> {
                 .collect(Collectors.toList());
     }
 
+    @ImplicitNullCheck
     public List<FlatMateEntry> getByLifeStyle(String lifestyleCriteria) {
-        if (lifestyleCriteria == null) {
-            return Collections.emptyList();
-        }
-
         LifestyleCriteria crit = LifestyleCriteria.valueOf(lifestyleCriteria);
 
         return repository.findAll()
@@ -71,10 +59,30 @@ public class FlatMateEntryService extends AbstractBaseService<FlatMateEntry> {
                 .collect(Collectors.toList());
     }
 
+    @ImplicitNullCheck
     public List<FlatMateEntry> getUltimateMatches(String lifestyleCriteria, Integer age) {
         List<FlatMateEntry> entries = getByAgeRadius(age);
         entries.retainAll(getByLifeStyle(lifestyleCriteria));
 
         return entries;
+    }
+
+    @ImplicitNullCheck
+    public void deleteEntryWithConversations(FlatMateEntry entry) {
+
+        delete(entry);
+        List<ChatMessage> msgs = chatMessageService.getAll()
+                .stream()
+                .filter(msg -> msg.getChatContact().getContactEntry().equals(entry))
+                .collect(Collectors.toList());
+
+        msgs.forEach(chatMessageService::delete);
+
+        userService.getAll()
+                .forEach(u -> {
+                    u.getContacts().removeIf(e -> e.getContactEntry().equals(entry));
+                    userService.createOrUpdate(u);
+                });
+
     }
 }

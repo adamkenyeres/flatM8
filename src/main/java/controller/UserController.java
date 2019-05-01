@@ -12,22 +12,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import repository.UserRepository;
-import service.SecurityService;
 import service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.xml.ws.Response;
 import java.security.Principal;
-import java.util.Base64;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -37,53 +26,27 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 @RestController
 @RequestMapping("/")
 @CrossOrigin
-public class UserController {
+public class UserController extends AbstractBaseController<User> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-    private UserRepository repository;
-
-    @Autowired
     private UserService userService;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    private SecurityService securityService;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    public UserController(UserRepository repository) {
-        this.repository = repository;
+    public UserController(UserService userService, AuthenticationManager authenticationManager) {
+        super(userService);
+        this.userService = userService;
+        this.authenticationManager = authenticationManager;
     }
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    AuthenticationManager authenticationManager;
 
     @RequestMapping(value = "/getAllUsers", method = RequestMethod.GET)
     public List<User> getAllUsers() {
-        return repository.findAll();
-    }
-
-    @RequestMapping(value = "/getByName", method = RequestMethod.GET)
-    public List<User> getUsersByName(@RequestParam("name") String name) {
-        String[] nameParts = name.split(" ");
-        if (nameParts.length != 2) {
-            LOGGER.error("Name has more than 2 parts, returning empty collection.");
-            return Collections.emptyList();
-        }
-        return repository.findAllByFirstNameAndLastName(nameParts[0], nameParts[1]);
+        return userService.getAll();
     }
 
     @RequestMapping(value = "/getUserByEmail", method = RequestMethod.GET)
     public ResponseEntity getByEmail(@RequestParam("email") String email) {
-        if (!email.contains("@")) {
-            LOGGER.error("Email doesn't contain @ sign, returning null.");
-            return null;
-        }
-        User u = repository.findByEmail(email);
+        User u = userService.getUserByEmail(email);
         if (u == null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -93,12 +56,12 @@ public class UserController {
 
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
     public User createUser(@Valid @RequestBody User user) {
-        return repository.save(user);
+        return userService.createOrUpdate(user);
     }
 
     @RequestMapping(value = "/{email}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable String email) {
-        repository.delete(repository.findByEmail(email));
+        userService.delete(userService.getUserByEmail(email));
     }
 
     @RequestMapping(value = "/user")
@@ -117,17 +80,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/loggedInUsername")
-    public String getLoggedInUsername() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = null;
-
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-
-        return username;
+    public ResponseEntity getLoggedInUsername() {
+        String email = userService.getLoggedInEmail();
+        return email == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(email);
     }
 
     @RequestMapping(value = "/signin", method = RequestMethod.POST)
@@ -154,7 +109,7 @@ public class UserController {
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
     public ResponseEntity updateUser(@RequestBody User user) {
         try {
-            return ResponseEntity.ok(this.userService.save(user));
+            return ResponseEntity.ok(this.userService.createOrUpdate(user));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

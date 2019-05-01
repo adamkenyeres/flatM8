@@ -1,7 +1,5 @@
 package controller;
 
-import model.flat.Flat;
-import model.flatmate.FlatMateEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +24,7 @@ public abstract class AbstractBaseController<Entity> implements GenericControlle
     @Override
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity getAllEntities() {
-        List<Entity> entries = service.getAllEntries();
+        List<Entity> entries = service.getAll();
 
         if (entries.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -38,7 +36,7 @@ public abstract class AbstractBaseController<Entity> implements GenericControlle
     @Override
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity getEntityById(@PathVariable String id) {
-        Entity entry = service.getEntryById(id);
+        Entity entry = service.getById(id);
         if (entry == null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -49,7 +47,7 @@ public abstract class AbstractBaseController<Entity> implements GenericControlle
     @Override
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity createEntity(@Valid @RequestBody Entity entry) {
-        Entity e = service.createEntry(entry);
+        Entity e = service.createOrUpdate(entry);
 
         if (e == null) {
             return ResponseEntity.notFound().build();
@@ -73,7 +71,7 @@ public abstract class AbstractBaseController<Entity> implements GenericControlle
     @RequestMapping(value = "/deleteAllEntities", method = RequestMethod.POST)
     public ResponseEntity deleteAllEntities() {
         try {
-            service.deleteAllEntries();
+            service.deleteAll();
             return ResponseEntity.ok().build();
         } catch (Exception ex) {
             return ResponseEntity.notFound().build();

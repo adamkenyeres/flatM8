@@ -1,92 +1,95 @@
 package service;
 
+import annotation.ImplicitNullCheck;
+import jersey.repackaged.com.google.common.collect.ImmutableList;
+import jersey.repackaged.com.google.common.collect.Lists;
 import model.request.*;
 import model.tenant.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
+import repository.BaseRequestRepository;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Service
-public abstract class AbstractRequestService<T extends BaseRequest> {
+public abstract class AbstractRequestService<T extends BaseRequest> extends AbstractBaseService<T> {
 
-    protected final MongoRepository<T, String> repository;
-
-    protected final UserService userService;
+    private final BaseRequestRepository<T> baseRequestRepository;
+    private final UserService userService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRequestService.class);
 
     @Autowired
-    public AbstractRequestService(MongoRepository<T, String> repository, UserService userService) {
-        this.repository = repository;
+    public AbstractRequestService(UserService userService, BaseRequestRepository<T> baseRequestRepository) {
+        super(baseRequestRepository);
         this.userService = userService;
+        this.baseRequestRepository = baseRequestRepository;
     }
 
-    public List<T> getRequests() {
-        return repository.findAll();
+    @ImplicitNullCheck
+    public List<T> getRequestsForUsers(String email) {
+        return getRequestsForUsers(ImmutableList.of(email));
     }
 
-    public List<T> getRequestsForUsers(String e) {
-        return getRequestsForUsers(Collections.singleton(e));
+    @ImplicitNullCheck
+    public List<T> getRequestsForUsers(List<String> emails) {
+
+        List<User> users = userService.getUsersByEmail(emails);
+        return baseRequestRepository.findAllByReceiversIn(users);
     }
 
-    public List<T> getRequestsForUsers(Collection<String> emails) {
+    @ImplicitNullCheck
+    public List<T> getMyRequests(String email) {
+        User user = userService.getUserByEmail(email);
+        return baseRequestRepository.findAllBySender(user);
+    }
 
-        // TODO Bulk query by username
-        List<User> users = emails.stream()
-                .map(userService::findByUsername)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+    @ImplicitNullCheck
+    public T createRequestWithDuplicateCheck(T entry) {
+        boolean existing = repository.findAll()
+                .stream()
+                .anyMatch(r -> r.equals(entry)
+                        && r.getRequestStatus().equals(RequestStatus.PENDING));
 
-        if (isEmpty(users)) {
-            return Collections.emptyList();
+        if (existing) {
+            return null;
         }
-
-        List<T> requests = repository.findAll();
-        return requests.stream()
-                .filter(r -> r.getReceivers().containsAll(users))
-                .collect(Collectors.toList());
+        return repository.save(entry);
     }
 
-    public List<T> getMyRequests(String e) {
-        User user = userService.findByUsername(e);
+    @ImplicitNullCheck
+    public List<T> updateUsersInRequests(User user) {
+        List<T> requests = getRequestsForUsers(user.getEmail());
+        List<T> myRequests = getMyRequests(user.getEmail());
 
-        if (user == null) {
+
+        if (isEmpty(requests)) {
             return Collections.emptyList();
+        } else {
+            requests.forEach(r -> {
+                r.getReceivers().remove(user);
+                r.getReceivers().add(user);
+
+                if (r.getSender().equals(user)) {
+                    r.setSender(user);
+                }
+            });
+
+            myRequests.forEach(r -> {
+                r.setSender(user);
+                if (r.getReceivers().contains(user)) {
+                    r.getReceivers().remove(user);
+                    r.getReceivers().add(user);
+                }
+            });
+
+            requests.forEach(this::createOrUpdate);
+            myRequests.forEach(this::createOrUpdate);
+            return requests;
         }
-        List<T> requests = repository.findAll();
-        return requests.stream()
-                .filter(r -> r.getSender().equals(user))
-                .collect(Collectors.toList());
-    }
-
-    public List<T> getRequestsForUserByStatus(User u, RequestStatus requestStatus) {
-        return getRequestsForUsersByStatus(Collections.singleton(u), requestStatus);
-    }
-
-    public List<T> getRequestsForUsersByStatus(Collection<User> u, RequestStatus requestStatus) {
-        List<T> requests = repository.findAll();
-
-        return requests.stream()
-                .filter(r -> r.getRequestStatus().equals(requestStatus))
-                .filter(r -> r.getReceivers().containsAll(u))
-                .collect(Collectors.toList());
-    }
-
-    public T saveRequest(T request) {
-        return repository.save(request);
-    }
-
-    public void deleteRequest(T request) {
-        repository.delete(request);
-    }
-
-    public void deleteRequests() {
-        repository.deleteAll();
     }
 }

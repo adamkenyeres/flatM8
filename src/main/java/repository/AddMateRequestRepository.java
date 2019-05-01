@@ -6,8 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface AddMateRequestRepository extends MongoRepository<AddMateRequest, String> {
-
+public interface AddMateRequestRepository extends BaseRequestRepository<AddMateRequest> {
     List<AddMateRequest> findAllByRequestStatus(RequestStatus requestStatus);
     AddMateRequest findById(String id);
 }

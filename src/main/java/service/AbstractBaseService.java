@@ -1,20 +1,16 @@
 package service;
 
-import model.flat.Flat;
-import model.flatmate.FlatMateEntry;
+import annotation.ImplicitNullCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class AbstractBaseService<Entity> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBaseService.class);
-
     protected MongoRepository<Entity, String> repository;
 
     @Autowired
@@ -22,27 +18,30 @@ public abstract class AbstractBaseService<Entity> {
         this.repository = repository;
     }
 
-    public void deleteEntry(Entity flatMateEntry) throws IllegalArgumentException {
-        repository.delete(flatMateEntry);
+    @ImplicitNullCheck
+    public void delete(Entity entry) {
+        repository.delete(entry);
     }
 
-    public List<Entity> getAllEntries() {
+    public List<Entity> getAll() {
         return repository.findAll();
     }
 
-    public Entity getEntryById(String id) {
+    @ImplicitNullCheck
+    public Entity getById(String id) {
         return repository.findOne(id);
     }
 
-    public Entity createEntry(Entity entry) {
+    public Entity createOrUpdate(Entity entry) {
         return repository.save(entry);
     }
 
+    @ImplicitNullCheck
     public void deleteById(String id) throws IllegalArgumentException {
         repository.delete(id);
     }
 
-    public void deleteAllEntries() {
+    public void deleteAll() {
         repository.deleteAll();
     }
 }
