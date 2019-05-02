@@ -59,7 +59,7 @@ public abstract class AbstractRequestController<T extends BaseRequest> extends A
     public ResponseEntity updateEntity(@Valid @RequestBody T request) {
         T entity = abstractRequestService.createOrUpdate(request);
 
-        if (entity.getId() == null) {
+        if (entity == null || entity.getId() == null) {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok(entity);
@@ -115,7 +115,6 @@ public abstract class AbstractRequestController<T extends BaseRequest> extends A
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
     public ResponseEntity updateUser(@RequestBody User user) {
         List<T> updated = abstractRequestService.updateUsersInRequests(user);
-        List<T> myUpdated = abstractRequestService.updateMyRequestsForUser(user);
         if (isEmpty(updated)) {
             return ResponseEntity.notFound().build();
         } else {

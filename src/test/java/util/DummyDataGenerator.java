@@ -14,6 +14,10 @@ import model.flat.Flat;
 import model.flat.FlatType;
 import model.flatmate.FlatMateEntry;
 import model.flatmate.RoomCriteria;
+import model.request.AddMateRequest;
+import model.request.DeleteFlatRequest;
+import model.request.DeleteMateRequest;
+import model.request.RequestStatus;
 import model.tenant.User;
 
 import java.util.ArrayList;
@@ -96,6 +100,29 @@ public class DummyDataGenerator {
         return baseCriteria;
     }
 
+    public static AddMateRequest generateDummyAddMateRequest() {
+        AddMateRequest addMateRequest = new AddMateRequest();
+        addMateRequest.setMateToAdd(generateDummyUser());
+        addMateRequest.setRequestStatus(RequestStatus.PENDING);
+        addMateRequest.setFlat(generateDummyFlat());
+        addMateRequest.setSender(generateDummyUser());
+        addMateRequest.setReceivers(Lists.newArrayList(generateDummyUser()));
+        addMateRequest.setId("XXX");
+        return addMateRequest;
+    }
+
+    public static DeleteFlatRequest generateDeleteFlatRequest() {
+        DeleteFlatRequest deleteFlatRequest = new DeleteFlatRequest();
+        deleteFlatRequest.setId("XXX");
+        return deleteFlatRequest;
+    }
+
+    public static DeleteMateRequest generateDeleteMateRequest() {
+        DeleteMateRequest deleteMateRequest = new DeleteMateRequest();
+        deleteMateRequest.setId("XXX");
+        return deleteMateRequest;
+    }
+
     public static final Integer AGE_CRITERIA = 20;
     public static final Integer AGE_OFFSET = 3;
     public static final Integer AGE_IN_RADIUS = AGE_CRITERIA + AGE_OFFSET - 1;
@@ -107,5 +134,4 @@ public class DummyDataGenerator {
     public static final LifestyleCriteria LIFESTYLE_CRITERIA = LifestyleCriteria.WORK;
     public static final GenderCriteria GENDER_CRITERIA = GenderCriteria.FEMALE;
     public static final RoomTypeCriteria ROOM_CRITERIA = RoomTypeCriteria.PRIVATE_ROOM;
-
 }
