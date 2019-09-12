@@ -4,3 +4,7 @@
 /gradlew
 /gradlew.bat
 /out/*
+/bin/*
+/build/*
+/.classpath
+/.project
