@@ -2,12 +2,14 @@ package model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import model.flatmate.FlatMateEntry;
 
 import java.util.Objects;
 
-@AllArgsConstructor
-@Data
+@Getter
+@Setter
 public class ContactRequest extends BaseRequest {
 
     private FlatMateEntry entry;

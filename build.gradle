@@ -38,6 +38,7 @@ dependencies {
     runtime('org.springframework.boot:spring-boot-devtools')
     runtime('com.h2database:h2')
     compileOnly('org.projectlombok:lombok')
+    annotationProcessor 'org.projectlombok:lombok'
     testCompile('org.springframework.boot:spring-boot-starter-test')
     
     // https://mvnrepository.com/artifact/com.google.guava/guava
