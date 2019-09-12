@@ -1,7 +1,7 @@
 package service;
 
 import aop.NullCheckAspect;
-import jersey.repackaged.com.google.common.collect.Lists;
+import com.google.common.collect.Lists;
 import model.flat.Address;
 import model.flat.Flat;
 import model.request.AddMateRequest;

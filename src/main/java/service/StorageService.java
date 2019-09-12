@@ -1,7 +1,7 @@
 package service;
 
 import annotation.ImplicitNullCheck;
-import jersey.repackaged.com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap;
 import model.tenant.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

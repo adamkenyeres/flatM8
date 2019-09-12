@@ -9,6 +9,7 @@ import service.AbstractRequestService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
@@ -74,7 +75,7 @@ public abstract class AbstractRequestController<T extends BaseRequest> extends A
         if (addMateRequest == null) {
             return ResponseEntity.notFound().build();
         } else {
-            abstractRequestService.delete(addMateRequest);
+            abstractRequestService.deleteById(id);
             return ResponseEntity.ok().build();
         }
     }

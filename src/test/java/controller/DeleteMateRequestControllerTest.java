@@ -1,6 +1,6 @@
 package controller;
 
-import jersey.repackaged.com.google.common.collect.Lists;
+import com.google.common.collect.Lists;
 import model.request.DeleteFlatRequest;
 import model.request.DeleteMateRequest;
 import model.tenant.User;

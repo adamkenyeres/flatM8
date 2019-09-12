@@ -1,7 +1,7 @@
 package controller;
 
 import exception.FlatNotFoundException;
-import jersey.repackaged.com.google.common.collect.Lists;
+import com.google.common.collect.Lists;
 import model.chat.ChatMessage;
 import model.flat.Address;
 import model.flat.Flat;

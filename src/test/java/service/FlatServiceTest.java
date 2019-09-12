@@ -2,7 +2,7 @@ package service;
 
 import aop.NullCheckAspect;
 import exception.MultipleFlatForUserException;
-import jersey.repackaged.com.google.common.collect.Lists;
+import com.google.common.collect.Lists;
 import model.flat.Flat;
 import model.tenant.User;
 import org.junit.Test;

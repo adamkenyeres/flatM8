@@ -1,8 +1,8 @@
 package util;
 
-import jersey.repackaged.com.google.common.collect.ImmutableList;
-import jersey.repackaged.com.google.common.collect.Lists;
-import jersey.repackaged.com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import model.chat.ChatContact;
 import model.chat.ChatMessage;
 import model.criteria.BaseCriteria;

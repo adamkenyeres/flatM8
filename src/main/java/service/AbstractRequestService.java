@@ -1,7 +1,7 @@
 package service;
 
 import annotation.ImplicitNullCheck;
-import jersey.repackaged.com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList;
 import model.request.BaseRequest;
 import model.request.RequestStatus;
 import model.tenant.User;

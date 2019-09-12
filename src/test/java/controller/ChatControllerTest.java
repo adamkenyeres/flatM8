@@ -1,6 +1,6 @@
 package controller;
 
-import jersey.repackaged.com.google.common.collect.Lists;
+import com.google.common.collect.Lists;
 import model.chat.ChatMessage;
 import model.tenant.User;
 import org.glassfish.hk2.runlevel.RunLevelException;

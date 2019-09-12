@@ -1,7 +1,7 @@
 package service;
 
 import aop.NullCheckAspect;
-import jersey.repackaged.com.google.common.collect.Lists;
+import com.google.common.collect.Lists;
 import model.chat.ChatMessage;
 import org.hamcrest.Matchers;
 import org.junit.Test;

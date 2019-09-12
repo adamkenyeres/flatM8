@@ -1,7 +1,7 @@
 package service;
 
 import aop.NullCheckAspect;
-import jersey.repackaged.com.google.common.collect.Lists;
+import com.google.common.collect.Lists;
 import model.request.AddMateRequest;
 import model.request.DeleteMateRequest;
 import model.request.RequestStatus;

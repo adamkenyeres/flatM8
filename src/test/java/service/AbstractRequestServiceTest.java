@@ -1,18 +1,11 @@
 package service;
 
-import aop.NullCheckAspect;
-import jersey.repackaged.com.google.common.collect.Lists;
-import model.request.AddMateRequest;
 import model.request.BaseRequest;
-import model.request.RequestStatus;
 import model.tenant.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import repository.AddMateRequestRepository;
 import repository.BaseRequestRepository;
 import util.DummyDataGenerator;
 
@@ -22,11 +15,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 public abstract class AbstractRequestServiceTest<T extends BaseRequest> {
 

@@ -52,16 +52,16 @@ public abstract class AbstractBaseControllerTest<T> {
 
     @Test
     public void testIfDeleteEntityByIdReturnCorrectResponse() {
-        ResponseEntity responseEntity = controller.deleteEntityById(null);
-        ResponseEntity responseEntity1 = emptyController.deleteEntityById(null);
+        ResponseEntity responseEntity = controller.deleteEntityById("xd");
+        ResponseEntity responseEntity1 = emptyController.deleteEntityById("xd");
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
 
     @Test
     public void testIfDeletedeleteAllEntitiesReturnCorrectResponse() {
-        ResponseEntity responseEntity = controller.deleteEntityById(null);
-        ResponseEntity responseEntity1 = emptyController.deleteEntityById(null);
+        ResponseEntity responseEntity = controller.deleteEntityById("xd");
+        ResponseEntity responseEntity1 = emptyController.deleteEntityById("xd");
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }

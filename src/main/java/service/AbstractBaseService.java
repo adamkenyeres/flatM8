@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AbstractBaseService<Entity> {
 
@@ -29,7 +30,8 @@ public abstract class AbstractBaseService<Entity> {
 
     @ImplicitNullCheck
     public Entity getById(String id) {
-        return repository.findOne(id);
+        return repository.findById(id)
+        		.orElse(null);
     }
 
     @ImplicitNullCheck
@@ -38,8 +40,8 @@ public abstract class AbstractBaseService<Entity> {
     }
 
     @ImplicitNullCheck
-    public void deleteById(String id) throws IllegalArgumentException {
-        repository.delete(id);
+    public void deleteById(String addMateRequestId) throws IllegalArgumentException {
+        repository.deleteById(addMateRequestId);
     }
 
     public void deleteAll() {
