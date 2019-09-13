@@ -8,7 +8,7 @@
   <h4>Please fill out the form. The fields marked with * must be filled.</h4>
   <form role="form" (submit)="register()" ngNativeValidate>
     <div class="form-group">
-      <label for="username">Username*:</label> <input type="userName"
+      <label for="username">Username*:</label> <input type="text"
                                                    class="form-control" id="username" name="username" required
                                                    [(ngModel)]="credentials.userName"/>
     </div>

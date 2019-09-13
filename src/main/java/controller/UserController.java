@@ -123,12 +123,4 @@ public class UserController extends AbstractBaseController<User> {
         }
     }
 
-    private ResponseEntity createResponse(User u) {
-        if (u == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(u);
-        }
-    }
-
 }

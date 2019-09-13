@@ -77,4 +77,12 @@ public abstract class AbstractBaseController<Entity> implements GenericControlle
             return ResponseEntity.notFound().build();
         }
     }
+
+    public ResponseEntity createResponse(Entity e) {
+        if (e == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(e);
+        }
+    }
 }

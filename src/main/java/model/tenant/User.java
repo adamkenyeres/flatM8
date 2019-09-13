@@ -44,6 +44,6 @@ public class User implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(userName);
+        return Objects.hash(userName, email);
     }
 }
