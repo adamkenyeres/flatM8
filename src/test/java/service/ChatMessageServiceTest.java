@@ -6,7 +6,6 @@ import model.chat.ChatMessage;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
-import repository.AddMateRequestRepository;
 import repository.ChatMessageRepository;
 import util.DummyDataGenerator;
 
@@ -15,7 +14,6 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

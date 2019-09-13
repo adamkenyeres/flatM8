@@ -1,11 +1,14 @@
 package model.request;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import model.flat.Flat;
 
 import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 public class DeleteFlatRequest extends BaseRequest {
     private Flat flatToDelete;
 

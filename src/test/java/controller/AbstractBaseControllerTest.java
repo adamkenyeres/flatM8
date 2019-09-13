@@ -8,8 +8,6 @@ import service.AbstractBaseService;
 
 import java.util.List;
 
-import static org.hamcrest.core.Is.is;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractBaseControllerTest<T> {

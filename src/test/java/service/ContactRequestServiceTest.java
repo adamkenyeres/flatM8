@@ -2,21 +2,17 @@ package service;
 
 import aop.NullCheckAspect;
 import com.google.common.collect.Lists;
-import model.flat.Address;
-import model.flat.Flat;
 import model.request.ContactRequest;
-import model.request.DeleteFlatRequest;
 import model.request.RequestStatus;
 import model.tenant.User;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 import repository.ContactRequestRepository;
-import repository.DeleteFlatRequestRepository;
 import util.DummyDataGenerator;
 
 import java.util.List;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -49,7 +45,7 @@ public class ContactRequestServiceTest extends AbstractRequestServiceTest<Contac
         userService = mock(UserService.class);
         spyService = spy(new ContactRequestService((ContactRequestRepository)requestRepository, userService));
 
-        when(requestRepository.save(any(ContactRequest.class)))
+        when(requestRepository.save(nullable(ContactRequest.class)))
                 .thenReturn(dummyRequests().get(0));
 
         when(spyService.getRequestsForUsers(anyString()))

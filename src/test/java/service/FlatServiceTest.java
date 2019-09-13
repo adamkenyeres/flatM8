@@ -8,19 +8,14 @@ import model.tenant.User;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
-import repository.FlatMateEntryRepository;
 import repository.FlatRepository;
 import repository.UserRepository;
 import util.DummyDataGenerator;
 
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.notNull;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -36,16 +31,16 @@ public class FlatServiceTest extends AbstractBaseServiceTest<Flat> {
         repository = mock(FlatRepository.class);
         userRepository = mock(UserRepository.class);
 
-        when(((FlatRepository) repository).findByUserEmail(anyString()))
+        when(((FlatRepository) repository).findByUserEmail(nullable(String.class)))
                 .thenReturn(DummyDataGenerator.generateDummyFlat());
 
-        when(repository.save(any(Flat.class)))
+        when(repository.save(nullable(Flat.class)))
                 .then(returnsFirstArg());
 
         when(repository.findAll())
                 .thenReturn(Lists.newArrayList(DummyDataGenerator.generateDummyFlat()));
 
-        when(userRepository.findByEmail(anyString()))
+        when(userRepository.findByEmail(nullable(String.class)))
                 .thenReturn(DummyDataGenerator.generateDummyUser());
 
         AspectJProxyFactory proxy =

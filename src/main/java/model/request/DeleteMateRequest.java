@@ -2,12 +2,15 @@ package model.request;
 
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import model.flat.Flat;
 import model.tenant.User;
 
 import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 public class DeleteMateRequest extends BaseRequest {
 
     private User mateToDelete;

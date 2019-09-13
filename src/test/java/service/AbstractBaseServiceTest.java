@@ -1,16 +1,9 @@
 package service;
 
-import aop.NullCheckAspect;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import repository.AddMateRequestRepository;
-
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 public abstract class AbstractBaseServiceTest<Entity> {
 

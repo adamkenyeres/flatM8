@@ -1,26 +1,17 @@
 package service;
 
 import aop.NullCheckAspect;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import model.request.AddMateRequest;
 import model.request.RequestStatus;
 import model.tenant.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 import repository.AddMateRequestRepository;
 import util.DummyDataGenerator;
 
-import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -58,7 +49,7 @@ public class AddMateRequestServiceTest extends AbstractRequestServiceTest<AddMat
         userService = mock(UserService.class);
         spyService = spy(new AddMateRequestService((AddMateRequestRepository)requestRepository, userService));
 
-        when(requestRepository.save(any(AddMateRequest.class)))
+        when(requestRepository.save(nullable(AddMateRequest.class)))
                 .thenReturn(dummyRequests().get(0));
 
         when(spyService.getRequestsForUsers(anyString()))

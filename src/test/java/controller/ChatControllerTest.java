@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import model.chat.ChatMessage;
 import model.tenant.User;
 import org.glassfish.hk2.runlevel.RunLevelException;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import service.ChatMessageService;
@@ -14,8 +13,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class ChatControllerTest extends AbstractBaseControllerTest<ChatMessage> {
@@ -35,32 +32,32 @@ public class ChatControllerTest extends AbstractBaseControllerTest<ChatMessage> 
 
         when(emptyService.getAll())
                 .thenReturn(Collections.emptyList());
-        when(emptyService.getById(anyString()))
+        when(emptyService.getById(nullable(String.class)))
                 .thenReturn(null);
-        when(emptyService.createOrUpdate(any(ChatMessage.class)))
+        when(emptyService.createOrUpdate(nullable(ChatMessage.class)))
                 .thenReturn(null);
         doThrow(new RunLevelException())
                 .when(emptyService)
-                .deleteById(anyString());
+                .deleteById(nullable(String.class));
         doThrow(new RunLevelException())
                 .when(emptyService)
                 .deleteAll();
-        when(emptyChatMessageService.getMessagesByReceiver(any(User.class)))
+        when(emptyChatMessageService.getMessagesByReceiver(nullable(User.class)))
                 .thenReturn(Collections.emptyList());
 
         when(service.getAll())
                 .thenReturn(getDummyEntities());
-        when(service.getById(anyString()))
+        when(service.getById(nullable(String.class)))
                 .thenReturn(getDummyEntities().get(0));
-        when(service.createOrUpdate(any(ChatMessage.class)))
+        when(service.createOrUpdate(nullable(ChatMessage.class)))
                 .thenReturn(getDummyEntities().get(0));
         doNothing()
                 .when(service)
-                .deleteById(anyString());
+                .deleteById(nullable(String.class));
         doNothing()
                 .when(service)
                 .deleteAll();
-        when(chatMessageService.getMessagesByReceiver(any(User.class)))
+        when(chatMessageService.getMessagesByReceiver(nullable(User.class)))
                 .thenReturn(Lists.newArrayList(DummyDataGenerator.generateDummyChatMessage()));
 
         this.controller = new ChatController((ChatMessageService)service);

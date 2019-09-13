@@ -2,12 +2,16 @@ package model.request;
 
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import model.flat.Flat;
 import model.tenant.User;
 
 import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 public class AddMateRequest extends BaseRequest {
 
     private User mateToAdd;

@@ -2,15 +2,12 @@ package controller;
 
 import exception.FlatNotFoundException;
 import com.google.common.collect.Lists;
-import model.chat.ChatMessage;
 import model.flat.Address;
 import model.flat.Flat;
 import model.tenant.User;
-import org.glassfish.hk2.runlevel.RunLevelException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
-import service.ChatMessageService;
 import service.FlatService;
 import util.DummyDataGenerator;
 
@@ -18,8 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -42,28 +37,28 @@ public class FlatControllerTest extends AbstractBaseControllerTest<Flat> {
 
         when(emptyService.getAll())
                 .thenReturn(Collections.emptyList());
-        when(emptyService.getById(anyString()))
+        when(emptyService.getById(nullable(String.class)))
                 .thenReturn(null);
-        when(emptyService.createOrUpdate(any(Flat.class)))
+        when(emptyService.createOrUpdate(nullable(Flat.class)))
                 .thenReturn(null);
         doThrow(new RuntimeException())
                 .when(emptyService)
-                .deleteById(anyString());
+                .deleteById(nullable(String.class));
         doThrow(new RuntimeException())
                 .when(emptyService)
                 .deleteAll();
-        when(emptyFlatService.updateFlat(any(Flat.class)))
+        when(emptyFlatService.updateFlat(nullable(Flat.class)))
                 .thenReturn(null);
-        when(emptyFlatService.getFlatForFlatMate(anyString()))
+        when(emptyFlatService.getFlatForFlatMate(nullable(String.class)))
                 .thenReturn(null);
-        when(emptyFlatService.updateFlatWithUser(any(User.class)))
+        when(emptyFlatService.updateFlatWithUser(nullable(User.class)))
                 .thenReturn(null);
-        when(emptyFlatService.getFlatByAddress(any(Address.class)))
+        when(emptyFlatService.getFlatByAddress(nullable(Address.class)))
                 .thenReturn(null);
         try {
             doThrow(new FlatNotFoundException("NOPE"))
                     .when(emptyFlatService)
-                    .deleteFlatByAddress(any(Address.class));
+                    .deleteFlatByAddress(nullable(Address.class));
         } catch (FlatNotFoundException e) {
             assert false;
         }
@@ -71,28 +66,28 @@ public class FlatControllerTest extends AbstractBaseControllerTest<Flat> {
 
         when(service.getAll())
                 .thenReturn(getDummyEntities());
-        when(service.getById(anyString()))
+        when(service.getById(nullable(String.class)))
                 .thenReturn(getDummyEntities().get(0));
-        when(service.createOrUpdate(any(Flat.class)))
+        when(service.createOrUpdate(nullable(Flat.class)))
                 .thenReturn(getDummyEntities().get(0));
         doNothing()
                 .when(service)
-                .deleteById(anyString());
+                .deleteById(nullable(String.class));
         doNothing()
                 .when(service)
                 .deleteAll();
-        when(flatService.updateFlat(any(Flat.class)))
+        when(flatService.updateFlat(nullable(Flat.class)))
                 .thenReturn(getDummyEntities().get(0));
-        when(flatService.getFlatForFlatMate(anyString()))
+        when(flatService.getFlatForFlatMate(nullable(String.class)))
                 .thenReturn(getDummyEntities().get(0));
-        when(flatService.updateFlatWithUser(any(User.class)))
+        when(flatService.updateFlatWithUser(nullable(User.class)))
                 .thenReturn(getDummyEntities().get(0));
-        when(flatService.getFlatByAddress(any(Address.class)))
+        when(flatService.getFlatByAddress(nullable(Address.class)))
                 .thenReturn(getDummyEntities().get(0));
         try {
             doNothing()
                     .when(flatService)
-                    .deleteFlatByAddress(any(Address.class));
+                    .deleteFlatByAddress(nullable(Address.class));
         } catch (FlatNotFoundException e) {
             assert false;
         }

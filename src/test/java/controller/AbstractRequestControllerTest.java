@@ -4,7 +4,6 @@ import model.request.BaseRequest;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import service.AbstractRequestService;
-import service.AddMateRequestService;
 
 import java.util.List;
 
