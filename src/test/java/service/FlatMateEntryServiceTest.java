@@ -99,13 +99,13 @@ public class FlatMateEntryServiceTest extends AbstractBaseServiceTest<FlatMateEn
         doAnswer(invocation -> {
             deletedMsgs.add((ChatMessage)invocation.getArguments()[0]);
             return null;
-        }).when(chatMessageRepository).delete(nullable(ChatMessage.class));
+        }).when(chatMessageRepository).delete(any(ChatMessage.class));
 
         List<User> users = new ArrayList<>();
         doAnswer(invocation -> {
             users.add((User)invocation.getArguments()[0]);
             return null;
-        }).when(userRepository).save(nullable(User.class));
+        }).when(userRepository).save(any(User.class));
 
         spyService.deleteEntryWithConversations(generateDummyFlatMateEntry());
 

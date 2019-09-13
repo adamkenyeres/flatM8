@@ -6,11 +6,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import repository.FlatRepository;
 import repository.RoleRepository;
 import repository.UserRepository;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class UserServiceTest extends AbstractBaseServiceTest<User> {

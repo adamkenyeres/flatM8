@@ -34,35 +34,36 @@ public abstract class AbstractBaseControllerTest<T> {
 
     @Test
     public void testIfGetEntityByIdReturnCorrectResponse() {
-        ResponseEntity responseEntity = controller.getEntityById("X");
-        ResponseEntity responseEntity1 = emptyController.getEntityById("X");
+        ResponseEntity responseEntity = controller.getEntityById("ID");
+        ResponseEntity responseEntity1 = emptyController.getEntityById("ID");
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
 
     @Test
     public void testIfCreateEntityReturnCorrectResponse() {
-        ResponseEntity responseEntity = controller.createEntity(null);
-        ResponseEntity responseEntity1 = emptyController.createEntity(null);
+        ResponseEntity responseEntity = controller.createEntity(DUMMY_ENTITY);
+        ResponseEntity responseEntity1 = emptyController.createEntity(DUMMY_ENTITY);
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
 
     @Test
     public void testIfDeleteEntityByIdReturnCorrectResponse() {
-        ResponseEntity responseEntity = controller.deleteEntityById("xd");
-        ResponseEntity responseEntity1 = emptyController.deleteEntityById("xd");
+        ResponseEntity responseEntity = controller.deleteEntityById("ID");
+        ResponseEntity responseEntity1 = emptyController.deleteEntityById("ID");
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
 
     @Test
     public void testIfDeletedeleteAllEntitiesReturnCorrectResponse() {
-        ResponseEntity responseEntity = controller.deleteEntityById("xd");
-        ResponseEntity responseEntity1 = emptyController.deleteEntityById("xd");
+        ResponseEntity responseEntity = controller.deleteEntityById("ID");
+        ResponseEntity responseEntity1 = emptyController.deleteEntityById("ID");
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
 
     protected abstract List<T> getDummyEntities();
+    protected T DUMMY_ENTITY;
 }

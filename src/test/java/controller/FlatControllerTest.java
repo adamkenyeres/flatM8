@@ -23,6 +23,8 @@ public class FlatControllerTest extends AbstractBaseControllerTest<Flat> {
 
     private FlatController flatController;
     private FlatController emptyFlatController;
+    private static final Address DUMMY_ADDRESS = DummyDataGenerator.generateDummyAddress();
+    private static final User DUMMY_USER = DummyDataGenerator.generateDummyUser();
 
     @Override
     @Before
@@ -37,28 +39,28 @@ public class FlatControllerTest extends AbstractBaseControllerTest<Flat> {
 
         when(emptyService.getAll())
                 .thenReturn(Collections.emptyList());
-        when(emptyService.getById(nullable(String.class)))
+        when(emptyService.getById(any(String.class)))
                 .thenReturn(null);
-        when(emptyService.createOrUpdate(nullable(Flat.class)))
+        when(emptyService.createOrUpdate(any(Flat.class)))
                 .thenReturn(null);
         doThrow(new RuntimeException())
                 .when(emptyService)
-                .deleteById(nullable(String.class));
+                .deleteById(any(String.class));
         doThrow(new RuntimeException())
                 .when(emptyService)
                 .deleteAll();
-        when(emptyFlatService.updateFlat(nullable(Flat.class)))
+        when(emptyFlatService.updateFlat(any(Flat.class)))
                 .thenReturn(null);
-        when(emptyFlatService.getFlatForFlatMate(nullable(String.class)))
+        when(emptyFlatService.getFlatForFlatMate(any(String.class)))
                 .thenReturn(null);
-        when(emptyFlatService.updateFlatWithUser(nullable(User.class)))
+        when(emptyFlatService.updateFlatWithUser(any(User.class)))
                 .thenReturn(null);
-        when(emptyFlatService.getFlatByAddress(nullable(Address.class)))
+        when(emptyFlatService.getFlatByAddress(any(Address.class)))
                 .thenReturn(null);
         try {
             doThrow(new FlatNotFoundException("NOPE"))
                     .when(emptyFlatService)
-                    .deleteFlatByAddress(nullable(Address.class));
+                    .deleteFlatByAddress(any(Address.class));
         } catch (FlatNotFoundException e) {
             assert false;
         }
@@ -66,48 +68,49 @@ public class FlatControllerTest extends AbstractBaseControllerTest<Flat> {
 
         when(service.getAll())
                 .thenReturn(getDummyEntities());
-        when(service.getById(nullable(String.class)))
+        when(service.getById(any(String.class)))
                 .thenReturn(getDummyEntities().get(0));
-        when(service.createOrUpdate(nullable(Flat.class)))
+        when(service.createOrUpdate(any(Flat.class)))
                 .thenReturn(getDummyEntities().get(0));
         doNothing()
                 .when(service)
-                .deleteById(nullable(String.class));
+                .deleteById(any(String.class));
         doNothing()
                 .when(service)
                 .deleteAll();
-        when(flatService.updateFlat(nullable(Flat.class)))
+        when(flatService.updateFlat(any(Flat.class)))
                 .thenReturn(getDummyEntities().get(0));
-        when(flatService.getFlatForFlatMate(nullable(String.class)))
+        when(flatService.getFlatForFlatMate(any(String.class)))
                 .thenReturn(getDummyEntities().get(0));
-        when(flatService.updateFlatWithUser(nullable(User.class)))
+        when(flatService.updateFlatWithUser(any(User.class)))
                 .thenReturn(getDummyEntities().get(0));
-        when(flatService.getFlatByAddress(nullable(Address.class)))
+        when(flatService.getFlatByAddress(any(Address.class)))
                 .thenReturn(getDummyEntities().get(0));
         try {
             doNothing()
                     .when(flatService)
-                    .deleteFlatByAddress(nullable(Address.class));
+                    .deleteFlatByAddress(any(Address.class));
         } catch (FlatNotFoundException e) {
             assert false;
         }
 
         this.controller = new FlatController((FlatService) service);
         this.emptyController = new FlatController((FlatService)emptyService);
+        this.DUMMY_ENTITY = new Flat();
     }
 
     @Test
     public void testIfUpdateEntityReturnCorrectResponse() {
-        ResponseEntity responseEntity = flatController.updateEntity(null);
-        ResponseEntity responseEntity1 = emptyFlatController.updateEntity(null);
+        ResponseEntity responseEntity = flatController.updateEntity(DUMMY_ENTITY);
+        ResponseEntity responseEntity1 = emptyFlatController.updateEntity(DUMMY_ENTITY);
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
 
     @Test
     public void testIfDeleteFlatByAddressReturnCorrectResponse() {
-        ResponseEntity responseEntity = flatController.deleteFlatByAddress(null);
-        ResponseEntity responseEntity1 = emptyFlatController.deleteFlatByAddress(null);
+        ResponseEntity responseEntity = flatController.deleteFlatByAddress(DUMMY_ADDRESS);
+        ResponseEntity responseEntity1 = emptyFlatController.deleteFlatByAddress(DUMMY_ADDRESS);
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
@@ -115,24 +118,24 @@ public class FlatControllerTest extends AbstractBaseControllerTest<Flat> {
 
     @Test
     public void testIfGetFlatByAddressReturnCorrectResponse() {
-        ResponseEntity responseEntity = flatController.getFlatByAddress(null);
-        ResponseEntity responseEntity1 = emptyFlatController.getFlatByAddress(null);
+        ResponseEntity responseEntity = flatController.getFlatByAddress(DUMMY_ADDRESS);
+        ResponseEntity responseEntity1 = emptyFlatController.getFlatByAddress(DUMMY_ADDRESS);
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
 
     @Test
     public void testIfGetFlatForUserReturnCorrectResponse() {
-        ResponseEntity responseEntity = flatController.getFlatForUser(null);
-        ResponseEntity responseEntity1 = emptyFlatController.getFlatForUser(null);
+        ResponseEntity responseEntity = flatController.getFlatForUser("email");
+        ResponseEntity responseEntity1 = emptyFlatController.getFlatForUser("email");
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
 
     @Test
     public void testIfUpdateUserInFlatReturnCorrectResponse() {
-        ResponseEntity responseEntity = flatController.updateUserInFlat(null);
-        ResponseEntity responseEntity1 = emptyFlatController.updateUserInFlat(null);
+        ResponseEntity responseEntity = flatController.updateUserInFlat(DUMMY_USER);
+        ResponseEntity responseEntity1 = emptyFlatController.updateUserInFlat(DUMMY_USER);
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(400, responseEntity1.getStatusCode().value());
     }

@@ -11,8 +11,7 @@ import util.DummyDataGenerator;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -44,7 +43,7 @@ public class DeleteMateRequestServiceTest extends AbstractRequestServiceTest<Del
         userService = mock(UserService.class);
         spyService = spy(new DeleteMateRequestService((DeleteMateRequestRepository)requestRepository, userService));
 
-        when(requestRepository.save(nullable(DeleteMateRequest.class)))
+        when(requestRepository.save(any(DeleteMateRequest.class)))
                 .thenReturn(dummyRequests().get(0));
 
         when(spyService.getRequestsForUsers(anyString()))

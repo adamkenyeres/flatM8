@@ -1,6 +1,5 @@
 package util;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import model.chat.ChatContact;
@@ -20,18 +19,31 @@ import model.request.DeleteMateRequest;
 import model.request.RequestStatus;
 import model.tenant.User;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
 public class DummyDataGenerator {
 
+    private static ChatMessage DUMMY_CHAT_MESSAGE;
+    private static ChatContact DUMMY_CHAT_CONTACT;
+    private static FlatMateEntry DUMMY_FLATMATE_ENTRY;
+    private static RoomCriteria DUMMY_ROOM_CRITERIA;
+    private static BaseCriteria DUMMY_BASE_CRITERIA;
+    private static AddMateRequest DUMMY_ADD_MATE_REQUEST;
+    private static DeleteFlatRequest DUMMY_DELETE_FLAT_REQUEST;
+    private static DeleteMateRequest DUMMY_DELETE_MATE_REQUEST;
+
     public static User generateDummyUser() {
-        User u = new User();
-        u.setEmail("test@test.hu");
-        u.setFirstName("Test");
-        u.setLastName("Janos");
-        return u;
+        return generateDummyUser("test@test.hu");
+    }
+
+    public static User generateDummyUser(String email) {
+        User user = new User();
+        user.setEmail(email);
+        user.setFirstName("Test");
+        user.setLastName("Janos");
+
+        return user;
     }
 
     public static Address generateDummyAddress() {
@@ -57,70 +69,86 @@ public class DummyDataGenerator {
     }
 
     public static ChatMessage generateDummyChatMessage() {
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setChatContact(generateDummyChatContact());
-        chatMessage.setMessage("Test");
-        chatMessage.setReceivers(Sets.newHashSet(generateDummyUser()));
-        chatMessage.setSender(generateDummyUser());
-        chatMessage.setTimestamp(new Date());
-        return chatMessage;
+        if (DUMMY_CHAT_MESSAGE == null) {
+            DUMMY_CHAT_MESSAGE = new ChatMessage();
+            DUMMY_CHAT_MESSAGE.setChatContact(generateDummyChatContact());
+            DUMMY_CHAT_MESSAGE.setMessage("Test");
+            DUMMY_CHAT_MESSAGE.setReceivers(Sets.newHashSet(generateDummyUser()));
+            DUMMY_CHAT_MESSAGE.setSender(generateDummyUser());
+            DUMMY_CHAT_MESSAGE.setTimestamp(new Date());
+        }
+        return DUMMY_CHAT_MESSAGE;
     }
 
     public static ChatContact generateDummyChatContact() {
-        ChatContact chatContact = new ChatContact();
-        chatContact.setContactEntry(generateDummyFlatMateEntry());
-        chatContact.setSenderEmail("test@test.hu");
-        return chatContact;
+        if (DUMMY_CHAT_CONTACT == null) {
+            DUMMY_CHAT_CONTACT = new ChatContact();
+            DUMMY_CHAT_CONTACT.setContactEntry(generateDummyFlatMateEntry());
+            DUMMY_CHAT_CONTACT.setSenderEmail("test@test.hu");
+        }
+        return DUMMY_CHAT_CONTACT;
     }
 
     public static FlatMateEntry generateDummyFlatMateEntry() {
-        FlatMateEntry flatMateEntry = new FlatMateEntry();
-        flatMateEntry.setFlat(generateDummyFlat());
-        flatMateEntry.setPhotos(Collections.emptyList());
-        flatMateEntry.setRoomCriteria(generateDummyRoomCriteria());
-        return flatMateEntry;
+        if (DUMMY_FLATMATE_ENTRY == null) {
+            DUMMY_FLATMATE_ENTRY = new FlatMateEntry();
+            DUMMY_FLATMATE_ENTRY.setFlat(generateDummyFlat());
+            DUMMY_FLATMATE_ENTRY.setPhotos(Collections.emptyList());
+            DUMMY_FLATMATE_ENTRY.setRoomCriteria(generateDummyRoomCriteria());
+        }
+        return DUMMY_FLATMATE_ENTRY;
     }
 
     public static RoomCriteria generateDummyRoomCriteria() {
-        RoomCriteria roomCriteria = new RoomCriteria();
-        roomCriteria.setAdditionalDetails(Collections.emptyList());
-        roomCriteria.setCapacity(ROOM_SIZE);
-        roomCriteria.setCriteria(generateDummyBaseCriteria());
-        roomCriteria.setSize(ROOM_CAPACITY);
-        return roomCriteria;
+        if (DUMMY_ROOM_CRITERIA == null) {
+            DUMMY_ROOM_CRITERIA = new RoomCriteria();
+            DUMMY_ROOM_CRITERIA.setAdditionalDetails(Collections.emptyList());
+            DUMMY_ROOM_CRITERIA.setCapacity(ROOM_SIZE);
+            DUMMY_ROOM_CRITERIA.setCriteria(generateDummyBaseCriteria());
+            DUMMY_ROOM_CRITERIA.setSize(ROOM_CAPACITY);
+        }
+        return DUMMY_ROOM_CRITERIA;
     }
 
     public static BaseCriteria generateDummyBaseCriteria() {
-        BaseCriteria baseCriteria = new BaseCriteria();
-        baseCriteria.setAgeCriteria(AGE_CRITERIA);
-        baseCriteria.setAgeOffset(AGE_OFFSET);
-        baseCriteria.setGenderCriteria(GENDER_CRITERIA);
-        baseCriteria.setRoomTypeCriteria(ROOM_CRITERIA);
-        baseCriteria.setLifestyleCriteria(LIFESTYLE_CRITERIA);
-        return baseCriteria;
+        if (DUMMY_BASE_CRITERIA == null) {
+            DUMMY_BASE_CRITERIA = new BaseCriteria();
+            DUMMY_BASE_CRITERIA.setAgeCriteria(AGE_CRITERIA);
+            DUMMY_BASE_CRITERIA.setAgeOffset(AGE_OFFSET);
+            DUMMY_BASE_CRITERIA.setGenderCriteria(GENDER_CRITERIA);
+            DUMMY_BASE_CRITERIA.setRoomTypeCriteria(ROOM_CRITERIA);
+            DUMMY_BASE_CRITERIA.setLifestyleCriteria(LIFESTYLE_CRITERIA);
+        }
+        return DUMMY_BASE_CRITERIA;
     }
 
     public static AddMateRequest generateDummyAddMateRequest() {
-        AddMateRequest addMateRequest = new AddMateRequest();
-        addMateRequest.setMateToAdd(generateDummyUser());
-        addMateRequest.setRequestStatus(RequestStatus.PENDING);
-        addMateRequest.setFlat(generateDummyFlat());
-        addMateRequest.setSender(generateDummyUser());
-        addMateRequest.setReceivers(Lists.newArrayList(generateDummyUser()));
-        addMateRequest.setId("XXX");
-        return addMateRequest;
+        if (DUMMY_ADD_MATE_REQUEST == null) {
+            DUMMY_ADD_MATE_REQUEST = new AddMateRequest();
+            DUMMY_ADD_MATE_REQUEST.setMateToAdd(generateDummyUser());
+            DUMMY_ADD_MATE_REQUEST.setRequestStatus(RequestStatus.PENDING);
+            DUMMY_ADD_MATE_REQUEST.setFlat(generateDummyFlat());
+            DUMMY_ADD_MATE_REQUEST.setSender(generateDummyUser());
+            DUMMY_ADD_MATE_REQUEST.setReceivers(Lists.newArrayList(generateDummyUser()));
+            DUMMY_ADD_MATE_REQUEST.setId("XXX");
+        }
+        return DUMMY_ADD_MATE_REQUEST;
     }
 
     public static DeleteFlatRequest generateDeleteFlatRequest() {
-        DeleteFlatRequest deleteFlatRequest = new DeleteFlatRequest();
-        deleteFlatRequest.setId("XXX");
-        return deleteFlatRequest;
+        if (DUMMY_DELETE_FLAT_REQUEST == null) {
+            DUMMY_DELETE_FLAT_REQUEST = new DeleteFlatRequest();
+            DUMMY_DELETE_FLAT_REQUEST.setId("XXX");
+        }
+        return DUMMY_DELETE_FLAT_REQUEST;
     }
 
     public static DeleteMateRequest generateDeleteMateRequest() {
-        DeleteMateRequest deleteMateRequest = new DeleteMateRequest();
-        deleteMateRequest.setId("XXX");
-        return deleteMateRequest;
+        if (DUMMY_DELETE_MATE_REQUEST == null) {
+            DUMMY_DELETE_MATE_REQUEST = new DeleteMateRequest();
+            DUMMY_DELETE_MATE_REQUEST.setId("XXX");
+        }
+        return DUMMY_DELETE_MATE_REQUEST;
     }
 
     public static final Integer AGE_CRITERIA = 20;
