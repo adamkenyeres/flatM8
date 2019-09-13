@@ -4,6 +4,7 @@ import {ChatContact} from "./ChatContact";
 export class User {
   password: string;
   email: string;
+  userName: string;
   firstName: string;
   lastName: string;
   tenantType: string;

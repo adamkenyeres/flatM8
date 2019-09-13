@@ -48,11 +48,13 @@ public class UserController extends AbstractBaseController<User> {
     @RequestMapping(value = "/getUserByEmail", method = RequestMethod.GET)
     public ResponseEntity getByEmail(@RequestParam("email") String email) {
         User u = userService.getUserByEmail(email);
-        if (u == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(u);
-        }
+        return createResponse(u);
+    }
+
+    @RequestMapping(value = "/getUserByUserName", method = RequestMethod.GET)
+    public ResponseEntity getByUserName(@RequestParam("userName") String userName) {
+        User u = userService.getUserByUserName(userName);
+        return createResponse(u);
     }
 
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
@@ -60,9 +62,14 @@ public class UserController extends AbstractBaseController<User> {
         return userService.createOrUpdate(user);
     }
 
-    @RequestMapping(value = "/{email}", method = RequestMethod.DELETE)
-    public void deleteUser(@PathVariable String email) {
+    @RequestMapping(value = "/deleteByEmail/{email}", method = RequestMethod.DELETE)
+    public void deleteUserByEmail(@PathVariable String email) {
         userService.delete(userService.getUserByEmail(email));
+    }
+
+    @RequestMapping(value = "/deleteByUserName/{userName}", method = RequestMethod.DELETE)
+    public void deleteUserByUserName(@PathVariable String userName) {
+        userService.delete(userService.getUserByUserName(userName));
     }
 
     @RequestMapping(value = "/user")
