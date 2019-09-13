@@ -23,8 +23,6 @@ public class FlatControllerTest extends AbstractBaseControllerTest<Flat> {
 
     private FlatController flatController;
     private FlatController emptyFlatController;
-    private static final Address DUMMY_ADDRESS = DummyDataGenerator.generateDummyAddress();
-    private static final User DUMMY_USER = DummyDataGenerator.generateDummyUser();
 
     @Override
     @Before
@@ -109,8 +107,8 @@ public class FlatControllerTest extends AbstractBaseControllerTest<Flat> {
 
     @Test
     public void testIfDeleteFlatByAddressReturnCorrectResponse() {
-        ResponseEntity responseEntity = flatController.deleteFlatByAddress(DUMMY_ADDRESS);
-        ResponseEntity responseEntity1 = emptyFlatController.deleteFlatByAddress(DUMMY_ADDRESS);
+        ResponseEntity responseEntity = flatController.deleteFlatByAddress(DummyDataGenerator.generateDummyAddressSingleton());
+        ResponseEntity responseEntity1 = emptyFlatController.deleteFlatByAddress(DummyDataGenerator.generateDummyAddressSingleton());
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
@@ -118,8 +116,8 @@ public class FlatControllerTest extends AbstractBaseControllerTest<Flat> {
 
     @Test
     public void testIfGetFlatByAddressReturnCorrectResponse() {
-        ResponseEntity responseEntity = flatController.getFlatByAddress(DUMMY_ADDRESS);
-        ResponseEntity responseEntity1 = emptyFlatController.getFlatByAddress(DUMMY_ADDRESS);
+        ResponseEntity responseEntity = flatController.getFlatByAddress(DummyDataGenerator.generateDummyAddressSingleton());
+        ResponseEntity responseEntity1 = emptyFlatController.getFlatByAddress(DummyDataGenerator.generateDummyAddressSingleton());
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
@@ -134,8 +132,8 @@ public class FlatControllerTest extends AbstractBaseControllerTest<Flat> {
 
     @Test
     public void testIfUpdateUserInFlatReturnCorrectResponse() {
-        ResponseEntity responseEntity = flatController.updateUserInFlat(DUMMY_USER);
-        ResponseEntity responseEntity1 = emptyFlatController.updateUserInFlat(DUMMY_USER);
+        ResponseEntity responseEntity = flatController.updateUserInFlat(DummyDataGenerator.generateDummyUserSingleton());
+        ResponseEntity responseEntity1 = emptyFlatController.updateUserInFlat(DummyDataGenerator.generateDummyUserSingleton());
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(400, responseEntity1.getStatusCode().value());
     }
@@ -143,6 +141,6 @@ public class FlatControllerTest extends AbstractBaseControllerTest<Flat> {
 
     @Override
     protected List<Flat> getDummyEntities() {
-        return Lists.newArrayList(DummyDataGenerator.generateDummyFlat());
+        return Lists.newArrayList(DummyDataGenerator.generateDummyFlatSingleton());
     }
 }

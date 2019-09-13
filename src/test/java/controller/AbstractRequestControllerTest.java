@@ -18,8 +18,6 @@ public abstract class AbstractRequestControllerTest<T extends BaseRequest> exten
     protected AbstractRequestController<T> requestController;
     protected AbstractRequestController<T> emptyRequestController;
 
-    protected User DUMMY_USER = DummyDataGenerator.generateDummyUser();
-
     @Override
     public abstract void setUp();
 
@@ -28,8 +26,8 @@ public abstract class AbstractRequestControllerTest<T extends BaseRequest> exten
 
     @Test
     public void testIfUpdateUserReturnCorrectResponse() {
-        ResponseEntity responseEntity = requestController.updateUser(DUMMY_USER);
-        ResponseEntity responseEntity1 = emptyRequestController.updateUser(DUMMY_USER);
+        ResponseEntity responseEntity = requestController.updateUser(DummyDataGenerator.generateDummyUserSingleton());
+        ResponseEntity responseEntity1 = emptyRequestController.updateUser(DummyDataGenerator.generateDummyUserSingleton());
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }

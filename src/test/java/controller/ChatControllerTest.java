@@ -19,7 +19,6 @@ public class ChatControllerTest extends AbstractBaseControllerTest<ChatMessage> 
 
     private ChatController chatController;
     private ChatController emptyChatController;
-    private static final User DUMMY_USER = new User();
 
     @Override
     public void setUp(){
@@ -68,8 +67,8 @@ public class ChatControllerTest extends AbstractBaseControllerTest<ChatMessage> 
 
     @Test
     public void testIfGetAllForReceiverReturnCorrectResponse() {
-        ResponseEntity responseEntity = chatController.getAllForReceiver(DUMMY_USER);
-        ResponseEntity responseEntity1 = emptyChatController.getAllForReceiver(DUMMY_USER);
+        ResponseEntity responseEntity = chatController.getAllForReceiver(DummyDataGenerator.generateDummyUserSingleton());
+        ResponseEntity responseEntity1 = emptyChatController.getAllForReceiver(DummyDataGenerator.generateDummyUserSingleton());
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }

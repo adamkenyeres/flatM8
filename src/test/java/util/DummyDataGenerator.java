@@ -24,6 +24,9 @@ import java.util.Date;
 
 public class DummyDataGenerator {
 
+    private static User DUMMY_USER;
+    private static Flat DUMMY_FLAT;
+    private static Address DUMMY_ADDRESS;
     private static ChatMessage DUMMY_CHAT_MESSAGE;
     private static ChatContact DUMMY_CHAT_CONTACT;
     private static FlatMateEntry DUMMY_FLATMATE_ENTRY;
@@ -32,6 +35,30 @@ public class DummyDataGenerator {
     private static AddMateRequest DUMMY_ADD_MATE_REQUEST;
     private static DeleteFlatRequest DUMMY_DELETE_FLAT_REQUEST;
     private static DeleteMateRequest DUMMY_DELETE_MATE_REQUEST;
+
+    public static User generateDummyUserSingleton() {
+        if (DUMMY_USER == null) {
+            DUMMY_USER = generateDummyUser();
+        }
+
+        return DUMMY_USER;
+    }
+
+    public static Flat generateDummyFlatSingleton() {
+        if (DUMMY_FLAT == null) {
+            DUMMY_FLAT = generateDummyFlat();
+        }
+
+        return DUMMY_FLAT;
+    }
+
+    public static Address generateDummyAddressSingleton() {
+        if (DUMMY_ADDRESS == null) {
+            DUMMY_ADDRESS = generateDummyAddress();
+        }
+
+        return DUMMY_ADDRESS;
+    }
 
     public static User generateDummyUser() {
         return generateDummyUser("test@test.hu");
