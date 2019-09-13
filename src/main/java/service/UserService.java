@@ -55,6 +55,11 @@ public class UserService extends AbstractBaseService<User> {
     }
 
     @ImplicitNullCheck
+    public User getUserByUserName(String userName) {
+        return userRepository.findByUserName(userName);
+    }
+
+    @ImplicitNullCheck
     public List<User> getUsersByEmail(List<String> emails) {
         return userRepository.getAllByEmailIn(emails);
     }

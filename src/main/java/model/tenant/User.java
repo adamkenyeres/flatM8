@@ -18,6 +18,7 @@ public class User implements Serializable {
     @Id
     private String id;
 
+    private String userName;
     private String password;
     private String email;
     private String firstName;
@@ -36,11 +37,13 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(email, user.email);
+
+        return (   Objects.equals(email, user.email)
+                && Objects.equals(userName, user.userName));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email);
+        return Objects.hash(userName);
     }
 }
