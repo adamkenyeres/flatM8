@@ -15,7 +15,7 @@ import util.DummyDataGenerator;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -31,16 +31,16 @@ public class FlatServiceTest extends AbstractBaseServiceTest<Flat> {
         repository = mock(FlatRepository.class);
         userRepository = mock(UserRepository.class);
 
-        when(((FlatRepository) repository).findByUserEmail(nullable(String.class)))
+        when(((FlatRepository) repository).findByUserEmail(any(String.class)))
                 .thenReturn(DummyDataGenerator.generateDummyFlat());
 
-        when(repository.save(nullable(Flat.class)))
+        when(repository.save(any(Flat.class)))
                 .then(returnsFirstArg());
 
         when(repository.findAll())
                 .thenReturn(Lists.newArrayList(DummyDataGenerator.generateDummyFlat()));
 
-        when(userRepository.findByEmail(nullable(String.class)))
+        when(userRepository.findByEmail(any(String.class)))
                 .thenReturn(DummyDataGenerator.generateDummyUser());
 
         AspectJProxyFactory proxy =

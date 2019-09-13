@@ -27,18 +27,19 @@ public class AddMateRequestServiceTest extends AbstractRequestServiceTest<AddMat
     @Override
     protected List<AddMateRequest> dummyRequests() {
         AddMateRequest addMateRequest = new AddMateRequest();
-        addMateRequest.setReceivers(Lists.newArrayList(DummyDataGenerator.generateDummyUser()));
-        addMateRequest.setSender(DummyDataGenerator.generateDummyUser());
-        addMateRequest.setRequestStatus(RequestStatus.PENDING);
-        addMateRequest.setMateToAdd(DummyDataGenerator.generateDummyUser());
-
         User user = DummyDataGenerator.generateDummyUser();
-        user.setEmail("new@new.hu");
+        addMateRequest.setReceivers(Lists.newArrayList(user));
+        addMateRequest.setSender(user);
+        addMateRequest.setRequestStatus(RequestStatus.PENDING);
+        addMateRequest.setMateToAdd(user);
+
+        User user2 = DummyDataGenerator.generateDummyUser("new@new.hu");
         AddMateRequest addMateRequest2 = new AddMateRequest();
-        addMateRequest2.setReceivers(Lists.newArrayList(user));
-        addMateRequest2.setSender(user);
+        addMateRequest2.setReceivers(Lists.newArrayList(user2));
+        addMateRequest2.setReceivers(Lists.newArrayList(user2));
+        addMateRequest2.setSender(user2);
         addMateRequest2.setRequestStatus(RequestStatus.PENDING);
-        addMateRequest2.setMateToAdd(user);
+        addMateRequest2.setMateToAdd(user2);
 
         return Lists.newArrayList(addMateRequest, addMateRequest2);
     }
@@ -49,7 +50,7 @@ public class AddMateRequestServiceTest extends AbstractRequestServiceTest<AddMat
         userService = mock(UserService.class);
         spyService = spy(new AddMateRequestService((AddMateRequestRepository)requestRepository, userService));
 
-        when(requestRepository.save(nullable(AddMateRequest.class)))
+        when(requestRepository.save(any(AddMateRequest.class)))
                 .thenReturn(dummyRequests().get(0));
 
         when(spyService.getRequestsForUsers(anyString()))

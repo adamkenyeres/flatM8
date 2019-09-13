@@ -11,8 +11,7 @@ import util.DummyDataGenerator;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -45,7 +44,7 @@ public class ContactRequestServiceTest extends AbstractRequestServiceTest<Contac
         userService = mock(UserService.class);
         spyService = spy(new ContactRequestService((ContactRequestRepository)requestRepository, userService));
 
-        when(requestRepository.save(nullable(ContactRequest.class)))
+        when(requestRepository.save(any(ContactRequest.class)))
                 .thenReturn(dummyRequests().get(0));
 
         when(spyService.getRequestsForUsers(anyString()))

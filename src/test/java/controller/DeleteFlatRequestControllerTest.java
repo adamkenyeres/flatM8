@@ -25,42 +25,42 @@ public class DeleteFlatRequestControllerTest extends AbstractRequestControllerTe
 
         when(emptyRequestService.getAll())
                 .thenReturn(Collections.emptyList());
-        when(emptyRequestService.getById(nullable(String.class)))
+        when(emptyRequestService.getById(any(String.class)))
                 .thenReturn(null);
-        when(emptyRequestService.createOrUpdate(nullable(DeleteFlatRequest.class)))
+        when(emptyRequestService.createOrUpdate(any(DeleteFlatRequest.class)))
                 .thenReturn(null);
-        when(emptyRequestService.createRequestWithDuplicateCheck(nullable(DeleteFlatRequest.class)))
+        when(emptyRequestService.createRequestWithDuplicateCheck(any(DeleteFlatRequest.class)))
                 .thenReturn(null);
-        when(emptyRequestService.updateUsersInRequests(nullable(User.class)))
+        when(emptyRequestService.updateUsersInRequests(any(User.class)))
                 .thenReturn(Collections.emptyList());
-        when(emptyRequestService.getRequestsForUsers(nullable(String.class)))
+        when(emptyRequestService.getRequestsForUsers(any(String.class)))
                 .thenReturn(Collections.emptyList());
-        when(emptyRequestService.getMyRequests(nullable(String.class)))
+        when(emptyRequestService.getMyRequests(any(String.class)))
                 .thenReturn(Collections.emptyList());
         doThrow(new RunLevelException())
                 .when(emptyRequestService)
-                .deleteById(nullable(String.class));
+                .deleteById(any(String.class));
         doThrow(new RunLevelException())
                 .when(emptyRequestService)
                 .deleteAll();
 
         when(requestService.getAll())
                 .thenReturn(getDummyEntities());
-        when(requestService.getById(nullable(String.class)))
+        when(requestService.getById(any(String.class)))
                 .thenReturn(getDummyEntities().get(0));
-        when(requestService.createOrUpdate(nullable(DeleteFlatRequest.class)))
+        when(requestService.createOrUpdate(any(DeleteFlatRequest.class)))
                 .thenReturn(getDummyEntities().get(0));
-        when(requestService.createRequestWithDuplicateCheck(nullable(DeleteFlatRequest.class)))
+        when(requestService.createRequestWithDuplicateCheck(any(DeleteFlatRequest.class)))
                 .thenReturn(getDummyEntities().get(0));
-        when(requestService.updateUsersInRequests(nullable(User.class)))
+        when(requestService.updateUsersInRequests(any(User.class)))
                 .thenReturn(getDummyEntities());
-        when(requestService.getRequestsForUsers(nullable(String.class)))
+        when(requestService.getRequestsForUsers(any(String.class)))
                 .thenReturn(getDummyEntities());
-        when(requestService.getMyRequests(nullable(String.class)))
+        when(requestService.getMyRequests(any(String.class)))
                 .thenReturn(getDummyEntities());
         doNothing()
                 .when(requestService)
-                .deleteById(nullable(String.class));
+                .deleteById(any(String.class));
         doNothing()
                 .when(requestService)
                 .deleteAll();
@@ -68,6 +68,7 @@ public class DeleteFlatRequestControllerTest extends AbstractRequestControllerTe
         this.emptyService = emptyRequestService;
         this.controller = requestController;
         this.emptyController = emptyRequestController;
+        this.DUMMY_ENTITY = new DeleteFlatRequest();
     }
 
     @Override

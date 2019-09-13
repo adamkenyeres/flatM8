@@ -1,9 +1,11 @@
 package controller;
 
 import model.request.BaseRequest;
+import model.tenant.User;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import service.AbstractRequestService;
+import util.DummyDataGenerator;
 
 import java.util.List;
 
@@ -24,16 +26,16 @@ public abstract class AbstractRequestControllerTest<T extends BaseRequest> exten
 
     @Test
     public void testIfUpdateUserReturnCorrectResponse() {
-        ResponseEntity responseEntity = requestController.updateUser(null);
-        ResponseEntity responseEntity1 = emptyRequestController.updateUser(null);
+        ResponseEntity responseEntity = requestController.updateUser(DummyDataGenerator.generateDummyUserSingleton());
+        ResponseEntity responseEntity1 = emptyRequestController.updateUser(DummyDataGenerator.generateDummyUserSingleton());
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
 
     @Test
     public void testIfGetMyRequestsReturnCorrectResponse() {
-        ResponseEntity responseEntity = requestController.getMyRequests(null);
-        ResponseEntity responseEntity1 = emptyRequestController.getMyRequests(null);
+        ResponseEntity responseEntity = requestController.getMyRequests("email");
+        ResponseEntity responseEntity1 = emptyRequestController.getMyRequests("email");
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
@@ -41,8 +43,8 @@ public abstract class AbstractRequestControllerTest<T extends BaseRequest> exten
 
     @Test
     public void testIfGetForUserReturnCorrectResponse() {
-        ResponseEntity responseEntity = requestController.getForUser(null);
-        ResponseEntity responseEntity1 = emptyRequestController.getForUser(null);
+        ResponseEntity responseEntity = requestController.getForUser("email");
+        ResponseEntity responseEntity1 = emptyRequestController.getForUser("email");
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
@@ -50,8 +52,8 @@ public abstract class AbstractRequestControllerTest<T extends BaseRequest> exten
 
     @Test
     public void testIfUpdateEntityReturnCorrectResponse() {
-        ResponseEntity responseEntity = requestController.updateEntity(null);
-        ResponseEntity responseEntity1 = emptyRequestController.updateEntity(null);
+        ResponseEntity responseEntity = requestController.updateEntity(DUMMY_ENTITY);
+        ResponseEntity responseEntity1 = emptyRequestController.updateEntity(DUMMY_ENTITY);
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }

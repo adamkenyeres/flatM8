@@ -32,42 +32,43 @@ public class ChatControllerTest extends AbstractBaseControllerTest<ChatMessage> 
 
         when(emptyService.getAll())
                 .thenReturn(Collections.emptyList());
-        when(emptyService.getById(nullable(String.class)))
+        when(emptyService.getById(any(String.class)))
                 .thenReturn(null);
-        when(emptyService.createOrUpdate(nullable(ChatMessage.class)))
+        when(emptyService.createOrUpdate(any(ChatMessage.class)))
                 .thenReturn(null);
         doThrow(new RunLevelException())
                 .when(emptyService)
-                .deleteById(nullable(String.class));
+                .deleteById(any(String.class));
         doThrow(new RunLevelException())
                 .when(emptyService)
                 .deleteAll();
-        when(emptyChatMessageService.getMessagesByReceiver(nullable(User.class)))
+        when(emptyChatMessageService.getMessagesByReceiver(any(User.class)))
                 .thenReturn(Collections.emptyList());
 
         when(service.getAll())
                 .thenReturn(getDummyEntities());
-        when(service.getById(nullable(String.class)))
+        when(service.getById(any(String.class)))
                 .thenReturn(getDummyEntities().get(0));
-        when(service.createOrUpdate(nullable(ChatMessage.class)))
+        when(service.createOrUpdate(any(ChatMessage.class)))
                 .thenReturn(getDummyEntities().get(0));
         doNothing()
                 .when(service)
-                .deleteById(nullable(String.class));
+                .deleteById(any(String.class));
         doNothing()
                 .when(service)
                 .deleteAll();
-        when(chatMessageService.getMessagesByReceiver(nullable(User.class)))
+        when(chatMessageService.getMessagesByReceiver(any(User.class)))
                 .thenReturn(Lists.newArrayList(DummyDataGenerator.generateDummyChatMessage()));
 
         this.controller = new ChatController((ChatMessageService)service);
         this.emptyController = new ChatController((ChatMessageService)emptyService);
+        this.DUMMY_ENTITY = new ChatMessage();
     }
 
     @Test
     public void testIfGetAllForReceiverReturnCorrectResponse() {
-        ResponseEntity responseEntity = chatController.getAllForReceiver(null);
-        ResponseEntity responseEntity1 = emptyChatController.getAllForReceiver(null);
+        ResponseEntity responseEntity = chatController.getAllForReceiver(DummyDataGenerator.generateDummyUserSingleton());
+        ResponseEntity responseEntity1 = emptyChatController.getAllForReceiver(DummyDataGenerator.generateDummyUserSingleton());
         assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals(404, responseEntity1.getStatusCode().value());
     }
