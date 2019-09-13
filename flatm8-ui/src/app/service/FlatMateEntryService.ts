@@ -1,7 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {AppService} from "./AppService";
-import {endTimeRange} from "@angular/core/src/profile/wtf_impl";
 
 @Injectable()
 export class FlatMateEntryService {
