@@ -93,11 +93,11 @@ public class UserController extends AbstractBaseController<User> {
         return email == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(email);
     }
 
-    @RequestMapping(value = "/signin", method = RequestMethod.POST)
+    @RequestMapping(value = "/signinByEmail", method = RequestMethod.POST)
     public ResponseEntity signIn(@RequestBody UserLogin userLogin) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userLogin.getEmail(), userLogin.getPassword()));
+                    new UsernamePasswordAuthenticationToken(userLogin.getUserName(), userLogin.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -106,10 +106,10 @@ public class UserController extends AbstractBaseController<User> {
                     .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                     .sign(HMAC512(SECRET.getBytes()));
 
-            UserTokenData userTokenData = new UserTokenData(userLogin.getEmail(), token);
+            UserTokenData userTokenData = new UserTokenData(userLogin.getUserName(), token);
             return ResponseEntity.ok(userTokenData);
         } catch (Exception ex) {
-            LOGGER.error("Error occured while trying to log in user: {}", userLogin.getEmail());
+            LOGGER.error("Error occured while trying to log in user: {}", userLogin.getUserName());
             return ResponseEntity.notFound().build();
         }
     }

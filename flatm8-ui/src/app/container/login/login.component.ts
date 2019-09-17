@@ -14,7 +14,10 @@ import {AuthService} from "../../auth/auth.service";
 
 export class LoginComponent implements OnInit {
 
-  credentials = {email: '', password: ''};
+  credentials = {
+    userName: '',
+    password: ''
+  };
 
   loginError = false;
   unknownError = false;
@@ -25,19 +28,10 @@ export class LoginComponent implements OnInit {
   login() {
     this.loginError = false;
     this.unknownError = false;
-    this.app.authenticate(this.credentials).subscribe(response => {
-        if (response["token"]) {
-          sessionStorage.setItem("token", response["token"]);
-          this.router.navigateByUrl("");
-        }
-      },
-      err => {
-        if (err.status == 404 || err.status == 403) {
-          this.loginError = true;
-        } else {
-          this.unknownError = true;
-        }
-      });
+
+    console.log(this.credentials.userName);
+    console.log(this.credentials.userName.contains("@"));
+
   }
 
   ngOnInit() {
