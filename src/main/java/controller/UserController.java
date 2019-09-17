@@ -71,6 +71,10 @@ public class UserController extends AbstractBaseController<User> {
     public void deleteUserByUserName(@PathVariable String userName) {
         userService.delete(userService.getUserByUserName(userName));
     }
+    @RequestMapping(value = "/deleteAll", method = RequestMethod.DELETE)
+    public void deleteAllUsers() {
+        userService.deleteAll();
+    }
 
     @RequestMapping(value = "/user")
     public Principal user(Principal user) {
@@ -94,10 +98,22 @@ public class UserController extends AbstractBaseController<User> {
     }
 
     @RequestMapping(value = "/signinByEmail", method = RequestMethod.POST)
-    public ResponseEntity signIn(@RequestBody UserLogin userLogin) {
+    public ResponseEntity signInByEmail(@RequestBody UserLogin userLogin) {
+        System.out.println("username is: " + userLogin.getLoginName());
+        return signIn(userLogin.getLoginName(), userLogin.getPassword());
+    }
+
+    @RequestMapping(value = "/signinByUserName", method = RequestMethod.POST)
+    public ResponseEntity signInByUserName(@RequestBody UserLogin userLogin) {
+        User u = userService.getUserByUserName(userLogin.getLoginName());
+        String email = u.getEmail();
+        return signIn(email, userLogin.getPassword());
+    }
+
+    public ResponseEntity signIn(String email, String password) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userLogin.getUserName(), userLogin.getPassword()));
+                    new UsernamePasswordAuthenticationToken(email, password));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -106,10 +122,10 @@ public class UserController extends AbstractBaseController<User> {
                     .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                     .sign(HMAC512(SECRET.getBytes()));
 
-            UserTokenData userTokenData = new UserTokenData(userLogin.getUserName(), token);
+            UserTokenData userTokenData = new UserTokenData(email, token);
             return ResponseEntity.ok(userTokenData);
         } catch (Exception ex) {
-            LOGGER.error("Error occured while trying to log in user: {}", userLogin.getUserName());
+            LOGGER.error("Error occured while trying to log in user: {}", email);
             return ResponseEntity.notFound().build();
         }
     }

@@ -15,7 +15,7 @@ import {AuthService} from "../../auth/auth.service";
 export class LoginComponent implements OnInit {
 
   credentials = {
-    userName: '',
+    loginName: '',
     password: ''
   };
 
@@ -29,8 +29,40 @@ export class LoginComponent implements OnInit {
     this.loginError = false;
     this.unknownError = false;
 
-    console.log(this.credentials.userName);
-    console.log(this.credentials.userName.contains("@"));
+    console.log(this.credentials.loginName);
+    console.log(this.credentials.loginName.includes("@"));
+    console.log(this.credentials.loginName.includes("@"));
+    if(this.credentials.loginName.includes("@")) {
+        this.app.authenticateByEmail(this.credentials).subscribe(response => {
+            if (response["token"]) {
+              sessionStorage.setItem("token", response["token"]);
+              this.router.navigateByUrl("");
+            }
+          },
+          err => {
+            if (err.status == 404 || err.status == 403) {
+              this.loginError = true;
+            } else {
+              this.unknownError = true;
+            }
+        });
+    } else {
+    this.app.authenticateByUserName(this.credentials).subscribe(response => {
+      if (response["token"]) {
+            sessionStorage.setItem("token", response["token"]);
+            this.router.navigateByUrl("");
+          }
+        },
+        err => {
+          if (err.status == 404 || err.status == 403) {
+            this.loginError = true;
+          } else {
+            this.unknownError = true;
+          }
+        });
+    }
+
+
 
   }
 

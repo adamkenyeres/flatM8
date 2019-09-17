@@ -41,7 +41,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.cors().and().csrf().disable().authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**")
-				.permitAll().antMatchers("/registration").permitAll().antMatchers("/resources/**").permitAll()
+				.permitAll().antMatchers("/*").permitAll().antMatchers("/resources/**").permitAll()
 				.antMatchers(HttpMethod.POST, "/signin").permitAll().anyRequest().authenticated().and()
 				.addFilter(new JWTAuthenticationFilter(authenticationManager()))
 				.addFilter(new JWTAuthorizationFilter(authenticationManager()))
