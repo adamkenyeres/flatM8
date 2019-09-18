@@ -69,7 +69,7 @@ public class UserService extends AbstractBaseService<User> {
         String username = null;
 
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            username = ((UserDetails) principal).getUsername();
         } else {
             username = principal.toString();
         }

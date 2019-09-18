@@ -71,6 +71,7 @@ public class UserController extends AbstractBaseController<User> {
     public void deleteUserByUserName(@PathVariable String userName) {
         userService.delete(userService.getUserByUserName(userName));
     }
+
     @RequestMapping(value = "/deleteAll", method = RequestMethod.DELETE)
     public void deleteAllUsers() {
         userService.deleteAll();
@@ -78,7 +79,7 @@ public class UserController extends AbstractBaseController<User> {
 
     @RequestMapping(value = "/user")
     public Principal user(Principal user) {
-       return user;
+        return user;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
@@ -99,15 +100,19 @@ public class UserController extends AbstractBaseController<User> {
 
     @RequestMapping(value = "/signinByEmail", method = RequestMethod.POST)
     public ResponseEntity signInByEmail(@RequestBody UserLogin userLogin) {
-        System.out.println("username is: " + userLogin.getLoginName());
         return signIn(userLogin.getLoginName(), userLogin.getPassword());
     }
 
     @RequestMapping(value = "/signinByUserName", method = RequestMethod.POST)
     public ResponseEntity signInByUserName(@RequestBody UserLogin userLogin) {
-        User u = userService.getUserByUserName(userLogin.getLoginName());
-        String email = u.getEmail();
-        return signIn(email, userLogin.getPassword());
+        try {
+            User u = userService.getUserByUserName(userLogin.getLoginName());
+            String email = u.getEmail();
+            return signIn(email, userLogin.getPassword());
+        } catch (Exception e) {
+            LOGGER.error("Error occured while trying to log in user (user not found): {}", userLogin.getLoginName());
+            return ResponseEntity.notFound().build();
+        }
     }
 
     public ResponseEntity signIn(String email, String password) {
