@@ -43,9 +43,18 @@ public class UserControllerTest extends AbstractBaseControllerTest<User> {
                 .when(emptyService)
                 .deleteAll();
 
-
+        when(emptyUserService.getUserByEmail(nullable(String.class)))
+                .thenReturn(nullable(User.class));
+        when(emptyUserService.getUserByUserName(nullable(String.class)))
+                .thenReturn(nullable(User.class));
+        when(emptyUserService.getLoggedInEmail())
+                .thenReturn(nullable(String.class));
     }
 
+    @Test
+    public void testIfUserCanLogInWithUserName() {
+
+    }
     @Override
     protected List<User> getDummyEntities() {
         return null;

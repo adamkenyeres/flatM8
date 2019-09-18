@@ -36,14 +36,11 @@ export class LoginComponent implements OnInit {
     } else {
       this.loginByUserName();
     }
-
   }
 
   loginByUserName() {
     this.app.authenticateByUserName(this.credentials).subscribe(response => {
-      if (response["token"]) {
-        this.processLoginResponse(response);
-      }
+      this.processLoginResponse(response);
     },
       err => {
         this.handleLoginError(err);
