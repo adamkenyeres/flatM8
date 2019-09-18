@@ -1,10 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Observable} from "rxjs/internal/Observable";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {AppService} from "../../service/AppService";
-import {AuthService} from "../../auth/auth.service";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { AppService } from "../../service/AppService";
+import { AuthService } from "../../auth/auth.service";
+import { Observable } from 'rxjs';
+import { MethodCall } from '@angular/compiler';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +16,10 @@ import {AuthService} from "../../auth/auth.service";
 
 export class LoginComponent implements OnInit {
 
-  credentials = {email: '', password: ''};
+  credentials = {
+    loginName: '',
+    password: ''
+  };
 
   loginError = false;
   unknownError = false;
@@ -25,19 +30,45 @@ export class LoginComponent implements OnInit {
   login() {
     this.loginError = false;
     this.unknownError = false;
-    this.app.authenticate(this.credentials).subscribe(response => {
-        if (response["token"]) {
-          sessionStorage.setItem("token", response["token"]);
-          this.router.navigateByUrl("");
-        }
-      },
+
+    if (this.credentials.loginName.includes("@")) {
+      this.loginByEmail();
+    } else {
+      this.loginByUserName();
+    }
+  }
+
+  loginByUserName() {
+    this.app.authenticateByUserName(this.credentials).subscribe(response => {
+      this.processLoginResponse(response);
+    },
       err => {
-        if (err.status == 404 || err.status == 403) {
-          this.loginError = true;
-        } else {
-          this.unknownError = true;
-        }
+        this.handleLoginError(err);
       });
+  }
+
+  loginByEmail() {
+    this.app.authenticateByEmail(this.credentials).subscribe(response => {
+      this.processLoginResponse(response);
+    },
+      err => {
+        this.handleLoginError(err);
+      });
+  }
+
+  processLoginResponse(response) {
+    if (response["token"]) {
+      sessionStorage.setItem("token", response["token"]);
+      this.router.navigateByUrl("");
+    }
+  }
+
+  handleLoginError(err) {
+    if (err.status == 404 || err.status == 403) {
+      this.loginError = true;
+    } else {
+      this.unknownError = true;
+    }
   }
 
   ngOnInit() {

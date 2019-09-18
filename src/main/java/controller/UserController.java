@@ -72,9 +72,14 @@ public class UserController extends AbstractBaseController<User> {
         userService.delete(userService.getUserByUserName(userName));
     }
 
+    @RequestMapping(value = "/deleteAll", method = RequestMethod.DELETE)
+    public void deleteAllUsers() {
+        userService.deleteAll();
+    }
+
     @RequestMapping(value = "/user")
     public Principal user(Principal user) {
-       return user;
+        return user;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
@@ -93,11 +98,27 @@ public class UserController extends AbstractBaseController<User> {
         return email == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(email);
     }
 
-    @RequestMapping(value = "/signin", method = RequestMethod.POST)
-    public ResponseEntity signIn(@RequestBody UserLogin userLogin) {
+    @RequestMapping(value = "/signinByEmail", method = RequestMethod.POST)
+    public ResponseEntity signInByEmail(@RequestBody UserLogin userLogin) {
+        return signIn(userLogin.getLoginName(), userLogin.getPassword());
+    }
+
+    @RequestMapping(value = "/signinByUserName", method = RequestMethod.POST)
+    public ResponseEntity signInByUserName(@RequestBody UserLogin userLogin) {
+        try {
+            User u = userService.getUserByUserName(userLogin.getLoginName());
+            String email = u.getEmail();
+            return signIn(email, userLogin.getPassword());
+        } catch (Exception e) {
+            LOGGER.error("Error occured while trying to log in user (user not found): {}", userLogin.getLoginName());
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity signIn(String email, String password) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userLogin.getEmail(), userLogin.getPassword()));
+                    new UsernamePasswordAuthenticationToken(email, password));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -106,10 +127,10 @@ public class UserController extends AbstractBaseController<User> {
                     .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                     .sign(HMAC512(SECRET.getBytes()));
 
-            UserTokenData userTokenData = new UserTokenData(userLogin.getEmail(), token);
+            UserTokenData userTokenData = new UserTokenData(email, token);
             return ResponseEntity.ok(userTokenData);
         } catch (Exception ex) {
-            LOGGER.error("Error occured while trying to log in user: {}", userLogin.getEmail());
+            LOGGER.error("Error occured while trying to log in user: {}", email);
             return ResponseEntity.notFound().build();
         }
     }

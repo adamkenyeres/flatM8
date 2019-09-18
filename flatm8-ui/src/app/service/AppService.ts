@@ -35,8 +35,12 @@ export class AppService {
 
   }
 
-  authenticate(credentials): Observable<Object> {
-    return this.http.post('http://localhost:8080/signin', credentials);
+  authenticateByEmail(credentials): Observable<Object> {
+    return this.http.post('http://localhost:8080/signinByEmail', credentials);
+  }
+
+  authenticateByUserName(credentials): Observable<Object> {
+    return this.http.post('http://localhost:8080/signinByUserName', credentials);
   }
 
   getUserLoggedInUser(): Observable<Object> {
